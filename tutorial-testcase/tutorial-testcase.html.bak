@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Tutorial - The unified “middle” thermostat scheme in AMBER for efficient configurational sampling (Both for CPU and GPU)</title>
+  <title>Tutorial - The unified “middle” thermostat scheme in AMBER for efficient configurational sampling</title>
   <style type="text/css">code{white-space: pre;}</style>
   <link rel="stylesheet" href="github.css">
  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript" 
@@ -35,11 +35,6 @@ crossorigin="anonymous"></script>
 </ul></li>
 <li><a href="#replica-exchange-molecular-dynamics">Replica exchange molecular dynamics</a><ul>
 <li><a href="#f-remd-input-using-the-langevin-thermostat-with-the-lfmiddle-scheme-for-the-ace-ala-ala-ala-nme-in-vacuum.lengths-of-the-bonds-having-hydrogen-atoms-are-constrained.">(f) REMD input using the Langevin thermostat with the “LFMiddle” scheme for the ACE-ALA-ALA-ALA-NME in vacuum.Lengths of the bonds having hydrogen atoms are constrained.</a></li>
-</ul></li>
-<li><a href="#Pmemd-examples-for-GPUs">Pmemd examples for CPU and GPU</a><ul>
-<li><a href="#g-GPU-1">(g) Pmemd input for liquid water with 4096 water molecules in a cell </a></li>
-<li><a href="#h-GPU-2">(h) Pmemd input for DNA A7 −T7 duplex solvated in a cell with 3351 water molecules and 12 sodium ions as counter-ions </a></li>
-<li><a href="#i-GPU-3">(i) Pmemd input for Ethaline Deep Eutectic Solvent(512 choline chloride and 1024 ethylene glycol molecules) </a></li>
 </ul></li>
 </ul></li>
 <li><a href="#references">References</a></li>
@@ -533,81 +528,6 @@ numexchg=5,                 ! exchange frequency
 <p>Note that each line starts with <code>-O</code> and ends with <code>-inf &lt;info&gt;</code> . The groupfile has 4 lines, which means 4 replicas are employed in REMD. <code>sander.MPI</code> is executed via the following command:</p>
 <pre><code>$ mpirun -np 4 sander.MPI -ng 4 -groupfile groupfile</code></pre>
 <p>The number of processes (4) that is specified by <code>-np</code> can be replaced by any multiple of the number of replicas used in REMD (4 in this case).</p>
-<h3 id="Pmemd-examples-for-GPUs">Pmemd examples for CPU and GPU</h3>
-<h4 id="g-GPU-1">(g) Pmemd input for liquid water with 4096 water molecules in a cell </h4>
-<p>Test: <em>$AMBRHOME/test/middle-scheme/4096wat</em></p>
-<pre><code>MD: NVT simulation of liquid water
-&cntrl
-ntx = 5, irest = 1, ! read coordinates
-ntc = 2, ntf = 2, ! constrain lengths of bonds
-tol = 0.0000001, ! having hydrogen atoms
-nstlim = 10, ! MD for 10 steps
-ntpr = 1, ntwr = 10000 ! output settings
-dt = 0.001, ! timestep in ps
-ig = 71277, ! random seed
-cut = 7.0, ! non-bond cut off
-ischeme = 1, !! Leapfrog middle scheme
-ithermostat = 1, !! Langevin thermostat
-therm_par = 5.0, !! thermostat parameter
-midpoint = 1 ! use midpoint method, only for pmemd.MPI;
-! remove this flag otherwise
-/
-&amp;end</code></pre>
-
-
-<h4 id="h-GPU-2">(h) Pmemd input for DNA A7 −T7 duplex solvated in a cell with 3351 water molecules and 12 sodium ions as counter-ions </h4>
-<p>Test: <em>$AMBERHOME/test/middle-scheme/DNA7</em></p>
-<pre><code>MD: NVT simulation of DNA duplex
-&cntrl
-ntx = 5, irest = 1, ! read coordinates
-ntc = 2, ntf = 2, ! constrain lengths of bonds
-tol = 0.0000001, ! having hydrogen atoms
-nstlim = 10, ! MD for 10 steps
-ntpr = 1, ntwr = 10000 ! output settings
-dt = 0.001, ! timestep in ps
-ig = 71277, ! random seed
-cut = 9.0, ! non-bond cut off
-ischeme = 1, !! Leapfrog middle scheme
-ithermostat = 1, !! Langevin thermostat
-therm_par = 5.0, !! thermostat parameter
-midpoint = 1 ! use midpoint method, only for pmemd.MPI;
-! remove this flag otherwise
-/
-</code></pre>
-<h4 id="i-GPU-3">(i) Pmemd input for Ethaline Deep Eutectic Solvent(512 choline chloride and 1024 ethylene glycol molecules) </h4>
-<p>Test: <em> $AMBERHOME/test/middle-scheme/ETH</em></p>
-<pre><code>MD: NVT simulation of Ethaline Deep Eutectic Solvent
-&cntrl
-ntx = 5, irest = 1, ! read coordinates
-ntc = 2, ntf = 2, ! constrain lengths of bonds
-tol = 0.0000001, ! having hydrogen atoms
-nstlim = 10, ! MD for 10 steps
-ntpr = 1, ntwr = 10000 ! output settings
-dt = 0.001, ! timestep in ps
-ig = 71277, ! random seed
-cut = 10.0, ! non-bond cut off
-ischeme = 1, !! Leapfrog middle scheme
-ithermostat = 1, !! Langevin thermostat
-therm_par = 5.0, !! thermostat parameter
-midpoint = 1 ! use midpoint method, only for pmemd.MPI;
-! remove this flag otherwise
-/
-
-&amp;end</code></pre>
-
-<p>All those three pmemd examples can be executed in a serial job(using sander or pmemd):</p>
-<pre><code>$ sander -O -i mdin -o mdout -p prmtop -c inpcrd -r restrt</code></pre>
-<p>or</p>
-<pre><code>$ pmemd -O -i mdin -o mdout -p prmtop -c inpcrd -r restrt</code></pre>
-<p>or a parallel job(using sander.MPI or pmemd.MPI):</p>
-<pre><code>$ sander.MPI -O -i mdin -o mdout -p prmtop -c inpcrd -r restrt</code></pre>
-<p>or</p>
-<pre><code>$ pmemd.MPI -O -i mdin -o mdout -p prmtop -c inpcrd -r restrt</code></pre>
-<p>or a GPU-accelerated job(using pmemd.cuda):</p>
-<pre><code>$ pmemd.cuda_DPFP -O -i mdin -o mdout -p prmtop -c inpcrd -r restrt
-$ pmemd.cuda_SPFP -O -i mdin -o mdout -p prmtop -c inpcrd -r restrt</code></pre>
-
-
 <h2 id="references" class="unnumbered">References</h2>
 <div id="refs" class="references" role="doc-bibliography">
 <div id="ref-middle-scheme-2017">
