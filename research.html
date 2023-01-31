@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <meta name="description" content="">
+  <meta name="author" content="Jian Liu Group">
+  <title>Jian Liu Research Group, Peking University</title>
+  <!-- Bootstrap core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/font-awesome.min.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="css/style.css" rel="stylesheet">
+  <!-- The following scripts do not work for IE8, so you'd better use latest browsers -->
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>      
+      <script src="js/respond.min.js"></script>   
+    <![endif]-->
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108786458-1"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-108786458-1');
+  </script>
+</head>
+
+<body>
+  <header class="header">
+    <div class="container">
+      <div style="display:inline-block;">
+        <div class="pull-left">
+          <h3>Jian Liu Group @PKU</h3>
+        </div>
+        <div class="pull-left">
+          <h3><small>Theoretical Chemistry / Chemical Dynamics</small></h3>
+        </div>
+      </div>
+      <div class="pull-right">
+        <img class="img-responsive" src="images/logo/group-logo-sword-pild.jpg" />
+      </div>
+      <nav>
+        <!--<div id="navbar" class="collapse navbar-collapse">-->
+        <!-- for mobile menu -->
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav nav-justified navbar-custom">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="members.html">Members</a></li>
+            <li class="active"><a href="#">Research</a></li>
+            <li><a href="publications.html">Publications</a></li>
+            <li><a href="teaching.html">Teaching</a></li>
+            <li><a href="tutorials.html">Tutorials</a></li>
+            <li><a href="software.html">Software</a></li>
+            <li><a href="links.html">Links</a></li>
+          </ul>
+        </div>
+        <!--</div>-->
+      </nav>
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+  </header>
+  <div class="container">
+    <h1 class="page-header">Research</h1>
+    <p>Our research deals with quantum and semiclassical theories of chemical dynamics and thermodynamics for "real" molecular systems. Development of such theories/methods would lead to prediction of dynamic, spectroscopic, and thermodynamic properties where nuclear quantum effects (including zero point energy, tunneling, and coherence effects) become important at low temperatures and/or in realistic systems that contain light atoms such as hydrogen, helium, and even lithium. Typical examples include vibrational dynamics, ground-/excited-electronic-state proton transfer reactions, hydrogen bonding effects, H/D/T isotopic substitution, separation, and fractionation, and many other phenomena (of importance of nuclear quantum effects) in chemical, biological, and materials systems. In addition to infrared (IR) and Raman spectroscopy, elastic and inelastic neutron scattering, high-resolution scanning tunneling microscopy, and other experimental methods, developing theories and computational tools to understand these phenomena or experimental results at the atomistic level presents challenging frontiers in modern physical chemistry. </p>
+    <p>We are focused on developing new methods and models, and also on applying them to "real" molecular systems. Current primary interests are </p>
+    <ol class="mg-top-20">
+      <li>
+        <p><b>Quantum/Classical Statistical Mechanics</b></p>
+      </li>
+      <ol class="mg-top-20" type="a">
+        <li>
+          <p>Efficient thermostats for molecular dynamics and path integral molecular dynamics</p>
+        </li>
+        <li>
+          <p>Path integral molecular dynamics for nonadiabatic systems</p>
+        </li>
+      </ol>
+      <li>
+        <p><b>Quantum Dynamics and Spectroscopy for Complex/Large Systems</b></p>
+      </li>
+      <ol class="mg-top-20" type="a">
+        <li>
+          <p>Path integral Liouville dynamics</p>
+        </li>
+        <li>
+          <p>Semiclassical dynamics</p>
+        </li>
+        <li>
+          <p>Phase space formulations of quantum dynamics</p>
+        </li>
+        <li>
+          <p>Trajectory-based nonadiabatic quantum dynamics </p>
+        </li>
+      </ol>
+      <li>
+        <p><b>Machine Learning for Quantum Dynamics and Statistical Mechanics</b></p>
+      </li>
+    </ol>
+    <hr>
+    <h2><b>Theories and Methodologies</b></h2>
+    <h3><b>● Phase Space Mapping Theory for Nonadiabatic Molecular Systems</b></h3>
+    <div class="row mg-top-20">
+      <div class="col-sm-4">
+        <div class="well">
+          <img src="images/research/MappingDynamics.jpg" alt="image:<i>" class="img-responsive center-block">
+          <div style="padding:9px">
+            <h4>Phase Space Mapping Theory</h4>
+          </div>
+        </div>
+      </div>
+      <p>We have proposed a generic framework to construct mapping models in the Cartesian phase space for the multi-state Hamiltonian operator [J. Chem. Phys. 146, 024110 (2017)]. After mapping an F-dimensional Hamiltonian onto an F+1 dimensional space as suggested in Phys. Rev. Lett. 78, 578 (1997), creation and annihilation operators are defined such that the F+1 dimensional space is complete for any combined excitation. Commutation and anti-commutation relations are then naturally derived, which show that the underlying degrees of freedom are neither bosons nor fermions. The framework provides three mapping approaches: (a) from the analogy with the quantum-classical correspondence for two non-commutable operators; (b) from the analogy with the classical angular momentum; and (c) from the analogy with the classical vector. While approach (a) offers a novel means to derive the well-known Meyer-Miller Hamiltonian model [J. Chem. Phys. 70, 3214 (1979)], approaches (b) and (c) set the scene for developing other exact Hamiltonian formulations and their semiclassical/quasiclassical counterparts for multi-state dynamics/nonadiabatic dynamics.</p>
+      <p>We have further introduced the isomorphism between the multi-state Hamiltonian and the second-quantized many-electron Hamiltonian (with only 1-electron interactions) and demonstrated that all methods developed for the former can be used for the latter, and vice versa. It is shown that the recently proposed mapping model for the many-electron Hamiltonian [J. Chem. Phys. 137, 154107 (2012)] is not unique but one of a few exact mapping models naturally derived in the framework.</p>
+    </div>
+    <p>The relevant peer-reviewed papers are</p>
+    <ol>
+      <li>
+	<p><i>"A unified theoretical framework for mapping models for the multi-state Hamiltonian" </i></p>
+        <p>Jian Liu*</p>
+        <p>Journal of Chemical Physics, 145, 204105 (2016) </p>
+        <p><a href="http://dx.doi.org/10.1063/1.4967815" target="_blank">http://dx.doi.org/10.1063/1.4967815</a> </p>
+        <p>Note: In the article we formulate a generic framework to construct mapping models in the Cartesian phase space for the multi-state Hamiltonian operator, which sets the scene for developing a series of exact Hamiltonian formulations and their semiclassical/quasiclassical counterparts for multi-state dynamics/nonadiabatic dynamics.</p>
+      </li>
+      <li>
+	<p><i>"Isomorphism between the multi-state Hamiltonian and the second-quantized many-electron Hamiltonian with only 1-electron interactions" </i></p>
+        <p>Jian Liu*</p>
+        <p>Journal of Chemical Physics, 146, 024110 (2017) </p>
+        <p><a href="http://dx.doi.org/10.1063/1.4973708">http://dx.doi.org/10.1063/1.497370</a></p>
+        <p>Note: In the article we introduce the isomorphism between the multi-state Hamiltonian and the second-quantized many-electron Hamiltonian (with only 1-electron interactions) and demonstrated that all methods developed for the former can be used for the latter, and vice versa. </p>
+      </li>
+      <li><p><i>"A new perspective for nonadiabatic dynamics with phase space mapping models"</i></p>
+	  <p>Xin He, Jian Liu<sup>*</sup></p>
+	  <p>Journal of Chemical Physics, , 151, 024105 (2019). (Invited contribution to Special Topic Issue on "Dynamics of Open Quantum Systems")</p> 
+	  <p> [<a href="https://doi.org/10.1063/1.5108736">https://doi.org/10.1063/1.5108736 </a>]</p>
+          <p>Note: In the article we propose a new approach for phase space mapping models on constraint space for nonadiabatic quantum dynamics. </p></li>
+      <li>
+	  <p><i>"Negative Zero-Point-Energy Parameter in the Meyer–Miller Mapping Model for Nonadiabatic Dynamics"</i></p> 
+	  <p>Xin He, Zhihao Gong, Baihua Wu, and Jian Liu<sup>*</sup></p> 
+	  <p>Journal of Physical Chemistry Letters, 12, 2496–2501 (2021)</p> 
+	  <p>[<a href="https://pubs.acs.org/doi/full/10.1021/acs.jpclett.1c00232">https://pubs.acs.org/doi/full/10.1021/acs.jpclett.1c00232</a>]  </p> </li>     
+      <li>
+	  <p><i>"Commutator Matrix in Phase Space Mapping Models for Nonadiabatic Quantum Dynamics"</i></p> 
+	  <p>Xin He, Baihua Wu, Zhihao Gong, Jian Liu<sup>*</sup></p> 
+	  <p>Journal of Physical Chemistry A, 125, 31, 6845–6863 (2021)</p>
+	  <p>[<a href="https://doi.org/10.1021/acs.jpca.1c04429">https://doi.org/10.1021/acs.jpca.1c04429</a>] [Invited contribution to the Tanimura Festschrift] </p></li>
+          <li><p><i>"Unified formulation for phase space mapping models for nonadiabatic quantum dynamics"</i></p>
+          <p>Jian Liu<sup>*</sup>, Xin He, Baihua Wu</p>
+          <p>Accounts of Chemical Research, 54, 23, 4215–4228 (2021)</p>
+	  <p><a href="https://doi.org/10.1021/acs.accounts.1c00511">https://doi.org/10.1021/acs.accounts.1c00511</a>  [Invited contribution]</p></li>
+          <li><p><i>"New Phase Space Formulations and Quantum Dynamics Approaches"</i></p>
+          <p>Xin He, Baihua Wu, Youhao Shang, Binqi Li, Xiangsong Cheng, <b>Jian Liu</b><sup>*</sup></p>
+          <p>Wiley Interdisciplinary Reviews-Computational Molecular Science, e1619 (2022)</p>
+          <p><a href="https://doi.org/10.1002/wcms.1619">https://doi.org/10.1002/wcms.1619</a><a href="https://wires.onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1002/wcms.1619&file=wcms1619-sup-0001-Appendix+S1.pdf"> Supporting Information</a> [Invited contribution]</p></li>
+    </ol>
+    <h3><b>● (Path Integral) Molecular Dynamics Methods for quantum/classical statistics</b></h3>
+    <div class="row mg-top-20">
+      <p>
+        <div class="col-sm-4">
+          <div class="well">
+            <img src="images/research/pimd-water-middle.png" alt="image: " class="img-responsive center-block">
+            <div style="padding:9px">
+              <h4>Quantum/Classical Statistical Mechanics</h4>
+            </div>
+          </div>
+        </div>Path integral molecular dynamics (PIMD) is a prevailing computational tool to study nuclear quantum statistics for realistic molecular systems at thermal equilibrium. We have employed the Kolmogorov operator to develop a unified framework that covers both stochastic and deterministic thermostatting algorithms, including such as the Andersen thermostat, Langevin dynamics, Nosé-Hoover chain (including Nosé-Hoover thermostat), etc. [J. Chem. Phys. 145, 024103 (2016); 147, 034109 (2017)] Compared to most conventional PIMD algorithms that can be unified in the “side”/“end” schemes of the framework, the “middle” thermostat scheme introduced by us significantly improves the sampling efficiency as well as accuracy for general molecular systems. In addition to numerical examples for realistic systems, we have presented the analytical analysis to prove that the “middle” scheme leads to exact results for PIMD in the harmonic limit regardless of the thermostat parameter and of the finite time interval (as long as the propagation is stable).
+      </p>
+      <p>
+        In the unified framework we have revealed that, in addition to the usual density evolution, there exists another type of discrete evolution that may not correspond to a continuous, real dynamical counterpart of the Langevin equation [J. Chem. Phys. 147, 184104 (2017)]. This virtual dynamics case is also amenable to the desired Boltzmann distribution for various stochastic thermostatting methods [Chin. J. Chem. Phys. 30, 735 (2017)]. By analyzing the asymptotic distribution and characteristic correlation time, we have shown that, for good numerical performance in efficiency as well as accuracy, one may choose the thermostat parameter (of the “middle” scheme) in a wide range from around the optimal value to the high value limit.
+      </p>
+      <p>
+        More recently, we have further used the unified framework to develop a novel practical PIMD methodology in either of the diabatic and adiabatic representations for studying exact quantum statistics of large multi-electronic-state systems in thermal equilibrium when the Born-Oppenheimer approximation, Condon approximation, and harmonic bath approximation are no longer valid [J. Chem. Phys. 148, 102319 (2018)]. </p>
+    </div>
+   <p><i>Note: The unified "middle" thermostat scheme has been implemented in <a href="http://ambermd.org/">AMBER</a> <a href="http://ambermd.org/doc12/">(2019 version)</a>.</i></p>
+    <p></p>
+    <p>The relevant peer-reviewed papers are </p>
+    <ol>
+      <li>
+        <p><i>"A simple and accurate algorithm for path integral molecular dynamics"</i></p>
+        <p>Jian Liu*, Dezhang Li, Xinzijian Liu </p>
+        <p>Journal of Chemical Physics, 145, 024103 (2016) </p>
+        <p><a href="http://dx.doi.org/10.1063/1.4954990" target="_blank">http://dx.doi.org/10.1063/1.4954990</a> </p>
+        <p>Note: In the article we propose a simple algorithm for PIMD for studying quantum statistics, which significantly improves the performance of sampling accuracy as well as efficiency over conventional PIMD algorithms.</p>
+      </li>
+      <li>
+        <p><i>"A unified thermostat scheme for efficient configurational sampling for classical/quantum canonical ensembles via molecular dynamics"</i></p>
+        <p>Zhijun Zhang, Xinzijian Liu, Zifei Chen, Haifeng Zheng, Kangyu Yan, Jian Liu*</p>
+        <p>Journal of Chemical Physics, 147, 034109 (2017)</p>
+        <p><a href="http://dx.doi.org/10.1063/1.4991621" target="_blank">http://dx.doi.org/10.1063/1.4991621</a> </p>
+        <p>Note: In this article we employ the Kolmogorov operator to develop a unified framework that covers both stochastic and deterministic thermostatting algorithms, which leads to the efficient “middle” thermostat scheme for performing either PIMD or MD.</p>
+      </li>
+      <li>
+	<p><i>"Path integral molecular dynamics for exact quantum statistics of multi-electronic-state systems"</i></p>
+        <p>Xinzijian Liu, Jian Liu*</p>
+        <p>Journal of Chemical Physics, 148, 102319 (2018) </p>
+        <p>[Invited article for the JCP special topic issue on "Nuclear Quantum Effects"] </p>
+        <p><a href="https://doi.org/10.1063/1.5005059" target="_blank">https://doi.org/10.1063/1.5005059</a> </p>
+        <p>Note: In this article we propose a novel practical PIMD methodology in either of the diabatic and adiabatic representations for studying exact quantum statistics of large multi-electronic-state systems in thermal equilibrium when the Born-Oppenheimer approximation, Condon approximation, and harmonic bath approximation are no longer valid.</p>
+      </li>
+      <li>
+        <p><i>"Stationary state distribution and efficiency analysis of the Langevin equation via real or virtual dynamics"</i></p>
+        <p>Dezhang Li, Xu Han, Yichen Chai, Cong Wang, Zhijun Zhang, Zifei Chen, Jian Liu*, Jiushu Shao*</p>
+        <p>Journal of Chemical Physics, 147, 184104 (2017)</p>
+        <p><a href="https://doi.org/10.1063/1.4996204" target="_blank">https://doi.org/10.1063/1.4996204</a> </p>
+        <p>Note: By analyzing the asymptotic distribution and characteristic correlation time, we show that, for good numerical performance in efficiency as well as accuracy, one may choose the thermostat parameter (of the “middle” scheme) in a wide range from around the optimal value to the high value limit.</p>
+      </li>
+      <li>
+        <p><i>"Understanding molecular dynamics with stochastic processes via real or virtual dynamics"</i></p>
+        <p>Dezhang Li, Zifei Chen, Zhijun Zhang, Jian Liu*</p>
+        <p>Chinese Journal of Chemical Physics, 30, 735 (2017) </p>
+        <p>[Invited article for the CJCP special topic issue on "Chemical Dynamics"] </p>
+        <p><a href="http://dx.doi.org/10.1063/1674-0068/30/cjcp1711223" target="_blank">http://dx.doi.org/10.1063/1674-0068/30/cjcp1711223</a></p>
+        <p>Note: In the unified framework [J. Chem. Phys. 147, 034109 (2017)] we reveal that, in addition to the usual density evolution, there exists another type of discrete evolution (so called “virtual dynamics”) that may not correspond to a continuous, real dynamical counterpart (of such as the Langevin equation), which is also amenable to the desired Boltzmann distribution for various stochastic thermostatting methods. </p>
+      </li>
+      <li>
+	<p><i>"A unified efficient thermostat scheme for the canonical ensemble with holonomic or isokinetic constraints via molecular dynamics"</i></p>      
+        <p>Zhijun Zhang, Xinzijian Liu, Kangyu Yan, Mark Tuckerman, Jian Liu<sup>*</sup></p>
+	<p>Journal of Physical Chemistry A, 123, 28, 6056-6079 (2019) </p>
+	<p>[Invited contribution to "Young Scientist Virtual Special Issue"]</p>
+	<p><a href="https://doi.org/10.1021/acs.jpca.9b02771">https://doi.org/10.1021/acs.jpca.9b02771</a>]<a href="paper/paper/constraint.pdf" download>[pdf version]</a>  (Highlighted in <a href="https://pubs.acs.org/doi/10.1021/acs.jpca.0c04262">JPC Virtual Issue on New Tools and Methods</a> ) </p>
+	<p>Note: In this paper we extend the “middle” scheme to molecular dynamics (and path integral molecular dynamics) algorithms for configurational sampling in systems subject to constraints. Holonomic constraints and isokinetic constraints are used for demonstration.  It is shown that the "middle" scheme can be easily combined with enhanced sampling techniques, multiple time-step techniques, etc. </p>
+      </li>	      
+      <li>
+	   <p><i>"Extensive Numerical Tests of the Leapfrog Integrator in the Middle Thermostat Scheme in Molecular Simulations"</i></p>
+	   <p>Zhaoxi Sun, Payam Kalhor, Yang Xu, Jian Liu<sup>*</sup> </p>
+	   <p>Chinese Journal of Chemical Physics, 34, 6, 932-948 (2021) </p> 
+	   <p>[Invited contribution to the John Zhang Festschrift] <a href="https://doi.org/10.1063/1674-0068/cjcp2111242">https://doi.org/10.1063/1674-0068/cjcp2111242</a>  </p>
+      </li>
+      <li>
+           <p><i>"Generalized Fourth-order Decompositions of Imaginary Time Path Integral: Implication of the Harmonic Oscillator"</i></p>
+           <p>Cong Wang, Lihan Zhang, <b>Jian Liu</b><sup>*</sup>, Jiushu Shao<sup>*</sup> </p>
+           <p>Chinese Journal of Chemical Physics, 35(3), 516-536 (2022) </p>
+           <p>[Invited Contribution to the Special Topic "Quantum and Classical Dynamics in Chemistry"] <a href="https://cps.scitation.org/doi/pdf/10.1063/1674-0068/cjcp2205089">https://cps.scitation.org/doi/pdf/10.1063/1674-0068/cjcp2205089</a> </p>
+      </li>
+    </ol>
+    <h3><b>● Path Integral-Based Approaches for Quantum Liouville Dynamics (quantum dynamics)</b></h3>
+    <div class="row mg-top-20">
+      <div class="col-sm-4">
+        <div class="well">
+          <img src="images/research/pild-square.png" alt="image:<i>" class="img-responsive center-block">
+          <div style="padding:9px">
+            <h4>Quantum Dynamics</h4>
+          </div>
+        </div>
+      </div>
+      <p>We were the first to develop a practical quantum dynamics method satisfying the two critical fundamental criteria: conservation of the quantum Boltzmann distribution for the thermal equilibrium system and being exact for any thermal correlation functions (of even nonlinear operators, i.e., nonlinear functions of position or momentum operators) in the classical and harmonic limits. The so-called path integral Liouville dynamics (PILD) [J. Chem. Phys. 140, 224107 (2014)] was derived from the elaborate combination of the imaginary time path integral and the three new theoretical frameworks that we formulated for generating trajectory-based dynamics methods in the quantum phase space [J. Chem. Phys. 134, 104101 (2011); 134, 104102 (2011); 134, 194110 (2011). Scientia Sinica Chimica, 46, 27 (2016)].</p>
+      <p>
+        PILD was applied to vibrational dynamics of several simple but representative realistic molecular systems (OH, water, ammonia, and methane) [J. Chem. Phys. 144, 034307 (2016)]. The dipole-derivative autocorrelation function was employed to obtain the infrared spectrum as a function of temperature and isotopic substitution. Comparison to the exact vibrational frequency shows that PILD produces a reasonably accurate peak position with a relatively small full width at half maximum. PILD offers a potentially useful trajectory-based quantum dynamics approach to compute vibrational spectra of molecular systems. We are extending the approach to study larger systems.</p>
+    </div>
+    <p>The relevant peer-reviewed papers are</p>
+    <ol>
+      <li>
+	<p><i>“Path integral Liouville dynamics for thermal equilibrium systems” </i></p>
+        <p>Jian Liu*</p>
+        <p>Journal of Chemical Physics, 140, 224107 (2014)</p>
+        <p><a href="https://doi.org/10.1063/1.4881518" target="_blank">https://doi.org/10.1063/1.4881518</a> </p>
+        <p> Note: In the article we propose a practical quantum dynamics method satisfying the two critical fundamental criteria: conservation of the quantum Boltzmann distribution for the thermal equilibrium system and being exact for any thermal correlation functions (of even nonlinear operators, i.e., nonlinear functions of position or momentum operators) in the classical and harmonic limits.</p>
+      </li>
+      <li>
+        <p><i>"Further study of path integral Liouville dynamics"</i></p>
+        <p> Jian Liu*, Dezhang Li, Xinzijian Liu</p>
+        <p> Scientia Sinica Chimica, 46, 27 (2016)</p>
+        <p>[Invited article for the special issue for the Festschrift for Professor Lemin Li's 80th birthday]</p>
+        <p> <a href="http://dx.doi.org/10.1360/N032015-00143">http://dx.doi.org/10.1360/N032015-00143</a> </p>
+        <p> Note: In the article we show how to derive PILD from each of the three frameworks in the phase space formulation of quantum mechanics which we formulated in 2011.</p>
+      </li>
+      <li>
+        <p><i>"Path integral Liouville dynamics: Applications to infrared spectra of OH, water, ammonia, and methane"</i></p>
+        <p>Jian Liu*, Zhijun Zhang</p>
+        <p>Journal of Chemical Physics, 144, 034307 (2016) </p>
+        <p><a href="http://dx.doi.org/10.1063/1.4939953" target="_blank">http://dx.doi.org/10.1063/1.4939953</a> </p>
+        <p>Note: In the article we apply PILD to study vibrational dynamics of several simple but representative realistic molecular systems, which demonstrates that PILD offers a potentially useful trajectory-based quantum dynamics approach to compute vibrational spectra of molecular systems.</p>
+      </li>
+      <li><p>Zhijun Zhang, Zifei Chen, Jian Liu<sup>*</sup></p> 
+      <p>"Path integral Liouville dynamics simulations of vibrational spectra of formaldehyde, and hydrogen peroxide"</p> 
+      <p>Chinese Journal of Chemical Physics, 33, 613 (2020)</p> 
+      <p>[<a href="https://doi.org/10.1063/1674-0068/cjcp2006099">https://doi.org/10.1063/1674-0068/cjcp2006099</a>] [Invited contribution] </p>
+      </li>
+      <li>
+      <p>Xinzijian Liu, Linfeng Zhang, Jian Liu<sup>*</sup></p> 
+      <p>"Machine Learning phase space quantum dynamics approaches"</p> 
+      <p>Journal of Chemical Physics, 154, 184104 (2021) </p> 
+      <p> [<a href="https://doi.org/10.1063/5.0046689">https://doi.org/10.1063/5.0046689</a>] </p> 
+      <p>[Invited contribution to the Special Topic 'Quantum Dynamics with ab Initio Potentials'] </p>
+      </li>
+    </ol>
+    <hr>
+    <h2><b>Applications</b></h2>
+    <h3><b>● Nuclear Quantum Effects in Vibrational Spectroscopy</b></h3>
+    <div class="row mg-top-20">
+      <div class="col-sm-5">
+        <div class="well">
+          <img src="images/research/water-600dpi.png" alt="image:<i>" class="img-responsive center-block">
+          <div style="padding:9px">
+            <h4>Dipole Moment Vector (IR)</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-5">
+        <div class="well">
+          <img src="images/research/Raman_box.png" alt="image:<i>" class="img-responsive center-block">
+          <div style="padding:9px">
+            <h4>Polarizability Tensor (Raman)</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p> Understanding vibrational spectra (infrared (IR) and Raman spectra) at the atomistic level is important for the elucidation of dynamical processes in complex/large molecular systems. The correlation approach offers a bridge to connect the microscopic motion to the experimental spectrum. Because the dipole moment/polarizability (or its time derivative) is often a highly nonlinear function of coordinates or/and momenta, we have employed the linearized semiclassical initial value representation for quantum dynamical simulations of liquid water (and heavy water) under ambient conditions based on an ab initio based, flexible, polarizable model. Besides applying our new PIMD algorithms in the “middle” scheme, we have proposed a new technique (by using the finite difference along the direction of a related vector) to significantly reduce the computational cost for preparing the initial condition for the correlation function.</p>
+    <p>
+      It is shown that quantum dynamical effects play a critical role in reproducing the peaks in the intermediate region between the librational and bending bands, those between the bending and stretching bands, and the double-peak in the stretching band in the experimental isotropic Raman spectrum. In contrast, quantum dynamical effects are important but less decisive in the anisotropic Raman spectrum. By selectively freezing either the intramolecular O-H stretching or H-O-H bending mode, we demonstrate that the peak in the intermediate region (2000-2400 cm-1) of the isotropic Raman spectrum arises from the interplay of the stretching and bending motions while a substantial part of the peak in the same intermediate region of the anisotropic Raman spectrum may be attributed to the combined motion of the bending and librational modes.</p>
+    <p>The relevant peer-reviewed papers are</p>
+    <ol>
+      <li>
+        <p><i>"Critical role of quantum dynamical effects in the Raman spectroscopy of liquid water"</i></p>
+        <p>Xinzijian Liu, Jian Liu*</p>
+	<p>Molecular Physics, 116(7-8), 755-779 (2018)</p>
+        <p> [Invited article for the special topic issue "Molecular Physics in China". Cover of the issue.] </p>
+        <p><a href="https://doi.org/10.1080/00268976.2018.1434907" target="_blank">https://doi.org/10.1080/00268976.2018.1434907</a></p>
+	<p><a href="http://www.tandfonline.com/eprint/4TjwwWZaju4fFGpwnKF3/full" target="_blank">Free eprints</a></p>
+        <p>Note: In this article we show that quantum dynamical effects play a decisive role in reproducing the peaks in the intermediate region between the librational and bending bands, those between the bending and stretching bands, and the double-peak in the stretching band in the experimental isotropic Raman spectrum. </p>
+      </li>
+    </ol>
+  </div>
+  <!-- footer -->
+  <footer class="footer bg-lightgray">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="support-footer">
+            <ul class="list-inline">
+              <li>
+                <p>Support:</p>
+              </li>
+              <li>
+                <a href="http://www.chem.pku.edu.cn/" target="_blank">
+    <img src="images/logo/ccme-logo.jpg">
+        </a>
+              </li>
+              <li>
+                <a href="http://bnlms.iccas.ac.cn/" target="_blank">
+    <img src="images/logo/BNLMS.jpg">
+        </a>
+              </li>
+              <li>
+                <a href="http://www.nsfc.gov.cn/" target="_blank">
+    <img src="images/logo/nsfc_logo.jpg">
+        </a>
+              </li>
+              <li>
+                <a href="http://www.most.gov.cn/" target="_blank">
+    <img src="images/logo/most_logo.jpg">
+        </a>
+              </li>
+              <li>
+                <a href="http://moe.gov.cn/" target="_blank">
+    <img src="images/logo/moe_logo.jpg">
+        </a>
+              </li>
+              <li>
+                <a href="http://www.skjlespc.net/" target="_blank">
+    <img src="images/logo/espc_logo.png">
+        </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <p class="text-muted text-center">Copyright &copy; 2015, Liu Group. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  <!-- ====== Bootstrap core JavaScript ====== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <script src="js/ie10-viewport-bug-workaround.js"></script>
+</body>
+
+</html>

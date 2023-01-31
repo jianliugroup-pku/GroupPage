@@ -1,0 +1,127 @@
+html {
+  position: relative;
+  min-height: 100%;
+  overflow-y: scroll;
+  /*prevent resizing the page due to scroll bar*/
+}
+
+html, body {
+  overflow-x: hidden;
+  /* Prevent scroll on narrow devices */
+}
+.sponsor:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.sponsor img {
+  margin: 8px 8px;
+  max-width: 120px;
+  max-height: 120px;
+  vertical-align: middle;
+  border: 0;
+}
+
+.navbar-toggle {
+  padding-top: 15px;
+  color: #efefef;
+}
+
+.navbar-toggle, .close {
+  outline: 0;
+}
+
+.navbar-toggle .icon-bar {
+  background-color: #000;
+}
+
+.navbar-custom {
+  border-width: 0;
+  background-color: #ffffff;
+  font-size: 16px;
+  top: 0;
+}
+
+.navbar-custom li>a {
+  /*background-color: #8A0808;*/
+  background-color: #000080;
+  color: #ffffff;
+}
+
+.navbar-custom .dropdown-menu li a {
+  color: #2A4888;
+}
+
+.navbar-custom .dropdown-menu li>a {
+  padding-left: 30px;
+}
+
+.navbar-custom li>a:hover, .navbar-custom li>a:focus {
+  background-color: #0000FF;
+  color: #fff;
+}
+
+.navbar-custom li.active>a {
+  /*background-color: #D22500;*/
+  background-color: #0000FF;
+}
+
+.navbar-collapse {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+td.openclose {
+  background-color: #FFA833;
+}
+
+td.break {
+  background-color: #AAF15F;
+}
+
+td.lecture {
+  background-color: #D4E8FE;
+}
+
+#slideshow {
+  margin: 30px auto;
+  position: relative;
+  width: 600px;
+  height: 400px;
+  padding: 10px;
+  /*box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);*/
+}
+
+#slideshow>div {
+  position: absolute;
+}
+
+#slideshow>div img {
+  width: 600px;
+  height: 400px;
+}
+
+@media (max-width: 767px) {
+#slideshow {
+  width: 480px;
+  height: 320px;
+}
+
+#slideshow>div img {
+  width: 480px;
+  height: 320px;
+}
+}
+
+@media (max-width: 600px) {
+#slideshow {
+  width: 330px;
+  height: 220px;
+}
+
+#slideshow>div img {
+  width: 330px;
+  height: 220px;
+}
+}

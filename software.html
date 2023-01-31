@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="">
+<meta name="author" content="Jian Liu Group">
+
+<title>Jian Liu Research Group, Peking University</title>
+
+<!-- Bootstrap core CSS -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="css/style.css" rel="stylesheet">
+
+<!-- The following scripts do not work for IE8, so you'd better use latest browsers -->
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>      
+      <script src="js/respond.min.js"></script>	  
+    <![endif]-->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108786458-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-108786458-1');
+</script>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="container">
+	<div style="display:inline-block;">
+	    <div class="pull-left">
+		<h3>Jian Liu Group @PKU</h3>
+	    </div>
+	    <div class="pull-left">	
+		<h3><small>Theoretical Chemistry / Chemical Dynamics</small></h3>
+	    </div>
+	</div>
+	<div class="pull-right">
+	    <img class="img-responsive" src="images/logo/group-logo-sword-pild.jpg"/>
+	</div>
+	<nav>
+	    <!--<div id="navbar" class="collapse navbar-collapse">--><!-- for mobile menu -->
+	    <div id="navbar" class="collapse navbar-collapse">
+		<ul class="nav nav-justified navbar-custom">
+		    <li><a href="index.html">Home</a></li>
+		    <li><a href="members.html">Members</a></li>
+		    <li><a href="research.html">Research</a></li>
+		    <li><a href="publications.html">Publications</a></li>
+		    <li><a href="teaching.html">Teaching</a></li>
+		    <li><a href="tutorials.html">Tutorials</a></li>
+		    <li class="active"><a href="#">Software</a></li>
+		    <li><a href="links.html">Links</a></li>
+		</ul>
+	    </div>
+	    <!--</div>-->
+	</nav>
+	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+	    <span class="sr-only">Toggle navigation</span>
+	    <span class="icon-bar"></span>
+	    <span class="icon-bar"></span>
+	    <span class="icon-bar"></span>
+	</button>
+    </div>
+
+</header>
+
+
+<div class="container">
+    <h1 class="page-header">Software</h1>   
+    <div class="tutorial"><!-- The layout is similar to tutorials -->    
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="tutorial-img">
+		    <a href="http://ambermd.org/GetAmber.php#ambertools">
+                        <img src="images/research/pimd-water-middle.png" alt="image: " class="img-responsive center-block">
+                    </a>
+                </div>
+		<div class="tutorial-img">
+                    <a href="http://ambermd.org/GetAmber.php#ambertools">
+                        <img src="images/research/Amber19_cover.png" alt="image: " class="img-responsive center-block">
+                    </a>
+                </div>
+            </div>	    
+            <div class="col-sm-8">
+                    <h2 class="tutorial-heading">
+                            The "middle" thermostat scheme in AmberTools
+                        </h2>
+                <div class="tutorial-text">
+                    <p> <!-- description for how to download it -->
+                        We have implemented the efficient "middle" thermostat scheme into the lastest version of AmberTools (AmberTools19). It can be obtained by following the instructions on <a href="http://ambermd.org/GetAmber.php#ambertools">the official website</a>.
+                        For the users who can only use AmberTools18, the updated files for the "middle" scheme for AmberTools18 can be downloaded from <a href="https://github.com/jianliugroup/AMBER-addition">the GitHub webpage</a>.
+                    </p>
+                    <p><!-- description for how to use it -->
+                        The tutorial for the "middle" scheme is available on the <a href="tutorial-testcase/tutorial-testcase.html">webpage</a>.
+			One is also encouraged to read the <a href="http://ambermd.org/doc12/Amber19.pdf">AMBER manual</a> for more details.  The "middle" thermostat scheme has been implemented for MD for classical statistics as well as primitive PIMD for quantum statistics.  It can be used together with QM/MM and enhanced sampling techniques (such as replica exchange) in AMBER. One can do <i>ab initio</i> PIMD or MD for the canonical ensemble by using AMBER combined with other quantum chemistry packages.
+                    </p>
+                    <p>Related papers:</p>
+                        <ul>
+			    <li><p>Zhaoxi Sun, Payam Kalhor, Yang Xu, Jian Liu<sup>*</sup>,"Extensive Numerical Tests of the Leapfrog Integrator in the Middle Thermostat Scheme in Molecular Simulations", Chinese Journal of Chemical Physics, 34, 6, 932-948 (2021) [Invited contribution to the John Zhang Festschrift] <a href="https://doi.org/10.1063/1674-0068/cjcp2111242">https://doi.org/10.1063/1674-0068/cjcp2111242</a>  </p></li> 	
+                            <li>
+                                <p>Zhijun Zhang, Xinzijian Liu, Kangyu Yan, Mark Tuckerman, Jian Liu<sup>*</sup>, "A unified efficient thermostat scheme for the canonical ensemble with holonomic or isokinetic constraints via molecular dynamics", Journal of Physical Chemistry A, 123, 28, 6056-6079 (2019). (Invited contribution to "Young Scientist Virtual Special Issue") [<a href="https://doi.org/10.1021/acs.jpca.9b02771">https://doi.org/10.1021/acs.jpca.9b02771</a>]<a href="paper/paper/constraint.pdf" download>[pdf version]</a>  (Highlighted in <a href="https://pubs.acs.org/doi/10.1021/acs.jpca.0c04262">JPC Virtual Issue on New Tools and Methods</a> ) </p>
+                            </li>
+<li><p>Xinzijian Liu, Jian Liu<sup>*</sup>, "Path integral molecular dynamics for exact quantum statistics of multi-electronic-state systems", Journal of Chemical Physics, 148, 102319 (2018) [<a href="https://doi.org/10.1063/1.5005059" target="_blank">https://doi.org/10.1063/1.5005059</a> Invited article for the JCP special topic issue on "Nuclear Quantum Effects"] <a href="https://arxiv.org/ftp/arxiv/papers/1710/1710.04126.pdf" target="_blank">[arXiv preprint]</a> <a href="paper/paper/9.pdf">[pdf version] </a>  </p></li>
+			    <li>
+                                    <p>Zhijun Zhang, Kangyu Yan, Xinzijian Liu, Jian Liu<sup>*</sup>, "A leap-frog algorithm-based efficient unified thermostat scheme <i>via</i> molecular dynamics", Chinese Science Bulletin，63(33), 3467-3483(2018) [Invited Contribution] [<a href="http://engine.scichina.com/doi/10.1360/N972018-00908">http://engine.scichina.com/doi/10.1360/N972018-00908</a> ] <a href="paper/paper/5.pdf">[pdf version] </a></p>
+                            </li>
+                            <li>
+                                <p>Dezhang Li, Zifei Chen, Zhijun Zhang, Jian Liu<sup>*</sup>, "Understanding molecular dynamics with stochastic processes <i>via</i> real or virtual dynamics", Chinese Journal of Chemical Physics, 30, 735 (2017)  [<a href="http://dx.doi.org/10.1063/1674-0068/30/cjcp1711223" target="_blank">http://dx.doi.org/10.1063/1674-0068/30/cjcp1711223</a> Invited article for the CJCP special topic issue on "Chemical Dynamics"]  <a href="http://cjcp.ustc.edu.cn/hxwlxb_en/ch/reader/create_pdf.aspx?file_no=cjcp1711223&amp;year_id=2017&amp;quarter_id=6&amp;falg=1" target="_blank">pdf version from the CJCP website</a>  <a href="https://arxiv.org/ftp/arxiv/papers/1711/1711.09497.pdf" target="_blank">[arXiv preprint]</a> <a href="paper/paper/8.pdf">[pdf version] </a>  </p>
+                            </li>
+                            <li>
+                                <p>Zhijun Zhang, Xinzijian Liu, Zifei Chen, Haifeng Zheng, Kangyu Yan, Jian Liu<sup>*</sup>, "A unified thermostat scheme for efficient configurational sampling for classical/quantum canonical ensembles <i>via</i> molecular dynamics", Journal of Chemical Physics, 147, 034109 (2017) [<a href="http://dx.doi.org/10.1063/1.4991621" target="_blank">http://dx.doi.org/10.1063/1.4991621</a>] <a href="ftp://ftp.aip.org/epaps/journ_chem_phys/E-JCPSA6-147-027726" target="_blank">Supplementary material</a>  <a href="https://arxiv.org/ftp/arxiv/papers/1705/1705.02236.pdf" target="_blank">[arXiv preprint]</a> <a href="paper/paper/11.pdf">[pdf version] </a>
+                                </p>
+                            </li>  
+<li>
+    <p>Jian Liu<sup>*</sup>, Dezhang Li, Xinzijian Liu, "A simple and accurate algorithm for path integral molecular dynamics", Journal of Chemical Physics, 145, 024103 (2016)   [<a href=" http://dx.doi.org/10.1063/1.4954990" target="_blank">http://dx.doi.org/10.1063/1.4954990</a>]  <a href="ftp://ftp.aip.org/epaps/journ_chem_phys/E-JCPSA6-145-007626" target="_blank">Supplementary material</a> <a href="https://arxiv.org/ftp/arxiv/papers/1611/1611.06331.pdf" target="_blank">[arXiv preprint (Paper + Supplemental materical)]</a><a href="paper/paper/14.pdf">[pdf version] </a> </p>
+</li>
+<li>
+    <p>Jian Liu<sup>*</sup>, Zhijun Zhang, "Path integral Liouville dynamics: Applications to infrared spectra of OH, water, ammonia, and methane", Journal of Chemical Physics, 144, 034307 (2016)  [<a href="http://dx.doi.org/10.1063/1.4939953" target="_blank">http://dx.doi.org/10.1063/1.4939953</a>] <a href="paper/paper/15.pdf">[pdf version] </a> </p>
+</li>
+                        </ul>
+                </div>
+            </div>
+        </div>
+    </div>         
+</div>
+
+
+<!-- footer -->
+<footer class="footer bg-lightgray">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="support-footer">
+                    <ul class="list-inline">
+                        <li><p>Support:</p></li>
+                        <li>
+                        <a href="http://www.chem.pku.edu.cn/" target="_blank">
+                            <img src="images/logo/ccme-logo.jpg">
+                        </a>
+                        </li>
+                        <li>
+                        <a href="http://bnlms.iccas.ac.cn/" target="_blank">
+                            <img src="images/logo/BNLMS.jpg">
+                        </a>
+                        </li>
+                        <li>
+                        <a href="http://www.nsfc.gov.cn/" target="_blank">
+                            <img src="images/logo/nsfc_logo.jpg">
+                        </a>
+                        </li>
+                        <li>
+                        <a href="http://www.most.gov.cn/" target="_blank">
+                            <img src="images/logo/most_logo.jpg">
+                        </a>
+                        </li>
+                        <li>
+                        <a href="http://moe.gov.cn/" target="_blank">
+                            <img src="images/logo/moe_logo.jpg">
+                        </a>
+                        </li>
+                        <li>
+                        <a href="http://www.skjlespc.net/" target="_blank">
+                            <img src="images/logo/espc_logo.png">
+                        </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>            
+        </div>
+        <div class="row">
+            <p class="text-muted text-center">Copyright &copy; 2015, Liu Group. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+<!-- ====== Bootstrap core JavaScript ====== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>

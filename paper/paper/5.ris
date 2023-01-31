@@ -1,0 +1,22 @@
+TY - JOUR
+T1 - A leap-frog algorithm-based efficient unified thermostat scheme for molecular dynamics
+AU - Zhijun Zhang
+AU - Kangyu Yan
+AU - Xinzijian Liu
+AU - Jian Liu
+JO - Chinese Science Bulletin
+VL - 63
+IS - 33
+SP - 3467
+EP - 3483
+PY - 2018
+DA - 2018/11/08
+SN - 0023-074X
+DO - https://doi.org/10.1360/N972018-00908
+UR - http://engine.scichina.com/doi/10.1360/N972018-00908
+KW - "middle" scheme
+KW - canonical ensemble
+KW - thermostatting integrators
+KW - marginal distribution of momentum
+KW - configurational sampling
+ER - 
