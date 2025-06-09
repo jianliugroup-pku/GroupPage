@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="">
+<meta name="author" content="Jian Liu Group">
+
+<title>Jian Liu Research Group, Peking University</title>
+
+<!-- Bootstrap core CSS -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="css/style.css" rel="stylesheet">
+
+<!-- The following scripts do not work for IE8, so you'd better use latest browsers -->
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>      
+      <script src="js/respond.min.js"></script>	  
+    <![endif]-->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108786458-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-108786458-1');
+</script>
+</head>
+
+<body>
+<header class="header">
+    <div class="container">
+	<div style="display:inline-block;">
+	    <div class="pull-left">
+		<h3>Jian Liu Group @PKU</h3>
+	    </div>
+	    <div class="pull-left">	
+		<h3><small>Theoretical Chemistry / Chemical Dynamics</small></h3>
+	    </div>
+	</div>
+	<div class="pull-right">
+	    <img class="img-responsive" src="images/logo/group-logo-sword-pild.jpg"/>
+	</div>
+	<nav>
+	    <!--<div id="navbar" class="collapse navbar-collapse">--><!-- for mobile menu -->
+	    <div id="navbar" class="collapse navbar-collapse">
+		<ul class="nav nav-justified navbar-custom">
+		    <li><a href="index.html">Home</a></li>
+		    <li><a href="members.html">Members</a></li>
+		    <li><a href="research.html">Research</a></li>
+		    <li><a href="publications.html">Publications</a></li>
+		    <li><a href="teaching.html">Teaching</a></li>
+		    <li><a href="tutorials.html">Tutorials</a></li>
+		    <li><a href="software.html">Software</a></li>
+		    <li><a href="#">Links</a></li>
+		</ul>
+	    </div>
+	    <!--</div>-->
+	</nav>
+	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+	    <span class="sr-only">Toggle navigation</span>
+	    <span class="icon-bar"></span>
+	    <span class="icon-bar"></span>
+	    <span class="icon-bar"></span>
+	</button>
+    </div>
+</header>
+
+
+<div class="container mg-top-20 mg-bottom-20">
+    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+        <li class="active"><a href="#mat" data-toggle="tab">Material</a></li>
+    </ul>
+    <div id="links-tab-content" class="tab-content">
+        </div><!--end of Material tab-->
+        <div class="tab-pane" id="mat">
+            <h1 class="page-header">Material</h1>
+
+            <!-- cover letter -->
+            <p>We report to you and the editorial office the ethical issues on the JCP manuscript (<strong>#</strong> <strong>JCP22-AR-01244</strong>) entitled “Non-adiabatic Dynamics using the Generators of the su(N) Lie Algebra” by Duncan Bossion, Sutirtha Chowdhury, and Pengfei Huo, of which the same version was also released to ChemRxiv online on <strong>May 20, 2022</strong>,</p>
+            <p><a href="https://chemrxiv.org/engage/chemrxiv/article-details/6286c9ba59f0d6831996a480"><u>https://chemrxiv.org/engage/chemrxiv/article-details/6286c9ba59f0d6831996a480</u></a>.</p>
+            <p>(<strong>Version 1</strong>.) We have prepared a file “***” to show “***” in detail.</p>
+            <p><strong>More importantly,</strong> we also report the ethical issues on its revised version entitled “Non-adiabatic Mapping Dynamics in the Phase Space of the SU(N) Lie Group” by Duncan Bossion, Wenxiang Ying, Sutirtha Chowdhury, and Pengfei Huo, released to ChemRxiv online on <strong>May 27, 2022</strong>.</p>
+            <p><a href="https://chemrxiv.org/engage/chemrxiv/article-details/6290092c1df2edd1ac59ea52"><u>https://chemrxiv.org/engage/chemrxiv/article-details/6290092c1df2edd1ac59ea52</u></a></p>
+            <p>(<strong>Version 2</strong>.)</p>
+            <p>The accepted version at JCP.</p>
+            <p><a href="https://aip.scitation.org/doi/10.1063/5.0094893"><u>https://aip.scitation.org/doi/10.1063/5.0094893</u></a></p>
+            <p>(<strong>Version 3</strong>.)</p>
+            <p>See the <em>Zhihu</em> webpage</p>
+            <p><a href="https://www.zhihu.com/people/liu-xing-yu-72-53/pins"><u>https://www.zhihu.com/people/liu-xing-yu-72-53/pins</u></a></p>
+            <p>Check the note opened on May 15, 2022 (Beijing Time) or May 14, 2022 (Eastern Standard Time), and see the relevant comments added later. Written by Wenxiang Ying (the second author of Version 2/Version 3) and the Huo group.</p>
+            <ol type="1">
+                <li><p><strong>In Version 1, Version 2, and Version 3, the authors plagiarized the idea on the relation between our CMM approach</strong> [<em>J. Chem. Phys.</em> 151, 024105 (2019); <em>J. Phys. Chem. Lett.</em> 12, 2496–2501 (2021)] <strong>and the general spin-mapping (SM) method of</strong> <em>J. Chem. Phys.</em> 152, 084110 (2020)<strong>, which had already been presented in the literature.</strong> E.g., in the discussion after Equation 23 on Page 6847 of <em>J. Phys. Chem. A</em> 125, 6845–6863 (2021) [submitted on May 19, 2021, revised on July 3, 2021, released on arXiv on <strong>July 7, 2021</strong>, and published online on <strong>August 2, 2021</strong>], as well as in the discussion after Equation 44 on Page 4220 of <em>Acc. Chem. Res.</em> 54, 4215–4228 (2021) [submitted on <strong>August 14, 2021</strong> and published online on <strong>November 10, 2021</strong>].</p></li>
+            </ol>
+            
+            <p>More details are presented in Evidence-1.pdf and Evidence-2.pdf.</p>
+            <ol start="2" type="1">
+                <li><p><strong>In Version 1 (even until May 20, 2022), Huo and his coworkers failed to correctly derive Hamilton’s equations of motion of the Stratonovich phase space with an SU(F) structure. In both Version 2 (</strong>released to ChemRxiv online on <strong>May 27, 2022) and Version 3 (published online on August ***, 2022), the authors plagiarized the ideas of Appendix 3 of Wiley Interdiscip. Rev. Comput. Mol. Sci. e1619 (2022)</strong> <a href="https://doi.org/10.1002/wcms.1619"><u>https://doi.org/10.1002/wcms.1619</u></a> (released on arXiv on May 8, 2022 and officially published on May 13, 2022) <strong>to obtain the correct derivation.</strong></p></li>
+            </ol>
+                <p>It is evident that Huo and his coworkers was <strong>incapable</strong> of obtaining the correct derivation for the equations of motion for the 2F-2 variables on the SU(F) Stratonovich phase space <strong>even until May 20, 2022</strong> when Version 1 was released on ChemRxiv. Not until in Version 2 released to ChemRxiv on <strong>May 27, 2022</strong>, the authors achieved the correct derivation.</p>
+                <p>In contrast, the correct equations of motion for either the 2F Meyer-Miller variables (on constraint coordinate-momentum phase space) or the 2F-2 variables on the SU(F) Stratonovich phase space were presented in our WCMS manuscript revised on April 8, 2022, accepted on April 11, 2022, released on arXiv on <strong>May 8, 2022</strong> and officially published on <strong>May 13, 2022.</strong></p>
+                <p>There existed nearly <strong>three weeks</strong> between May 8, 2022 and May 27, 2022. It offered more than enough time for Huo and his coworkers to plagiarize the ideas of our WCMS paper (not necessarily limited to its Appendix 3) for them to obtain the correct derivation procedure and add additional changes.</p>
+                <p>Please see more details in Evidence-3.pdf.</p>
+                <p>More evidences of Huo and his coworkers’ academic misconduct behaviors that occurred during the transition from Version 1 to Version 2/Version 3 include</p>
+            <ol type="a">
+                <li><p>Huo and his coworkers followed the title of our WCMS paper to change the title of Version 1 to that of Version 2/Version 3.</p></li>
+            </ol>
+                <p>Huo and his coworkers even changed the title from</p>
+                <p>“Non-adiabatic Dynamics using the Generators of the su(N) <strong>Lie Algebra</strong>”</p>
+                <p>to</p>
+                <p>“Non-adiabatic Mapping Dynamics in the <strong>Phase Space</strong> of the SU(N) Lie Group”</p>
+                <p>Wenxiang Ying, who was not an author of Version 1, became the second author of Version 2 as well as Version 3.</p>
+                <p>For comparison, the title of our WCMS paper had been</p>
+                <p>“New phase space formulations and quantum dynamics approaches”.</p>
+                <p>One main theme of the paper had been focused on mapping dynamics for nonadiabatic systems, where the Stratonovich phase space with an SU(2) or SU(F) structure had also been discussed.</p>
+                <p>( See Evidence-4.pdf  )</p>
+            <ol start="2" type="a">
+                <li><p>In our WCMS paper, we had used the key words, “smooth manifold” and “diffeomorphic”, to describe phase space. While such words never appeared in Version 1, Huo and his coworkers either rephrased our key words or even directly copied/pasted them in Version 2/Version 3. Such plagiarisms occurred in more than <strong>10</strong> places in Huo’s revised version (Version 2/Version 3).</p></li>
+            </ol>
+                <p>More details are presented in Evidence-5.pdf</p>
+            <ol start="3" type="a">
+                <li><p>It is evident that in Version 1 Huo and his coworkers even ridiculously used the so called term “su(N) symmetry group”, which could hardly be written by any scholars who are aware of Lie group or Lie algebra. In addition, in Version 1 Huo and his coworkers did not realize that the key of phase space mapping should be the Lie group structure rather than Lie algebra. Only after reading our WCMS paper (released on arXiv on May 8, 2022 and officially published on May 13, 2022), Huo and his coworkers plagiarized our ideas to correct their mistakes. Such plagiarisms occurred in more than <strong>30</strong> places in Huo’s revised version (Version 2/Version 3).</p></li>
+            </ol>
+                <p>More details are presented in Evidence-6.pdf</p>
+            <ol start="4" type="a">
+                <li><p>In Version 1, Huo and his coworkers never understood the concept as well as importance of the global phase when they did the transform between the 2F Meyer-Miller variables and the 2F-2 variables on the SU(F) Stratonovich phase space.</p></li>
+            </ol>
+                <p>Huo and his coworkers plagiarized our idea in the WCMS paper while abruptly adding the global phase in the equations (in Version 2/Version 3) with no deep understanding of the true role of the global phase.</p>
+                <p>More details are presented in Evidence-7.pdf</p>
+            <ol start="5" type="a">
+                <li><p>In Version 1 (<strong>even until May 20, 2022</strong>), Huo and his coworkers never cited the paper [ M. A. Marchiolli and D. Galetti, <em>J. Phys. A: Math. Theor.</em> 52, 405305 (2019)  ], which is Ref. 116 of our WCMS paper.</p></li>
+            </ol>
+                <p>In Version 2/Version 3, Huo and his coworkers copied/pasted our citation of the paper after their reading our WCMS paper (released on arXiv on May 8, 2022 and officially published on May 13, 2022).</p>
+                <p>There are several more references that Huo and his coworkers added in Version 2/Version 3 after reading our WCMS paper. More details are presented in Evidence-8.pdf</p>
+            <ol start="3" type="1">
+                <li><p><strong>Not less importantly, Huo and his coworkers had the falsification (i.e., data fraud) issue. When Huo and his coworkers submitted the JCP manuscript (# JCP22-AR-01244), which is identical to the ChemRxiv preprint (Version 1 released online on May 20, 2022). In Version 1, Huo and his coworkers made serious mistakes in deriving the equations of motion on the SU(N) Stratonovitch phase space. Their equations of motion happened to be valid for two-state systems, but were completely wrong for three or more-state systems. Interestingly, Figure *** of Version 1 is identical to Figure *** of Version 2 and Figure *** of Verison 3.</strong> More details are presented in Evidence-9.pdf.</p></li>
+                <li><p><strong>In addition to what we report above, Huo and his coworkers plagiarized the equations of</strong> <em>J. Chem. Phys.</em> 152, 084110 (2020) <strong>in more than 8 places of Version 1/Version 2/Version 3. Similarly, in Version 2/Version 3, Huo and his coworkers plagiarized the contribution of</strong> <em>J. Phys. A: Math. Theor.</em> 45, 015302 (2012) and even made a statement in Ref. 64 of Version 2 as well as Ref. 65 of Version 3 as if they were the first to achieve the kernel formalism of eq. (27) of either Version 2 or Version 3.</p></li>
+            </ol>
+            <p>More details are presented in Evidence-10.pdf and Evidence-11.pdf.</p>
+                <p><strong>It has been a habit of Huo and his coworkers to plagiarize others’ ideas reported in the literature.</strong> In Version 1, Huo and his coworkers <strong>plagiarized in at least *** places. More details are listed in ***.pdf</strong></p>
+                <p>Yours sincerely</p>
+                <p>Jian Liu</p>
+
+            <!-- cover letter -->
+
+            <p> There are materials for allegation on paper DOI:<a href="https://doi.org/10.1063/5.0094893">10.1063/5.0094893</a></p>
+            <ul>
+                <li><p><a href="files/2022/SI/Huo1_comment_0804-rev6.pdf" target="_blank">Comment on Version 1 (May, 20, 2022)</a>, corresponding the <a href='https://chemrxiv.org/engage/chemrxiv/article-details/6286c9ba59f0d6831996a480'>ChemRxiv Version 1</a></p></li>
+                <li><p><a href="files/2022/SI/Huo2_comment_rev37.pdf" target="_blank">Comment on Version 2 (May, 27, 2022)</a>, corresponding the <a href='https://chemrxiv.org/engage/chemrxiv/article-details/6290092c1df2edd1ac59ea52'>ChemRxiv Version 2</a></p></li>
+                <li><p><a href="files/2022/SI/HuoJCP-ver4.pdf" target="_blank">Comment on accepted Version (July, 29, 2022)</a></p></li>
+                <li><p><a href="files/2022/evidence.pdf" target="_blank">Evidence file on JCP manuscript</a>
+                    <ul>
+                        <li> 
+                            Evidence 1: See <a href="files/2022/E1.pdf" target="_blank">Supporting PDF</a>.
+                            <!-- <img src="files/2022/figs/No1-v5.png" width=80%></img> -->
+                        </li>
+                        <li> 
+                            Evidence 2: See <a href="files/2022/E2.pdf" target="_blank">Supporting PDF</a>.
+                            <!-- <img src="files/2022/figs/No2-v5.png" width=80%></img> --> 
+                        </li>
+                        <li> 
+                            Evidence 3: See <a href="files/2022/E3.pdf" target="_blank">Supporting PDF</a>. 
+                            <!-- <img src="files/2022/figs/No3-v5.png" width=80%></img> -->
+                        </li>
+                        <li> 
+                            Evidence 4: See <a href="files/2022/E4.pdf" target="_blank">Supporting PDF</a>.
+                            <!-- <img src="files/2022/figs/No4-v5.png" width=80%></img> -->
+                        </li>
+                        <li> 
+                            Evidence 5: See <a href="files/2022/E5.pdf" target="_blank">Supporting PDF</a>. 
+                            <!-- <img src="files/2022/figs/No5-v5.png" width=80%></img> -->
+                        </li>
+                        <li> 
+                            Evidence 6: See <a href="files/2022/E6.pdf" target="_blank">Supporting PDF</a>. 
+                            <!-- <img src="files/2022/figs/No6-v5.png" width=80%></img> -->
+                        </li>
+                        <li> 
+                            Evidence 7: See <a href="files/2022/E7.pdf" target="_blank">Supporting PDF</a>. 
+                            <!-- <img src="files/2022/figs/No7-v5.png" width=80%></img> -->
+                        </li>
+                        <li> 
+                            Evidence 8: See <a href="files/2022/E8.pdf" target="_blank">Supporting PDF</a>. 
+                            <!-- <img src="files/2022/figs/No8-v5.png" width=80%></img> -->
+                        </li>
+                        <li> 
+                            Evidence 9: See <a href="files/2022/E9.pdf" target="_blank">Supporting PDF</a>. 
+                            <!-- <img src="files/2022/figs/No9-v5.png" width=80%></img> -->
+                        </li>
+                        <li> 
+                            Evidence 10: See <a href="files/2022/E10.pdf" target="_blank">Supporting PDF</a>. 
+                            <!-- <img src="files/2022/figs/No10-v5.png" width=80%></img> -->
+                        </li>
+                        <li> 
+                            Evidence 11: See <a href="files/2022/E11.pdf" target="_blank">Supporting PDF</a>. 
+                            <!-- <img src="files/2022/figs/No11-v5.png" width=80%></img> -->
+                        </li>
+                        <li> 
+                            Evidence X: See <a href="files/2022/EX.pdf" target="_blank">Supporting PDF</a>. 
+                            <!-- <img src="files/2022/figs/NoX-v5.png" width=80%></img> -->
+                        </li>
+                    </ul>
+                    </p>
+                </li>
+                <li>
+                    <a href="files/2022/numerical.pdf" target="_blank">Numerical file on JCP manuscript</a>, and corresponding
+                    <a href="files/2022/SourceCode.zip" target="_blank">SourceCode</a>
+                </li>
+	    </ul>
+        </div><!--end of Material tab-->
+    </div>
+</div>
+
+
+<!-- footer -->
+<footer class="footer bg-lightgray">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="support-footer">
+                    <ul class="list-inline">
+                        <li><p>Support:</p></li>
+                        <li>
+                        <a href="http://www.chem.pku.edu.cn/" target="_blank">
+                            <img src="images/logo/ccme-logo.jpg">
+                        </a>
+                        </li>
+                        <li>
+                        <a href="http://bnlms.iccas.ac.cn/" target="_blank">
+                            <img src="images/logo/BNLMS.jpg">
+                        </a>
+                        </li>
+                        <li>
+                        <a href="http://www.nsfc.gov.cn/" target="_blank">
+                            <img src="images/logo/nsfc_logo.jpg">
+                        </a>
+                        </li>
+                        <li>
+                        <a href="http://www.most.gov.cn/" target="_blank">
+                            <img src="images/logo/most_logo.jpg">
+                        </a>
+                        </li>
+                        <li>
+                        <a href="http://moe.gov.cn/" target="_blank">
+                            <img src="images/logo/moe_logo.jpg">
+                        </a>
+                        </li>
+                        <li>
+                        <a href="http://www.skjlespc.net/" target="_blank">
+                            <img src="images/logo/espc_logo.png">
+                        </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>            
+        </div>
+        <div class="row">
+            <p class="text-muted text-center">Copyright &copy; 2015, Liu Group. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- ====== Bootstrap core JavaScript ====== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>

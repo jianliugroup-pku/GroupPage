@@ -1,0 +1,265 @@
+html {
+    position: relative;
+    min-height: 100%;
+    overflow-y:scroll; /*prevent resizing the page due to scroll bar*/
+}
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 170px;
+    font-size:160%;
+}
+html,
+body {
+    overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+.bg-lightgray {
+    background-color:#f5f5f5;
+}
+.bg-custom {
+    background-color:#3B5999;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height:  50px;
+    border-top: 1px solid #f8f8f8;
+    /* background-color:#3B5999; #f5f5f5; */
+}
+.font-18 {
+    font-size:18px;
+}
+.header {
+    background-color:#f5f5f5;
+    overflow:hidden;
+    padding:0;
+}
+.header h3 {
+    margin:20px 0;
+    padding-left:15px;
+}
+.header .ver {
+    float:right;
+    margin:15px 15px 0 15px;
+}
+.header img {
+    max-height: 120px;
+}
+/* Move down content in main content, because navbar is fixed top */
+.content {
+    padding: 15px 0 15px 0;
+}
+
+.navbar-toggle {
+    padding-top: 15px;
+    color:#efefef;
+}
+.navbar-toggle, .close {
+    outline:0;
+}
+.navbar-toggle .icon-bar {
+    background-color: #000;
+}
+
+.navbar-custom {
+    border-width: 0;
+    background-color: #ffffff;
+    font-size: 16px;
+    top:0;
+}
+.navbar-custom li > a {
+    background-color: #3B5999;
+    color:#ffffff;
+}
+
+.navbar-custom .dropdown-menu li a {color:#2A4888;}
+.navbar-custom .dropdown-menu li > a {padding-left:30px;}
+
+.navbar-custom li>a:hover, 
+.navbar-custom li>a:focus {
+    background-color:#2A4888;
+    color:#bbb;
+}
+.navbar-custom li.active {
+    border-bottom:4px solid #FFA500;
+}
+.navbar-collapse {
+    padding-right:0;
+    padding-left:0;
+}
+
+.mg-top-10 {
+    margin-top:10px;
+}
+.mg-top-20 {
+    margin-top:20px;
+}
+.mg-bottom-20{
+    margin-bottom:20px;
+}
+.pd-20 {
+    padding:20px;
+}
+.panel-primary .panel-heading {
+    background-color:#3B5999;
+}
+.contact {
+    display:inline-block;
+    padding: 0 10px;
+}
+.contact-item {
+    border-left: 1px dashed;
+}
+.member-list {
+    padding-left: 10px;
+    list-style:none;
+}
+.member,
+.member-text {
+    overflow:hidden;
+    zoom:1;
+}
+.member-photo,
+.member-text {
+    display:table-cell;
+    vertical-align:top;
+}
+
+.photo-shadow {
+    box-shadow: 2px 2px 3px 0px #000000;
+    margin: auto;
+    margin-bottom: 20px;
+}
+.member-brief {
+    overflow: hidden;
+    margin-bottom:15px;
+}
+.member-box {
+    overflow: hidden;
+}
+.member-photo-box {
+    display: flex; /* 设置容器为flex布局 */
+    align-items: center; /* 水平居中对齐项目 */
+    justify-content: center; /* 垂直居中对齐项目 */
+    height: 200px;
+}
+.member-list-box {
+    width: 100%;
+    overflow: auto;
+}
+.member {
+    margin-bottom: 20px;
+}
+.member-text {
+    padding: 10px 0 10px 20px;
+}
+.member-heading {
+    margin-bottom:15px;
+}
+.member-heading h3 {
+    margin-top:0;
+}
+.member-intro {
+    padding:5px 0;
+}
+.support {
+    margin-left: 10px;
+    margin-bottom:20px;
+}
+.support-logo,
+.support-text {
+    display:table-cell;
+    vertical-align:middle;
+}
+.support-logo {
+    text-align:center;
+    padding: 0 10px;
+}
+.support-logo img {
+    margin-top:auto;
+    margin-bottom:auto;
+    width:120px;
+}
+.support-text {
+    padding: 0 10px;
+}
+.support-footer {
+    margin:30px 0 20px 0;
+    background-color:white;
+    text-align:center;
+}
+.support-footer img {
+    margin:10px 0;
+    width:60px;
+}
+.tutorial {
+    margin-top: 20px;
+    padding: 0 20px;
+    border-bottom: 1px dotted silver;
+}
+.tutorial-img,
+.tutorial-text {
+    margin-bottom: 20px;
+}
+.tutorial-heading {
+    margin-top:0;
+}
+/* set caption below image, different from default carousel */
+.carousel-caption {
+    background: rgba(0,0,0,0.35);
+    position:relative;
+    top:0;
+    bottom:auto;
+    left: auto;
+    right: auto;
+}
+.carousel-indicators{
+    bottom: 1%;
+}
+.carousel-control {
+    top:45%; /*94%;*/
+    width:auto;
+    height:1em;
+    background:transparent;
+}
+.carousel-control.left {
+    left:3%;
+}
+.carousel-control.right {
+    right:3%;
+}
+/* show controls "<" and ">" only on hover */
+.carousel .carousel-control { visibility: hidden; }
+.carousel:hover .carousel-control { visibility: visible; }
+/* modify width, if images for slide change */
+.slide-img1 {
+    width:99.5%;
+    margin:0 auto;
+}
+.slide-img2 {
+    width:100%;
+    margin:0 auto;
+}
+.slide-img3 {
+    width:63.4%;
+    margin:0 auto;
+}
+.news {
+    margin-bottom:15px;
+    border-bottom:1px dashed silver;
+}
+
+.same-height-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+.same-height-row > [class^="col-"] {
+  display: flex;
+  flex-direction: column;
+}
+.same-height-row .well {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}

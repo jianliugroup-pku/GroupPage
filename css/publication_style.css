@@ -1,0 +1,41 @@
+li {
+    list-style-type: decimal;
+    margin-bottom: 20px;
+}
+
+.publication-item{
+    display: flex;
+    justify-content: space-between;
+}
+.publication-text {
+    width: 70%;
+    margin-left: 10px;
+}
+
+.publication-image {
+    width: 30%;
+    height: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0px 0px 3px 0px #000000;
+}
+
+@media screen and (max-width: 768px) {
+    .publication-item {
+        flex-direction: column;
+    }
+    .publication-image {
+        width: 100%;
+        height: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0px 0px 3px 0px #000000;
+        /* display: none; */
+
+    }
+    .publication-text {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
