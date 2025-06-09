@@ -1,0 +1,29 @@
+
+TY  - JOUR
+T1  - Recent advances in the linearized semiclassical initial value representation/classical Wigner model for the thermal correlation function
+AU  - Liu, Jian
+Y1  - 2015/06/05
+PY  - 2015
+DA  - 2015/06/05
+N1  - doi: 10.1002/qua.24872
+DO  - 10.1002/qua.24872
+T2  - International Journal of Quantum Chemistry
+JF  - International Journal of Quantum Chemistry
+JO  - International Journal of Quantum Chemistry
+JA  - Int. J. Quantum Chem.
+SP  - 657
+EP  - 670
+VL  - 115
+IS  - 11
+KW  - quantum dynamics
+KW  - phase space
+KW  - correlation function
+KW  - path integral
+KW  - semiclassical initial value representation
+PB  - John Wiley & Sons, Ltd
+SN  - 0020-7608
+M3  - doi: 10.1002/qua.24872
+UR  - https://doi.org/10.1002/qua.24872
+Y2  - 2018/12/31
+N2  - This article focuses on most recent advances in the linearized semiclassical initial value representation (LSC-IVR)/classical Wigner model that includes quantum effects with classical trajectories and recovers exact thermal correlation functions (of even nonlinear operators, that is, nonlinear functions of position or momentum operators) in the classical, high temperature, and harmonic limits. Two methods for implementing the LSC-IVR/classical Wigner which are in principle feasible to be combined with general force fields or even ab initio electronic structure methods have been reviewed. One is the local Gaussian approximation with the imaginary time path integral approach, the other is the quantum thermal bath method. The article emphasizes on the theory and the algorithms for implementation, while it also covers recent applications and limitations of the LSC-IVR/classical Wigner. ? 2015 Wiley Periodicals, Inc.
+ER  - 

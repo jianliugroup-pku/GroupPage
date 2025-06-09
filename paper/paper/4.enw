@@ -1,0 +1,32 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%0 Journal Article
+%A Yan, Yun-An
+%A Liu, Jian
+%A Shao, Jiushu
+
+%T A semiclassical initial-value representation for quantum propagator and boltzmann operator
+%D 2019
+%J Journal of Computational Chemistry
+%P 1161-1171
+%V 40
+%N 10
+%R doi:10.1002/jcc.25751
+%U https://onlinelibrary.wiley.com/doi/abs/10.1002/jcc.25751
+%X Starting from the position-momentum integral representation, we apply the correction operator method to the derivation of a uniform semiclassical approximation for the quantum propagator and then extend it to approximate the Boltzmann operator. In this approach, the involved classical dynamics is determined by the method itself instead of given beforehand. For the approximate Boltzmann operator, the corresponding classical dynamics is governed by a complex Hamiltonian, which can be described as a pair of real Hamiltonian systems. It is demonstrated that the semiclassical Boltzmann operator is exact for linear systems. A quantum propagator in the complex time is thus proposed and preliminary numerical results show that it is a reasonable approximation for calculating thermal correlation functions of general systems. © 2018 Wiley Periodicals, Inc.
+
+
+
+

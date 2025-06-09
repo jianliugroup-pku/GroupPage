@@ -1,0 +1,1162 @@
+
+<!DOCTYPE html>
+<html>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]  // 配置行内公式分隔符
+    }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Tutorial - The unified “middle” thermostat and barostat scheme in AMBER for efficient configurational sampling (Both for CPU and GPU)</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="github.css">
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript" 
+integrity="sha256-fCth3p2B4cZMzlr7OFizmo5RkdJAHJ4vOHpE7FaNcR8="
+crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="markdown-body">
+<header>
+<h1 class="title">Tutorial for CPU & GPU - The unified “middle” thermostat and barostat scheme in AMBER for efficient configurational sampling</h1>
+</header>
+<nav id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#input-parameters">Input parameters</a></li>
+<li><a href="#Tutorial-for-a-simulation-of-liquid-water">Tutorial for a simulation of liquid water</a></li><ul>
+<li><a href="#Preparing-topology-and-coordinate-files">Preparing topology and coordinate files</a></li> 
+<li><a href="#Minimizing-the-energy-of-the-system">Minimizing the energy of the system</a></li>
+<li><a href="#Equilibrating-and-Sampling-the-system-using-classical-dynamics-NPT">Equilibrating and Sampling the system using classical dynamics (NPT)</a></li>
+<li><a href="#Analysis">Analysis</a></li>
+</ul>
+<li><a href="#test-cases">Test cases</a><ul>
+<li><a href="#molecular-dynamics-for-classical-statistics">Molecular dynamics (for classical statistics)</a><ul>
+<li><a href="#a-md-input-using-the-langevin-thermostat-with-the-lfmiddle-scheme-for-liquid-water.">(a) MD input using the Langevin thermostat with the “LFMiddle” scheme for liquid water.</a></li>
+<li><a href="#b-md-input-using-langevin-dynamics-with-the-lfmiddle-scheme-for-the-liquid-water.-lengths-of-the-bonds-having-hydrogen-atoms-are-constrained.">(b) MD input using Langevin dynamics with the “LFMiddle” scheme for the liquid water. Lengths of the bonds having hydrogen atoms are constrained.</a></li>
+<li><a href="#c-md-input-using-langevin-dynamics-and-stochastic-cell-rescaling-barostat-with-the-lfmiddle-scheme-for-the-liquid-water.-lengths-of-the-bonds-having-hydrogen-atoms-are-constrained.">(c) MD input using Langevin dynamics and stochastic cell rescaling barostat with the “LFMiddle” scheme for the liquid water in the isothermal-isobaric (NPT) ensemble. Lengths of the bonds having hydrogen atoms are constrained.</a></li>
+</ul></li>
+<li><a href="#path-integral-molecular-dynamics-for-quantum-statistics">Path integral molecular dynamics (for quantum statistics)</a><ul>
+<li><a href="#d-primpimd-input-using-the-andersen-thermostat-with-the-lfmiddle-scheme-for-the-liquid-water.-lengths-of-the-bonds-having-hydrogen-atoms-are-constrained.">(d) PRIMPIMD input using the Andersen thermostat with the “LFMiddle” scheme for the liquid water. Lengths of the bonds having hydrogen atoms are constrained.</a></li>
+<li><a href="#e-primpimd-input-using-langevin-dynamics-with-the-lfmiddle-scheme-for-the-liquid-water.-no-constraints-are-applied.">(e) PRIMPIMD input using Langevin dynamics with the “LFMiddle” scheme for the liquid water. No constraints are applied.</a></li>
+<li><a href="#f-nmpimd-input-using-langevin-dynamics-and-mttk-langevin-barostat-with-the-lfmiddle-scheme-for-the-liquid-water-in-the-isothermal-isobaric-ensemble.-no-constraints-are-applied.">(f) PRIMPIMD input using Langevin dynamics with the “LFMiddle” scheme for the liquid water. No constraints are applied.</a></li>
+</ul></li>
+<li><a href="#qmmm-molecular-dynamics">QM/MM molecular dynamics</a><ul>
+<li><a href="#g-qmmm-md-input-using-the-langevin-thermostat-with-the-lfmiddle-scheme-for-the-alanine-dipeptide-solved-in-methol-box.-lengths-of-the-bonds-having-hydrogen-atoms-are-constrained-for-the-mm-part-while-no-constraints-are-applied-to-the-qm-part.">(g) QM/MM MD input using the Langevin thermostat with the “LFMiddle” scheme for the alanine dipeptide solved in methol box. Lengths of the bonds having hydrogen atoms are constrained for the MM part, while no constraints are applied to the QM part.</a></li>
+</ul></li>
+<li><a href="#replica-exchange-molecular-dynamics">Replica exchange molecular dynamics</a><ul>
+<li><a href="#h-remd-input-using-the-langevin-thermostat-with-the-lfmiddle-scheme-for-the-ace-ala-ala-ala-nme-in-vacuum.lengths-of-the-bonds-having-hydrogen-atoms-are-constrained.">(h) REMD input using the Langevin thermostat with the “LFMiddle” scheme for the ACE-ALA-ALA-ALA-NME in vacuum.Lengths of the bonds having hydrogen atoms are constrained.</a></li>
+</ul></li>
+<li><a href="#Pmemd-examples-for-GPUs">Pmemd examples for CPU and GPU</a><ul>
+<li><a href="#i-GPU-1">(g) Pmemd input for liquid water with 4096 water molecules in a cell </a></li>
+<li><a href="#j-GPU-2">(j) Pmemd input for liquid water with 4096 water molecules in the isothermal-isobaric (NPT) in a cell</a></li>
+<li><a href="#k-GPU-3">(h) Pmemd input for DNA A7 −T7 duplex solvated in a cell with 3351 water molecules and 12 sodium ions as counter-ions </a></li>
+<li><a href="#l-GPU-4">(i) Pmemd input for Ethaline Deep Eutectic Solvent(512 choline chloride and 1024 ethylene glycol molecules) </a></li>
+<li><a href="#m-GPU-5">(m) Pmemd input for 1:6 methanol-zinc chloride solution (290 zinc chloride and 1740 methanol molecules) </a></li>
+
+</ul></li>
+</ul></li>
+<li><a href="#references">References</a></li>
+</ul>
+</nav>
+<h2 id="introduction">Introduction</h2>
+<p>The tutorial offers an introduction to the unified “middle” scheme of thermostatting and barostatting algorithms in AMBER.</p>
+<p>The prerequisites are listed as below:</p>
+<ul>
+<li><a href="http://ambermd.org">AMBER software package</a> (2025 or later version) - <code>sander</code> and its parallel version, <code>sander.MPI</code>, <code>pmemd</code> and its parallel or GPU version, <code>pmemd.MPI</code>, <code>pmemd.cuda_SPFP</code> and <code>pmemd.cuda_DPFP</code>, are used to run simulations. In addition, <code>LEaP</code> (tleap and its graphical user interface, xleap) is utilized to generate the topology file of the simulated system.</li>
+</ul>
+<p>The “middle” scheme offers a unified framework to develop efficient thermostatting and barostatting algorithms for configurational sampling for the canonical (NVT) ensemble and isothermal-isobaric (NPT) ensemble, as described in Refs. <span class="citation" data-cites="PIMD-BAOAB-2016 middle-scheme-2017 Langevin-virtual-2017 Andersen-virtual-2017 LFMiddle-Constr-2018">[<a href="#ref-PIMD-BAOAB-2016">1</a>–<a href="#ref-middle-scheme-2017">5</a>]</span>
+<span class="citation" data-cites="Middle-Constr-SINR-2019">[<a href="#ref-Middle-Constr-SINR-2019">12</a>]</span>
+. It can be implemented for performing molecular dynamics (MD) or path integral molecular dynamics (PIMD), either with or without holonomic constraints. The “middle” scheme allows the use of much larger time intervals (i.e., time stepsizes) <span class="math inline">\(\Delta t\)</span>
+ to maintain the same accuracy, which significantly improves the configurational sampling efficiency. That is, it is efficient for calculating structural properties and thermodynamic observables that depend on coordinate variables (and the volume variable for the isothermal-isobaric ensemble). </p>
+
+
+<p>
+ When thermostatting algorithms are developed, most thermostats control the temperature by updating momenta of the system. Some prevailing thermostats include stochastic ones (such as the Andersen thermostat and Langevin dynamics) and deterministic ones (such as the Nosé-Hoover thermostat and Nosé-Hoover chain). In the “middle” scheme, immediately after the coordinate-updating step for half a time interval, the thermostat process for a full time interval takes place, which then followed by the coordinate-updating step for another half time interval <span class="citation" data-cites="middle-scheme-2017 LFMiddle-Constr-2018">[<a href="#ref-middle-scheme-2017">1</a>,<a href="#ref-LFMiddle-Constr-2018">5</a>]</span>
+.</p>
+
+
+<p>Here we present a brief introduction to the “middle” scheme. For many thermostats, the integration in one time step <span class="math inline">\(\Delta t\)</span>
+ can be splitted into three parts, the steps for updating coordinates, momenta and thermostat, denoted as “x”, “p” and “T”, respectively. In this case the “equations of motion” may be expressed as</p>
+
+
+<p><span id="eq:middle-eom" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+\begin{bmatrix}
+\mathrm{d}\mathbf{x}_t\\
+\mathrm{d}\mathbf{p}_t
+\end{bmatrix}
+=
+\underbrace{
+\begin{bmatrix}
+\mathbf{M}^{-1}\mathbf{p}_t\\
+0
+\end{bmatrix}\mathrm{d}t
+}_{\text{x}}
++
+\underbrace{
+\begin{bmatrix}
+0 \\
+-\nabla_{\mathbf{x}_t}U(\mathbf{x}_t)
+\end{bmatrix}\mathrm{d}t
+}_{\text{p}}
++
+\underbrace{
+\begin{bmatrix}
+\text{thermostat}
+\\
+\end{bmatrix}
+}_{\text{T}}
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(1)</span>
+</span>
+  Here, <span class="math inline">\(U\)</span>
+ is the potential energy, <span class="math inline">\(\mathbf{M}\)</span>
+ is the diagonal mass matrix, <span class="math inline">\(\mathbf{x}\)</span>
+ and <span class="math inline">\(\mathbf{p}\)</span>
+ are the vectors of coordinate and momentum, respectively. Equation (<a href="#eq:middle-eom">1</a>) is, however, not convenient to do the analysis.</p>
+
+
+<p>A more useful approach is to employ the forward Kolmogorov equation to express the evolution of the density distribution in the phase space <span class="math inline">\(\rho(\mathbf{x},\mathbf{p})\)</span>
+. <span id="eq:KolmogorovEq" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+\begin{aligned}
+\frac{\partial}{\partial t}\rho =&amp; \mathcal{L}\rho\\
+ =&amp; (\mathcal{L}_{\text{x}} + \mathcal{L}_{\text{p}} + \mathcal{L}_{\text{T}})\rho
+ \end{aligned}
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(2)</span>
+</span>
+  The relevant Kolmogorov operators for the 1st and 2nd terms of the right-hand side (RHS) are <span id="eq:Lx" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+\mathcal{L}_{\text{x}}\rho = -\mathbf{p}^T\mathbf{M}^{-1}\nabla_{\mathbf{x}}\rho
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(3)</span>
+</span>
+  <span id="eq:Lp" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+\mathcal{L}_{\text{p}}\rho = \nabla{}_{\mathbf{x}}U(\mathbf{x})\cdot\nabla{}_\mathbf{p}\rho
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(4)</span>
+</span>
+  respectively. The definition of <span class="math inline">\(\mathcal{L}_{\text{T}}\)</span>
+ depends on the specific thermostat. The phase space propagators for a time interval <span class="math inline">\(\Delta t\)</span>
+ for the three parts are <span class="math inline">\(e^{\mathcal{L}_{\text{x}}\Delta t}\)</span>
+, <span class="math inline">\(e^{\mathcal{L}_{\text{p}}\Delta t}\)</span>
+, and <span class="math inline">\(e^{\mathcal{L}_{\text{T}}\Delta t}\)</span>
+, respectively.</p>
+
+
+<p>The propagation in each time step with the velocity Verlet (VV) algorithm is performed as <span id="eq:middle-propagator" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+  e^{\mathcal{L}\Delta t} \approx
+  e^{\mathcal{L}^{\text{VV}}_{\text{middle}}\Delta t} =
+  e^{\mathcal{L}_{\text{p}}\Delta t/2}
+  e^{\mathcal{L}_{\text{x}}\Delta t/2}
+  e^{\mathcal{L}_{\text{T}}\Delta t}  
+  e^{\mathcal{L}_{\text{x}}\Delta t/2}
+  e^{\mathcal{L}_{\text{p}}\Delta t/2}
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(5)</span>
+</span>
+  The phase space propagator for the thermostat part <span class="math inline">\(e^{\mathcal{L}_{\text{T}}\Delta t}\)</span>
+ is designed in the middle. Equation (<a href="#eq:middle-propagator">5</a>) is denoted as “VVMiddle”. The numerical algorithm reads <span id="eq:vvm-algorithm" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+  \begin{aligned}
+    \text{Update Momenta for half a step:} \quad &amp;\mathbf{p} \leftarrow \mathbf{p} - \frac{\partial U}{\partial \mathbf{x}} \frac{\Delta t}{2}\\
+    \text{Update Coordinates for half a step:} \quad &amp;\mathbf{x} \leftarrow \mathbf{x} + \mathbf{M}^{-1}\mathbf{p} \frac{\Delta t}{2}\\
+    \text{Thermostat for a full time step:} \quad &amp;\textit{thermostat_step} \\
+    \text{Update Coordinates for another half step:} \quad &amp;\mathbf{x} \leftarrow \mathbf{x} + \mathbf{M}^{-1}\mathbf{p} \frac{\Delta t}{2}\\
+    \text{Update Momenta for another half step:} \quad &amp;\mathbf{p} \leftarrow \mathbf{p} - \frac{\partial U}{\partial \mathbf{x}} \frac{\Delta t}{2}\\
+  \end{aligned}
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(6)</span>
+</span>
+  where  is the subroutine for the thermostat process, which is determined according to the thermostat method of choice.</p>
+
+
+<p>The stationary state distribution of “VVMiddle” for a harmonic system <span class="math inline">\(U(\mathbf{x})=\frac{1}{2}(\mathbf{x}-\mathbf{x}_{\text{eq}})^T \mathbf{A} (\mathbf{x}-\mathbf{x}_{\text{eq}})\)</span>
+ is <span id="eq:rho-vvm" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+\begin{aligned}
+\rho^{\text{VV}}_{\text{middle}}(\mathbf{x},\mathbf{p})=&amp;\frac{1}{Z_N}\exp
+\left\{-\beta\left[
+\frac{1}{2}\mathbf{p}^T\left(\mathbf{M}-\mathbf{A}\frac{\Delta t^2}{4}\right)^{-1}\mathbf{p} \right. \right.\\
+&amp;\left. \left.
+ +\frac{1}{2}(\mathbf{x}-\mathbf{x}_{\text{eq}})^T \mathbf{A} (\mathbf{x}-\mathbf{x}_{\text{eq}})
+\right]\right\}
+\end{aligned}
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(7)</span>
+</span>
+  as long as the thermostat process keeps the Maxwell (or Maxwell-Boltzmann) momentum distribution unchanged, i.e. <span id="eq:criteria" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+e^{\mathcal{L}_{\text{T}}\Delta t}\rho_{\text{MB}}(\mathbf{p}) = \rho_{\text{MB}}(\mathbf{p}) 
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(8)</span>
+</span>
+  where the Maxwell momentum distribution is <span id="eq:rho-mb" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+\rho_{\text{MB}}(\mathbf{p}) = \left(\frac{\beta}{2\pi}\right)^{3N/2}\lvert\mathbf{M}\rvert^{-1/2}
+\exp\left[-\beta\left(\frac{1}{2}\mathbf{p}^T\mathbf{M}^{-1}\mathbf{p}\right)\right]
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(9)</span>
+</span>
+  Here <span class="math inline">\(\beta=\frac{1}{k_BT}\)</span>
+ with <span class="math inline">\(k_B\)</span>
+ as the Boltzmann constant, <span class="math inline">\(T\)</span>
+ is the temperature of the system. (<span class="math inline">\(N\)</span>
+ is the number of particles.) It is then easy to verify that the marginal distribution of coordinates for “VVMiddle” is exact in the harmonic limit. Many types of thermostats satisfy the criteria (thermostat process keeps the Maxwell momentum distribution unchanged, Equation (<a href="#eq:criteria">8</a>), which include, but not limited to, the thermostats listed below.</p>
+
+
+<ul>
+<li>Andersen thermostat (real dynamics case)</li>
+</ul>
+<p>In this thermostat, each particle of the system stochastically collides with a fictitious heat bath, and once the collision occurs, the momentum of this particle is chosen afresh from the Maxwell-Boltzmann momentum distribution. The explicit form for the thermostat process can be expressed as <span id="eq:Andersen-real" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+  \begin{aligned}
+  \mathbf{p}^{(j)}&amp;\leftarrow  \sqrt{\frac{m_j}{\beta}}\boldsymbol{\theta}_j, \ (j=\overline{1,N})\\
+  &amp;\text{if } \mu_j &lt; \nu \Delta t \ ( \text{or more precisely } \mu_j &lt; 1-e^{-\nu \Delta t})
+  \end{aligned}
+  \]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(10)</span>
+</span>
+  Here <span class="math inline">\(\nu\)</span>
+ is the collision frequency, <span class="math inline">\(\boldsymbol{\theta}_j\)</span>
+ is a vector of independent Gaussian-distributed random numbers with zero mean and unit variance, <span class="math inline">\(m_j\)</span>
+ the mass for the <span class="math inline">\(j\)</span>
+th atom, <span class="math inline">\(\mu_j\)</span>
+ is a uniformly distributed random number in the range (0,1). Here <span class="math inline">\(\mu_j\)</span>
+ may be different for each particle (<span class="math inline">\(j=\overline{1,N}\)</span>
+). In the current version of AMBER <span class="math inline">\(\mu_j\)</span>
+ is the same for all particles.</p>
+
+
+<p>The phase space propagator for the thermostat process is <span id="eq:Andersen-propagator" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+  \begin{aligned}
+  e^{\mathcal{L}_{\text{T}}\Delta t}\rho =   &amp;e^{-\nu \Delta t}\rho(\mathbf{x},\mathbf{p})\\
+  &amp;+ (1-e^{-\nu \Delta t})\rho_{\text{MB}}(\mathbf{p})
+  \int_{-\infty}^{\infty}\rho(\mathbf{x},\mathbf{p})\mathrm{d}\mathbf{p}
+  \end{aligned}
+  \]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(11)</span>
+</span>
+ </p>
+
+
+<ul>
+<li>Andersen thermostat (virtual dynamics case)</li>
+</ul>
+<p>The explicit form for the virtual dynamics case of the Andersen thermostat is expressed as <span id="eq:Andersen-virtual" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+\left.
+\begin{aligned}
+  \mathbf{p}^{(j)}\leftarrow &amp; \sqrt{\frac{m_j}{\beta}}\boldsymbol{\theta}_j,
+  \text{ if } \mu_j  &lt; 1-e^{-\nu \Delta t}\\
+\mathbf{p}^{(j)}\leftarrow &amp;- \mathbf{p}^{(j)}, \quad \text{otherwise}
+\end{aligned}
+\right\rbrace (j=\overline{1,N})
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(12)</span>
+</span>
+  The phase space propagator for the thermostat process is <span id="eq:Andersen-virtual-propagator" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+  \begin{aligned}
+  e^{\mathcal{L}_{\text{T}}\Delta t}\rho = 
+  &amp;e^{-\nu \Delta t}\rho(\mathbf{x},-\mathbf{p})\\
+  &amp;+ (1-e^{-\nu \Delta t})\rho_{\text{MB}}(\mathbf{p})
+  \int_{-\infty}^{\infty}\rho(\mathbf{x},\mathbf{p})\mathrm{d}\mathbf{p}
+  \end{aligned}
+  \]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(13)</span>
+</span>
+ </p>
+
+
+<ul>
+<li>Langevin dynamics (real dynamics case)</li>
+</ul>
+<p>The thermostat process is the solution to the Ornstein-Uhlenbeck (OU) process <span id="eq:Langevin-real" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+  \mathbf{p}\leftarrow e^{-\boldsymbol{\gamma}\Delta t}\mathbf{p} + \sqrt{\frac{1}{\beta}}\mathbf{M}^{1/2}(\mathbf{1}-e^{-2\boldsymbol{\gamma}\Delta t})^{1/2}\boldsymbol{\eta}
+  \]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(14)</span>
+</span>
+  Here, <span class="math inline">\(\boldsymbol{\gamma}\)</span>
+ is the diagonal friction coefficient matrix. In the current version of AMBER all diagonal elements of <span class="math inline">\(\boldsymbol{\gamma}\)</span>
+ are set to be the same. (That is, the friction coefficient is the same for all particles.)</p>
+
+
+<p>The phase space propagator for the thermostat process is <span id="eq:Langevin-real-propagator" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+  \begin{aligned}
+e^{\mathcal{L}_{\text{T}}\Delta t}\rho =&amp;\left(\frac{\beta}{2\pi}\right)^{3N/2}\lvert \mathbf{M} (\mathbf{1}-e^{-2\boldsymbol{\gamma}\Delta t})\rvert^{-1/2}
+\\
+&amp;\cdot\int\mathrm{d}\mathbf{p}_0\,\rho(\mathbf{x},\mathbf{p}_0)
+\exp\left[-\frac{\beta}{2}(\mathbf{p}-e^{-\boldsymbol{\gamma}\Delta t}\mathbf{p}_0)^T\right.
+\\&amp;\left.
+\cdot\mathbf{M}^{-1}(\mathbf{1}-e^{-2\boldsymbol{\gamma}\Delta t})^{-1}(\mathbf{p}-e^{-\boldsymbol{\gamma}\Delta t}\mathbf{p}_0)\right]
+\end{aligned}
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(15)</span>
+</span>
+ </p>
+
+
+<ul>
+<li>Langevin dynamics (virtual dynamics case)</li>
+</ul>
+<p>The virtual dynamics case represents another type of discrete evolution that may not correspond to a continuous, real dynamical counterpart of the Langevin equation. <span id="eq:Langevin-virtual" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+  \mathbf{p}\leftarrow -e^{-\boldsymbol{\gamma}\Delta t}\mathbf{p} + \sqrt{\frac{1}{\beta}}\mathbf{M}^{1/2}(\mathbf{1}-e^{-2\boldsymbol{\gamma}\Delta t})^{1/2}\boldsymbol{\eta}
+  \]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(16)</span>
+</span>
+  The virtual dynamics case is also able to produce the desired stationary distribution.<br />
+The phase space propagator for the thermostat process is then <span id="eq:Langevin-virtual-propagator" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+  \begin{aligned}
+e^{\mathcal{L}_{\text{T}}\Delta t}\rho =&amp;\left(\frac{\beta}{2\pi}\right)^{3N/2}\lvert \mathbf{M} (\mathbf{1}-e^{-2\boldsymbol{\gamma}\Delta t})\rvert^{-1/2}
+\\
+&amp;\cdot\int\mathrm{d}\mathbf{p}_0\,\rho(\mathbf{x},\mathbf{p}_0)
+\exp\left[-\frac{\beta}{2}(\mathbf{p}+e^{-\boldsymbol{\gamma}\Delta t}\mathbf{p}_0)^T\right.
+\\&amp;\left.
+\cdot\mathbf{M}^{-1}(\mathbf{1}-e^{-2\boldsymbol{\gamma}\Delta t})^{-1}(\mathbf{p}+e^{-\boldsymbol{\gamma}\Delta t}\mathbf{p}_0)\right]
+\end{aligned}
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(17)</span>
+</span>
+ </p>
+
+
+<ul>
+<li>Nosé-Hoover (NH) thermostat and Nosé-Hoover chain (NHC)</li>
+</ul>
+<p>See Ref. <span class="citation" data-cites="middle-scheme-2017">[<a href="#ref-middle-scheme-2017">1</a>]</span>
+ for more detailed discussions.</p>
+
+
+<p>The “middle” scheme of a thermostat includes both real and virtual dynamics cases. (See Refs. <span class="citation" data-cites="Andersen-virtual-2017 Langevin-virtual-2017">[<a href="#ref-Andersen-virtual-2017">3</a>,<a href="#ref-Langevin-virtual-2017">4</a>]</span>
+.) It is proved in Ref. <span class="citation" data-cites="Langevin-virtual-2017">[<a href="#ref-Langevin-virtual-2017">3</a>]</span>
+ that, while the Langevin equation algorithm (BAOAB) proposed in Ref. <span class="citation" data-cites="BAOAB-AMRX-2013">[<a href="#ref-BAOAB-AMRX-2013">6</a>]</span>
+ is simply only the real dynamics case of “VVMiddle”, another Langevin equation algorithm proposed (without employing the Lie-Trotter splitting) in Ref. <span class="citation" data-cites="GF-BAOAB-2012">[<a href="#ref-GF-BAOAB-2012">7</a>]</span>
+ is equivalent to “VVMiddle” for Langevin dynamics. The real dynamics case for the Andersen thermostat and that for Langevin dynamics have been implemented in the current version of AMBER.</p>
+
+
+<p>When the leapfrog algorithm, rather than the velocity-Verlet algorithm, is employed in the “middle” scheme, it is denoted as “LFMiddle” <span class="citation" data-cites="LFMiddle-Constr-2018">[<a href="#ref-LFMiddle-Constr-2018">5</a>]</span>
+. The propagation in each time step with the leapfrog (LF) algorithm is performed as <span id="eq:LFM-propagator" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+  e^{\mathcal{L}\Delta t} \approx
+  e^{\mathcal{L}^{\text{LF}}_{\text{middle}}\Delta t} =
+  e^{\mathcal{L}_{\text{x}}\Delta t/2}
+  e^{\mathcal{L}_{\text{T}}\Delta t}  
+  e^{\mathcal{L}_{\text{x}}\Delta t/2}
+  e^{\mathcal{L}_{\text{p}}\Delta t}
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(18)</span>
+</span>
+  The numerical algorithm of “LFMiddle” reads <span id="eq:LFM-algorithm" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+  \begin{aligned}
+    \text{Update Momenta for a full time step:} \quad &amp;\mathbf{p} \leftarrow \mathbf{p} - \frac{\partial U}{\partial \mathbf{x}} {\Delta t}\\
+    \text{Update Coordinates for half a step:} \quad &amp;\mathbf{x} \leftarrow \mathbf{x} + \mathbf{M}^{-1}\mathbf{p} \frac{\Delta t}{2}\\
+    \text{Thermostat for a full time step:} \quad &amp;\textit{thermostat_step} \\
+    \text{Update Coordinates for another half step:} \quad &amp;\mathbf{x} \leftarrow \mathbf{x} + \mathbf{M}^{-1}\mathbf{p} \frac{\Delta t}{2}
+  \end{aligned}
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(19)</span>
+</span>
+  For any general systems, "LFMiddle" shares the same accuracy as "VVMiddle" for sampling the marginal distribution of coordinates. In addition, "LFMiddle" leads to the exact marginal distribution of momenta in the harmonic limit<span class="citation" data-cites="LFMiddle-Constr-2018">[<a href="#ref-LFMiddle-Constr-2018">5</a>]</span>. For simplicity and compatibility, only “LFMiddle” is integrated into AMBER.</p>
+
+
+<p>The “middle” scheme with holonomic constraints (such as bond length constraints) is also implemented. While MD with holonomic constraints are widely used in biological simulations, PIMD with holonomic constraints may help understand nuclear quantum effects of different motions in molecular systems. For instance, help assign spectral features as shown in Ref. <span class="citation" data-cites="RamanWater2018">[<a href="#ref-RamanWater2018">8</a>]</span>
+. In the “middle” scheme, when holonomic constraints are applied, the SHAKE <span class="citation" data-cites="SHAKE1977">[<a href="#ref-SHAKE1977">9</a>]</span>
+ and RATTLE <span class="citation" data-cites="RATTLE1983">[<a href="#ref-RATTLE1983">10</a>]</span>
+ algorithms are used for fixing coordinates and velocities, respectively. Particularly for the molecular system that contains water molecules, the analytical SETTLE algorithm <span class="citation" data-cites="SETTLE1992">[<a href="#ref-SETTLE1992">11</a>]</span>
+ may be used to apply the constraint to the water molecule.</p>
+
+
+<p>
+  The full "LFMiddle" with holonomic constraints <span class="citation" data-cites="Middle-Constr-SINR-2019">[<a href="#ref-Middle-Constr-SINR-2019">12</a>]</span> reads 
+</p>
+
+<span id="eq:LFM-algorithm-constraint" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+  \begin{aligned}
+    \text{Update Momenta for a full time step:} \quad &amp;\mathbf{p} \leftarrow \mathbf{p} - \frac{\partial U}{\partial \mathbf{x}} {\Delta t}\\
+    \text{Solve velocity constraints:} \quad &amp;\text{RATTLE}\\
+    \text{Update Coordinates for half a step:} \quad &amp;\mathbf{x} \leftarrow \mathbf{x} + \mathbf{M}^{-1}\mathbf{p} \frac{\Delta t}{2}\\
+    \text{Thermostat for a full time step:} \quad &amp;\textit{thermostat_step} \\
+    \text{Update Coordinates for another half step:} \quad &amp;\mathbf{x} \leftarrow \mathbf{x} + \mathbf{M}^{-1}\mathbf{p} \frac{\Delta t}{2}\\
+    \text{Solve coordinate constraints:} \quad &amp;\text{SHAKE}\\
+    \text{Solve velocity constraints:} \quad &amp;\text{RATTLE}\\
+  \end{aligned}
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(19)</span>
+</span>
+
+
+<p>
+Ref <span class="citation" data-cites="Middle-2021">[<a href="#ref-Middle-2021">14</a>]</span> show more applications of "middle" scheme.  
+</p>
+
+
+<p>
+  In barostatting algorithms for the isothermal-isobaric (NPT) ensemble, the internal pressure estimator of the real molecular system in three-dimensional space is
+</p>
+
+
+<span id="eq:internal-pressure" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+  P_{\text{int}}=\frac{1}{3V}\left( \mathbf{p}^T\mathbf{M}^{-1}\mathbf{p}-\mathbf{x}^T\frac{\partial U}{\partial \mathbf{x}}\right)
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(18)</span>
+
+
+<p>
+  The estimation of the internal pressure consists of both the kinetic energy and virial terms. In the "middle" scheme, both the coordinate marginal distribution and momentum marginal distribution are accurately determined after the second half time-step updation of coordinates. By adding the barostat step after the second half time-step updation of the coordinates, an accurate internal pressure estimation can be achieved, which leads to accurate sampling of the volume distribution. The "LFmiddle" algorithm for the isothermal-isobaric (NPT) ensemble with holonomic constraints reads
+</p>
+
+
+
+<span id="eq:LFM-algorithm-NPT-constraint" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+  \begin{aligned}
+    \text{Update Momenta for a full time step:} \quad &amp;\mathbf{p} \leftarrow \mathbf{p} - \frac{\partial U}{\partial \mathbf{x}} {\Delta t}\\
+    \text{Solve velocity constraints:} \quad &amp;\text{RATTLE}\\
+    \text{Update Coordinates for half a step:} \quad &amp;\mathbf{x} \leftarrow \mathbf{x} + \mathbf{M}^{-1}\mathbf{p} \frac{\Delta t}{2}\\
+    \text{Thermostat for a full time step:} \quad &amp;\textit{thermostat_step} \\
+    \text{Update Coordinates for another half step:} \quad &amp;\mathbf{x} \leftarrow \mathbf{x} + \mathbf{M}^{-1}\mathbf{p} \frac{\Delta t}{2}\\
+    \text{Solve coordinate constraints:} \quad &amp;\text{SHAKE}\\
+    \text{Solve velocity constraints:} \quad &amp;\text{RATTLE}\\
+    \text{Update Volume for a full time step:} \quad &amp;\textit{barostat_step}\
+  \end{aligned}
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(19)</span>
+</span>
+
+
+<p>
+  The correct barostatting method in AMBER can be either the Stochastic Cell Rescaling (SCR) method <span class="citation" data-cites="ref-SCR-2020">[<a href="#ref-SCR-2020">16</a>]</span> (ntp > 0, barostat = 1, and baro_stochastic = 1) or Monte Carlo approach (ntp > 0 and barostat = 2). Because <span class="citation" data-cites="PIMD-BAOAB-2016">[<a href="#ref-PIMD-BAOAB-2016">2</a>]</span> the Berendsen barostat fails to faithfully reproduce the isothermal-isobaric (NPT) ensemble<span class="citation" data-cites="Rogge-2015">[<a href="#ref-Rogge-2015">15</a>]</span>, the SCR barostat outperforms the Berendsen barostat by correctly describing the volume fluctuation. The Kolmogorov operator for the SCR barostat is
+</p>
+
+
+
+<span id="eq:internal-pressure" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+  \mathcal{L}_\varepsilon \rho =-\partial _\varepsilon\left[ \frac{\kappa_T}{\tau_P}(P_\text{int}-P_\text{ext})\right]\rho + \partial^2_{\varepsilon}\left(\frac{\kappa_T}{\tau_P \beta V}\right)\rho
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(18)</span>
+
+
+<p>
+  When the SCR barostatting algorithm is used, the parameter <i>baro_stochastic</i> should be set to 1. More details are provided in the section for Input parameters below. Ref. [Middle NPT] shows the theory and applications of "middle" scheme for the isothermal-isobaric ensemble.
+</p>
+
+
+<p>While the “middle” scheme for PIMD with the staging transformation (staging PIMD) was first demonstrated in Ref. <span class="citation" data-cites="PIMD-BAOAB-2016">[<a href="#ref-PIMD-BAOAB-2016">2</a>]</span>
+, that for PIMD with the normal-mode transformation (normal-mode PIMD) was first proposed in the supplemental material of Ref. <span class="citation" data-cites="PIMD-BAOAB-2016">[<a href="#ref-PIMD-BAOAB-2016">2</a>]</span>
+ in 2016, which can be found via the URLs provided by the publisher:</p>
+
+
+<ul>
+<li><a href="https://aip.scitation.org/doi/suppl/10.1063/1.4954990/suppl_file/supplemental+material-submitted.docx" class="uri">https://aip.scitation.org/doi/suppl/10.1063/1.4954990/suppl_file/supplemental+material-submitted.docx</a></li>
+<li><a href="ftp://ftp.aip.org/epaps/journ_chem_phys/E-JCPSA6-145-007626" class="uri">ftp://ftp.aip.org/epaps/journ_chem_phys/E-JCPSA6-145-007626</a></li>
+</ul>
+
+
+<p>In addition, the arXiv preprint (that includes Ref. <span class="citation" data-cites="PIMD-BAOAB-2016">[<a href="#ref-PIMD-BAOAB-2016">2</a>]</span>
+ and its supplemental material) is also available (<a href="https://arxiv.org/ftp/arxiv/papers/1611/1611.06331.pdf" class="uri">https://arxiv.org/ftp/arxiv/papers/1611/1611.06331.pdf</a>).<br />
+In the current version, for the canonical (NVT) ensemble, the "middle" scheme is implemented for the primitive version and the normal-mode version of PIMD (PRIMPIMD and NMPIMD) of AMBER, corresponding to ipimd = 1 or 2. For the isothermal-isobaric (NPT) ensemble, the "middle" scheme is supported only for the normal-mode version of PIMD (NMPIMD) , corresponding to ipimd = 2. The staging PIMD or normal-mode PIMD algorithms in the “middle” scheme will also be implemented into AMBER soon.</p>
+
+
+<p>
+  For PIMD in the isothermal-isobaric (NPT) ensembles, the “reduced mode” method for the MTTK barostatting algorithm is employed  <span class="citation" data-cites="ref-Martyna-1999">[<a href="#ref-Martyna-1999">17</a>]</span>. This approach introduces a Hamiltonian with fictitious degrees of freedom to the system. One addtional degree of freedom serves as the conjugate variable of the volume and is often referred to as the momentum of ‘the piston’. Particle coordinates and momenta are scaled by the volume. Detailed discussion on the MTTK algorithm in the  “ middle” scheme can be found in Ref. [Middle NPT]. At present, holonomic constraints for PIMD are not supported in AMBER and in the barostat step the updation of the piston momentum is only compatible with the Langevin barostat.      
+</p>
+
+
+<h2 id="input-parameters">Input parameters</h2>
+<p>In order to perform MD or PRIMPIMD/NMPIMD simulations with the “middle” scheme, several additional flags should be added in the <i>mdin</i> file, which are used to distinguish different methods.</p>
+
+
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>ischeme</strong></td>
+<td>Flag for choosing an integration scheme for molecular dynamics.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td><strong>=0</strong> (default) conventional scheme in AMBER.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>=1</strong> “middle” scheme based on the leapfrog algorithm.</td>
+</tr>
+<tr class="even">
+<td><strong>ithermostat</strong></td>
+<td>Flag for different thermostats when the “middle” scheme is employed. Two types of thermostats are currently available.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>=1</strong> Langevin dynamics</td>
+</tr>
+<tr class="even">
+<td></td>
+<td><strong>=2</strong> Andersen thermostat</td>
+</tr>
+<tr class="odd">
+<td><strong>baro_stochasitc</strong></td>
+<td>Flag for using the stochastic cell rescaling method.  It  must be used with ntp > 0, barostat = 1.  This method improves over the Berendsen barastat and produces the correct isothermal-isobaric distribution. </td>
+</tr>
+<tr class="even">
+<td></td>
+<td><strong>=0</strong> (default) Uses the standard Berendsen barostat.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>=1</strong> Adds a stochastic term to the Berendsen barostat, which leads to the stochastic cell rescaling method.</td>
+</tr>
+<tr class="even">
+<td><strong>therm_par</strong></td>
+<td>The parameter used in a thermostatting method of the “middle” scheme, in the unit of ps<span class="math inline">\(^{-1}\)</span>
+, which should always be a positive number. It refers to the friction coefficient for Langevin dynamics ( = 1) or the collision frequency for the Andersen thermostat ( = 2).</td>
+</tr>
+<tr class="odd">
+<td><strong>therm_vol</strong></td>
+<td>The parameter used in the MTTK barostatting method of the “middle” scheme only in PIMD (ipimd > 0), in the unit of ps<span class="math inline">\(^{-1}\)</span>, which must be set in the input file and should always be a positive number. It refers to the friction coefficient for the Langevin thermostat for the piston momentum in the MTTK method (ischeme = 1, ithermostat = 1, ntp > 0, barostat = 1). Typically set to the inverse of the pressure relaxation time of the system. This parameter is recommended to set bewteen 2.0 ps<span class="math inline">\(^{-1}\)</span> for liquid water.
+</tr>
+</tbody>
+</table>
+
+
+<p>The recommended value for  is related to the characteristic frequency (<span class="math inline">\(\tilde{\omega}\)</span>
+) of the specific system. The characteristic time of the potential energy autocorrelation function is <span id="eq:UU-corr" style="display: inline-block; position: relative; width: 100%"><span class="math display">\[
+\tau_{UU} = \int_0^{\infty}\frac{\langle U(0)U(t)\rangle - \langle U \rangle^2}{\langle U^2\rangle - \langle U \rangle^2}\,\mathrm{d}t 
+\]</span>
+<span style="position: absolute; right: 0em; top: 50%; line-height:0; text-align: right">(20)</span>
+</span>
+  The optimal value of the thermostat parameter that produces the minimum correlation time of the potential is <span class="math inline">\(\xi^{opt} \approx \tilde{\omega}\)</span>
+ for Langevin dynamics and <span class="math inline">\(\xi^{opt}\approx\sqrt{2}\tilde{\omega}\)</span>
+ for the Andersen thermostat, as the time interval <span class="math inline">\(\Delta t\)</span>
+ approaches zero. E.g. for a HO molecule, the frequency of the O-H stretch is around 3600 cm<span class="math inline">\(^{-1}\)</span>
+(~680 ps<span class="math inline">\(^{-1}\)</span>
+), so one can choose 680 ps<span class="math inline">\(^{-1}\)</span>
+ as the value of  when Langevin dynamics is used, or 960 ps<span class="math inline">\(^{-1}\)</span>
+ when the Andersen thermostat is employed. When the time interval <span class="math inline">\(\Delta t\)</span>
+ is finite in the two thermostatting methods, while the characteristic correlation time goes to infinity as the thermostat parameter approaches zero, the characteristic correlation time gradually reaches a plateau as the thermostat parameter increases. (Please see Refs. <span class="citation" data-cites="Langevin-virtual-2017 Andersen-virtual-2017">[<a href="#ref-Langevin-virtual-2017">3</a>,<a href="#ref-Andersen-virtual-2017">4</a>]</span>
+ for more discussions.) When condensed phase systems are simulated, it is not straightforward to estimate the optimal thermostat parameter(s) that could be related to the mixing of frequencies or time scales of the system <span class="citation" data-cites="Andersen1980">[<a href="#ref-Andersen1980">13</a>]</span>
+. Some numerical tests are necessary for obtaining the reasonable region for the thermostat parameter. For a liquid water system (216 water molecules in a cell with periodic boundary conditions) with no holonomic constraints, the thermostat parameter is usually chosen to be <span class="math inline">\(2-50\)</span>
+ ps<span class="math inline">\(^{-1}\)</span>
+.</p>
+
+
+<h2 id="Tutorial-for-a-simulation-of-liquid-water">Tutorial for a simulation of liquid water</h2>
+<p>In this tutorial, we will outline the specific steps for performing molecular dynamics simulations of liquid water using the middle scheme.</p>
+
+<h3 id="Preparing-topology-and-coordinate-files">Preparing topology and coordinate files</h3>
+<p>For reference on creating the coordinate and topology files, one can refer to: <a href="http://jianliugroup.pku.edu.cn/tutorial-lscivr/tutorial-lscivr.html#2-preparing-topology-and-coordinate-files">Section 2 of Tutorial for LSCIVR</a>. In the tutorial, we use GaussView instead of xleap to prepare the required coordinate and topology files for the simulation. GaussView needs to be downloaded separately. Packmol and tleap are included in AMBER and can be accessed directly after loading <code>amber.sh</code> .</p>
+
+<p>The GaussView used in this tutorial is the Windows version, while the interface for GaussView on Linux remains basically consistent. After opening GaussView, the interface appears as shown below.</p>
+
+<center><img src="figures/Pic1.png" alt="GaussianView1" title=""></center> <br>
+<center>Fig. 1. Screenshot of <em>GaussView</em> window.</center> <br>
+
+<p>Follow the steps illustrated in the figure below to select the oxygen atom with automatically completed hydrogen atoms and click on the canvas to draw a water molecule.</p>
+
+<center><img src="figures/Pic2.png" alt="GaussianView2" title=""></center> <br>
+<center><img src="figures/Pic3.png" alt="GaussianView3" title=""></center> <br>
+<center>Fig. 2.3. Drawing a water molecule with <em>GaussView</em>.</center> <br>
+
+<p>Then save the file as <code>water1.pdb</code>. At this point, we have obtained a PDB file containing a single water molecule.</p>
+
+<center><img src="figures/Pic4.png" alt="GaussianView4" title=""></center> <br>
+<center>Fig. 4. Saving a pdb file of single water molecule.</center> <br>
+
+<p>Here is an example for <code>water1.pdb</code>:</p>
+<center>water1.pdb</center>
+
+<pre><code>REMARK   1 File created by GaussView 6.0.16
+HETATM    1  O           0       0.061  -0.678   0.000                       O
+HETATM    2  H           0       1.021  -0.678   0.000                       H
+HETATM    3  H           0      -0.260   0.227   0.000                       H
+END
+CONECT    1    2    3
+CONECT    2    1
+CONECT    3    1</code></pre>
+
+<p>The third (atom name) and fourth (residue name) columns should be changed manually to:</p>
+
+<center>water1new.pdb</center>
+
+<pre><code>REMARK   1 File created by GaussView 6.0.16
+HETATM    1  O   WAT     0       0.061  -0.678   0.000                       O
+HETATM    2  H1  WAT     0       1.021  -0.678   0.000                       H
+HETATM    3  H2  WAT     0      -0.260   0.227   0.000                       H
+END
+CONECT    1    2    3
+CONECT    2    1
+CONECT    3    1</code></pre>
+
+<p>Note: The position of each column is strictly defined in PDB files. For example, the <b>residue name</b> must start from the <b>18th character</b>. For detailed information, please refer to: <a href="https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/pdbintro.html">Introduction to Protein Data Bank Format</a></p>
+
+
+<p>Next, we use <code>tleap</code> to convert <code>water1new.pdb</code> into an AMBER-readable format. Ensure the pdb file and script file <code>Reconstruct.leaprc</code> are in the same dirctory. The specific command and script file are as follows:</p> 
+
+<pre><code>tleap -f Reconstruct.leaprc</code></pre>
+
+<center>Reconstruct.leaprc</center>
+
+<pre><code>water=loadpdb water1new.pdb
+savepdb water water1re.pdb</code></pre>
+
+
+<p>The reconstructed PDB file containing a single water molecule is shown below:</p>
+
+<center>water1re.pdb</center>
+
+<pre><code>ATOM      1  O   WAT     1       0.061  -0.678   0.000  1.00  0.00
+ATOM      2  H1  WAT     1       1.021  -0.678   0.000  1.00  0.00
+ATOM      3  H2  WAT     1      -0.260   0.227   0.000  1.00  0.00
+TER
+END</code></pre>
+
+<p>At this stage, we can use <code>packmol</code> to generate a PDB file containing 216 water molecules using the following command and script file <code>packmol.inp</code>.</p>
+
+<pre><code>packmol < packmol.inp</code></pre>
+
+<center>packmol.inp</center>
+
+<pre><code>tolerance 2.0
+output water216.pdb
+filetype pdb
+structure water1re.pdb
+number 216
+inside cube 0. 0. 0. 19.
+end structure</code></pre>
+
+<p>For details on the meaning of each line in the script file, please refer to:
+<a href="http://jianliugroup.pku.edu.cn/tutorial-lscivr/tutorial-lscivr.html#22-creating-a-pdb-file-for-a-water-box-with-216-molecules">Section 2.3 of Tutorial for LSCIVR</a> or <a href="https://m3g.github.io/packmol/userguide.shtml">Packmol userguide</a></p>
+
+<p>Finally, <code>tleap</code> is used to generate the inpcrd and prmtop files for further simulations. The following command and script file <code>qspcfw.leaprc</code> are used.</p>
+
+<pre><code>tleap -f qspcfw.leaprc</code></pre>
+
+<center>qspcfw.leaprc</center>
+<pre><code>source leaprc.protein.ff14SB
+loadOff solvents.lib              # load atom names library and residue name library for solvent
+WAT = SPG                         # set residue name WAT equal to SPG
+loadAmberParams frcmod.qspcfw     # load parameters for q-SPC/fw model
+set default FlexibleWater on      # using flexible water model
+water = loadpdb "water216.pdb"    # load coordinate file in pdb format
+setBox water centers 0.0          # set box centers at (0.0,0.0,0.0), and generate box automatically
+saveamberparm water wat216.prmtop wat216.inpcrd     # save topology file and coordinate file
+quit</code></pre>
+
+
+<h3 id="Minimizing-the-energy-of-the-system">Minimizing the energy of the system</h3>
+
+<p>The coordinate files generated by packmol often have high strain and should always undergo configuration optimization using AMBER's energy minimization function to prevent molecular dynamics simulation crashes. The input file for energy minimization is shown below:</p>
+
+<pre><code>minimization
+ &cntrl
+ imin   = 1,
+ maxcyc = 50000, 
+ ncyc   = 25000,
+ ntb    = 1,
+ cut    = 7.0
+  /</code></pre>
+
+<p>Run the minimization with sander:</p>
+
+<pre><code>sander -O -i min.in -p wat216.prmtop -c wat216.inpcrd -o min.out -r min.rst</code></pre>
+
+<p>The details of paramters in the input file can be found in <a href="http://jianliugroup.pku.edu.cn/tutorial-lscivr/tutorial-lscivr.html#24-minimizing-the-energy-of-the-system">Section 2.4 of Tutorial for LSCIVR</a> or <a href="https://ambermd.org/Manuals.php">AMBER manual</a>.</p>
+
+<h3 id="Equilibrating-and-Sampling-the-system-using-classical-dynamics-NPT">Equilibrating and Sampling the system using classical dynamics (NPT)</h3>
+
+<p>In this section, we will calculate the isobaric heat capacity, isothermal compressibility and thermal expansion coefficient of liquid water at 298 K and 1 atm using classical molecular dynamics. The minimized configuration containing 216 water molecules <code>min.rst</code> generated in the previous step will serve as the initial configuration. The input files (‘npt1.in’ and ‘npt2.in’) are as follows:</p>
+
+
+<div class="col-md-12"><div class="col-md-6-inline"><center>npt1.in</center><pre>
+NPT simulation of liquid water
+&amp;cntrl
+imin = 0,
+irest = 0, ntx = 1,
+ntb = 2, cut = 7.0,
+ntp = 1, taup = 2.0, pres0 = 1.013, barostat = 1, baro_stochastic = 1,
+tempi = 298.15, temp0 = 298.15,
+ischeme = 1, ithermostat = 1, therm_par = 5.0, ig = -1,
+nstlim = 500000, dt = 0.002,
+ntpr = 1000, ntwx = 1000, ntwr = 1000,
+/
+&amp;ewald
+skinnb = 2.0
+ /
+</pre></div><div class="col-md-6-inline"><center>npt2.in</center><pre>
+NPT simulation of liquid water
+&amp;cntrl
+imin = 0,
+irest = 1, ntx = 5,
+ntb = 2, cut = 7.0,
+ntp = 1, taup = 2.0, pres0 = 1.013, barostat = 1, baro_stochastic = 1,
+tempi = 298.15, temp0 = 298.15,
+ischeme = 1, ithermostat = 1, therm_par = 5.0, ig = -1,
+nstlim = 5000000, dt = 0.002,
+ntpr = 50, ntwx = 1000, ntwr = 1000,
+/
+&amp;ewald
+skinnb = 2.0
+ /
+</pre></div></div>
+
+<p>The details of paramters in the input file can be found in <a href="http://jianliugroup.pku.edu.cn/tutorial-lscivr/tutorial-lscivr.html#31-equilibrating-the-system-using-classical-dynamics-npt">Section 3.1 of Tutorial for LSCIVR</a> or <a href="https://ambermd.org/Manuals.php">AMBER manual</a>. The parameters for the "middle" scheme are listed in <a href="#input-parameters">Input parameters</a>.</p>
+
+<p>Typically, we need to run multiple trajectories (more than 20) to obtain sufficiently converged results. Here, we use a bash script <code>run.sh</code> to circularly generate trajectories, with each sampled trajectory employing a distinct initial configuration. Each trajectory will be generated in a folder numbered correspondingly. </p>
+
+<center>run.sh</center>
+<pre><code>#!/bin/bash
+cp min.rst start.rst.1
+for i in {1..20}
+do
+  mkdir $i
+  cp start.rst.$i $i/;
+  cd $i;
+  pmemd -O -i npt1.in -p wat216.prmtop -c start1.rst  -o equi.out -r equi.rst.$i -x equi.mdcrd;
+  pmemd -O -i npt2.in -p wat216.prmtop -c equi.rst.$i  -o sample.out -r end.rst.$i -x equi.mdcrd;
+  cp equi.rst.$i ../start.rst.$((i+1));
+  cd ../;
+done</code></pre>
+
+<h3 id="Analysis">Analysis</h3>
+
+<p>We can analyze the output files using the <code>process_mdout.perl</code> script included in the AMBER package to generate data files containing sampled quantities (e.g., volume, energy). For the calculation of different thermodynamic properties, a python script <a href="files/NPT_static.py">NPT_static.py</a> is provided. The calculation method can be found in Ref [JCTC].
+</p>
+
+<p>We also provide a loop analysis script to analyze each trajectory. The properties of each trajectory will be printed into TXT files within their respective folders. For example, the isobaric heat capacity analysis result is saved as Cp.txt.</p>
+
+<center>analysis.sh</center>
+<pre><code>#!/bin/bash
+for i in {1..20}
+do
+  cp NPT_static.py $i/;
+  cd $i;
+  process_mdout.perl sample.out
+  python NPT_static.py
+  cd ../;
+done</code></pre>
+
+
+
+<h2 id="test-cases">Test cases</h2>
+<h3 id="molecular-dynamics-for-classical-statistics">Molecular dynamics (for classical statistics)</h3>
+
+
+<h4 id="a-md-input-using-the-langevin-thermostat-with-the-lfmiddle-scheme-for-liquid-water.">(a) MD input using the Langevin thermostat with the “LFMiddle” scheme for liquid water.</h4>
+<p>Test: <em>$AMBERHOME/test/middle-scheme/MD_Unconstr_Langevin_water</em></p>
+<pre><code>MD: NVT simulation of liquid water
+&amp;cntrl    
+ipimd = 0, nstlim = 10        ! MD for 10 steps    
+ntx = 1, irest = 0            ! read coordinates    
+temp0 = 300, tempi = 300      ! temperature: target and initial    
+dt = 0.001                    ! time step in ps    
+cut = 7.0                     ! non-bond cut off    
+ischeme = 1                   !! leapfrog middle scheme
+ithermostat = 1               !! Langevin thermostat   
+therm_par = 5.0               !! thermostat parameter in 1/ps
+ig = 1000                     ! random seed 
+ntc = 1, ntf = 1              ! no constraints
+ntpr = 1, ntwr = 5, ntwx = 5  ! output settings 
+/ </code></pre>
+<p>One can run either a serial job (using <code>sander</code> ):</p>
+<pre><code>$ sander -O -i md_LGV.in -p qspcfw216.top -c nvt.rst -o md_LGV.out \
+  -r lgv.rst -info lgv.info</code></pre>
+<p>or a parallel job (using <code>sander.MPI</code> ):</p>
+<pre><code>$ mpirun -np 4 sander.MPI -O -i md_LGV.in -p qspcfw216.top -c nvt.rst \
+  -o md_LGV.out -r lgv.rst -info lgv.info</code></pre>
+
+
+<h4 id="b-md-input-using-langevin-dynamics-with-the-lfmiddle-scheme-for-the-liquid-water.-lengths-of-the-bonds-having-hydrogen-atoms-are-constrained.">(b) MD input using Langevin dynamics with the “LFMiddle” scheme for the liquid water. Lengths of the bonds having hydrogen atoms are constrained.</h4>
+<p>Test: <em>$AMBERHOME/test/middle-scheme/MD_Constr_Langevin_water</em></p>
+<pre><code>MD: NVT simulation of liquid water
+&amp;cntrl
+ipimd = 0, nstlim = 10        ! MD for 10 steps
+ntx = 1, irest = 0            ! read coordinates
+temp0 = 300, tempi = 300      ! temperature: target and initial
+dt = 0.004                    ! time step in ps
+cut = 7.0                     ! non-bond cut off
+ischeme = 1,                  !! leapfrog middle scheme
+ithermostat = 1,              !! Langevin thermostat, random seed is default value
+therm_par = 5.0               !! thermostat parameter, in 1/ps
+ntc = 2, ntf = 2              ! constrain lengths of the bonds having hydrogen atoms
+ntpr = 1, ntwr = 5, ntwx = 5  ! output settings 
+/</code></pre>
+<p>Run either a serial way (using <code>sander</code> ):</p>
+<pre><code>$ sander -O -i md_LGV.in -p qspcfw216.top -c nvt.rst -o md_LGV.out \
+  -r lgv.rst -info lgv.info</code></pre>
+<p>or a parallel job (using <code>sander.MPI</code> ):</p>
+<pre><code>$ mpirun -np 4 sander.MPI -O -i md_LGV.in -p qspcfw216.top -c nvt.rst \
+  -o md_LGV.out -r lgv.rst -info lgv.info</code></pre>
+
+
+<h4 id="c-md-input-using-langevin-dynamics-and-stochastic-cell-rescaling-barostat-with-the-lfmiddle-scheme-for-the-liquid-water.-lengths-of-the-bonds-having-hydrogen-atoms-are-constrained.">(c) MD input using Langevin dynamics and stochastic cell rescaling barostat with the “LFMiddle” scheme for the liquid water in the isothermal-isobaric (NPT) ensemble. Lengths of the bonds having hydrogen atoms are constrained.</h4>
+<p>Test: <em>$AMBERHOME/test/middle-scheme/MD_NPT_Constr_Langevin_water</em></p>
+<pre><code>MD: NPT simulation of liquid water
+&amp;cntrl
+ntx = 1, irest = 0                ! read coordinates
+ntc=2, ntf=2, tol=0.0000001,      ! constrain lengths of bonds
+                                  ! having hydrogen atoms
+ntb = 2,                          ! constant pressure simulation
+ntp = 1,                          ! md with isotropic position scaling
+barostat = 1,                     ! using Berendsen barostat
+baro_stochastic = 1,              !! Adds a stochastic term to the barostat
+taup = 2.0,                       ! pressure relaxation time, in ps
+pres0 = 1.013,                    ! reference external pressure, in bar
+nstlim=10,                        ! MD for 10 steps
+ntpr=1, ntwr=10000,               ! output settings
+dt=0.004,                         ! timestep in ps
+ig=71277,                         ! random seed
+cut = 7.0,                        ! non-bond cut off
+temp0 = 300, tempi = 300,         ! temperature: target and initial
+ischeme = 1,                      !! Leapfrog middle scheme
+ithermostat = 1,                  !! Langevin thermostat
+therm_par = 5.0,                  !! thermostat parameter in ps^-1
+/
+/</code></pre>
+<p>Run either a serial way (using <code>sander</code> ):</p>
+<pre><code>$ sander -O -i md_LGV_SCR.in -p qspcfw216.top -c npt.rst -o md_LGV_SCR.out \
+  -r lgv_scr.rst -info lgv_scr.info</code></pre>
+<p>or a parallel job (using <code>sander.MPI</code> ):</p>
+<pre><code>$ mpirun -np 4 sander.MPI -O -i md_LGV_SCR.in -p qspcfw216.top -c npt.rst \
+  -o md_LGV_SCR.out -r lgv_scr.rst -info lgv_scr.info</code></pre>
+
+
+<h3 id="path-integral-molecular-dynamics-for-quantum-statistics">Path integral molecular dynamics (for quantum statistics)</h3>
+<h4 id="d-primpimd-input-using-the-andersen-thermostat-with-the-lfmiddle-scheme-for-the-liquid-water.-lengths-of-the-bonds-having-hydrogen-atoms-are-constrained.">(d) PRIMPIMD input using the Andersen thermostat with the “LFMiddle” scheme for the liquid water. Lengths of the bonds having hydrogen atoms are constrained.</h4>
+<p>Test: <em>$AMBERHOME/test/middle-scheme/PIMD_Constr_Andersen_water</em></p>
+<pre><code>PRIMPIMD: NVT simulation of liquid water
+&amp;cntrl
+ipimd = 1, nstlim = 10   ! PRIMPIMD for 10 steps
+ntx = 5, irest = 0       ! read coordinates
+temp0 = 300, tempi = 300 ! target temperature and initial temperature
+dt = 0.002               ! time step in ps
+cut = 7.0                ! non-bond cut-off
+ischeme = 1,             !! leapfrog middle scheme
+ithermostat = 2,         !! Andersen thermostat
+therm_par = 8.0          !! thermostat parameter, in 1/ps
+ig = 777                 ! random seed
+ntc = 2,ntf = 2          ! constrain lengths of the bonds having hydrogen atoms
+ntpr=1, ntwr=5, ntwx=5   ! output settings
+/ </code></pre>
+
+
+<h4 id="e-primpimd-input-using-langevin-dynamics-with-the-lfmiddle-scheme-for-the-liquid-water.-no-constraints-are-applied.">(e) PRIMPIMD input using Langevin dynamics with the “LFMiddle” scheme for the liquid water. No constraints are applied.</h4>
+<p>Test: <em>$AMBERHOME/test/middle-scheme/PIMD_Langevin_water</em></p>
+<pre><code>PRIMPIMD: NVT simulation of liquid water
+&amp;cntrl
+ipimd = 1,nstlim = 10   ! PRIMPIMD for 10 steps
+ntx = 5,irest = 0       ! read coordinates, 
+                        ! and run as a new simulation.
+temp0 = 300,tempi = 300 ! target and initial temperature
+dt = 0.001              ! time step, in ps
+cut = 7.0               ! non-bond cut off
+ischeme = 1,            !! leapfrog middle scheme
+ithermostat = 1,        !! Langevin thermostat
+therm_par = 5.0         !! thermostat parameter, in 1/ps
+ntc = 1                 ! no constraints, default
+ntpr=1, ntwr=5, ntwx=5  ! output settings
+/</code></pre>
+
+
+<h4 id="f-nmpimd-input-using-langevin-dynamics-and-mttk-langevin-barostat-with-the-lfmiddle-scheme-for-the-liquid-water-in-the-isothermal-isobaric-ensemble.-no-constraints-are-applied.">(f) PRIMPIMD input using Langevin dynamics with the “LFMiddle” scheme for the liquid water. No constraints are applied.</h4>
+<p>Test: <em>$AMBERHOME/test/middle-scheme/PIMD_NPT_Langevin_water</em></p>
+<pre><code>PRIMPIMD: NVT simulation of liquid water
+&amp;cntrl
+ipimd = 2, nstlim = 10   ! NMPIMD for 10 steps
+ntx = 5, irest = 0       ! read coordinates
+                         ! and run as a new simulation. 
+temp0 = 300, tempi = 300 ! target and initial temperature
+dt = 0.001               ! time step in ps
+cut = 7.0                ! non-bond cut off
+ischeme = 1,             !! Leapfrog middle scheme
+ithermostat = 1,         !! Langevin thermostat
+therm_par = 5.0          !! thermostat parameter, in 1/ps
+                         !! (friction coefficient for Langevin thermostat)
+therm_vol = 2.0          !! barostat parameter, in 1/ps
+                         !! (friction coefficient for MTTK-Langevin barostat)
+ntb = 2,                 ! constant pressure simulation
+ntp = 1,                 ! md with isotropic position scaling
+barostat = 1,            ! using MTTK-Langevin equation
+                         ! only work as MTTK when using NMPIMD
+taup = 2.0,              ! pressure relaxation time, in ps
+pres0 = 1.013,           ! reference external pressure, in bar
+ntc = 1                  ! no constraints, default
+ntpr=1, ntwr=5, ntwx=5   ! output settings
+/
+/</code></pre>
+
+
+<p>When one runs PIMD in AMBER, a groupfile is needed. The groupfile <em>gf_pimd</em> may look like:</p>
+<pre><code>-O -i pimd.in -p qspcfw216.top -c nvt1.rst -o bead1.out -r bead1.rst 
+ -x bead1.mdcrd -inf bead1.mdinfo 
+-O -i pimd.in -p qspcfw216.top -c nvt2.rst -o bead2.out -r bead2.rst 
+ -x bead2.mdcrd -inf bead2.mdinfo 
+-O -i pimd.in -p qspcfw216.top -c nvt3.rst -o bead3.out -r bead3.rst 
+ -x bead3.mdcrd -inf bead3.mdinfo 
+-O -i pimd.in -p qspcfw216.top -c nvt4.rst -o bead4.out -r bead4.rst 
+ -x bead4.mdcrd -inf bead4.mdinfo </code></pre>
+<p>Note that each line starts with <code>-O</code> and ends with <code>-inf &lt;info&gt;</code> . The groupfile above contains 4 lines, which means 4 path integral beads are used.</p>
+<p><code>sander.MPI</code> is executed via the following command:</p>
+<pre><code>$ mpirun -np 8 sander.MPI -ng 4 -groupfile gf_pimd</code></pre>
+<p>The number of processes (8) that is specified by <code>-np</code> is a multiple of the number of groups (4). In this case 2 CPU processes are used on each path integral bead.</p>
+
+
+<h3 id="qmmm-molecular-dynamics">QM/MM molecular dynamics</h3>
+<h4 id="g-qmmm-md-input-using-the-langevin-thermostat-with-the-lfmiddle-scheme-for-the-alanine-dipeptide-solved-in-methol-box.-lengths-of-the-bonds-having-hydrogen-atoms-are-constrained-for-the-mm-part-while-no-constraints-are-applied-to-the-qm-part.">(g) QM/MM MD input using the Langevin thermostat with the “LFMiddle” scheme for the alanine dipeptide solved in methol box. Lengths of the bonds having hydrogen atoms are constrained for the MM part, while no constraints are applied to the QM part.</h4>
+<p>Test: <em>$AMBERHOME/test/middle-scheme/QMMM_Constr_ALA_Methol</em></p>
+<pre><code>constrained MD NVT: Alanine dipeptide in meoh (explicit solvent).
+&amp;cntrl
+ipimd = 0, nstlim = 10,   ! MD for 10 steps
+irest = 0, ntx = 1,       ! read coordinates
+temp0 = 300               ! target temperature 
+tempi = 300               ! initial temperature 
+dt = 0.002,               ! time step, in ps 
+cut = 8,                  ! non-bond cut off  
+ig = 6666,                ! random seed for reproducing results 
+ischeme = 1,              !! leapfrog middle scheme
+ithermostat = 1           !! Langevin thermostat 
+therm_par = 5.0,          !! thermostat parameter, in 1/ps 
+ntc=2,ntf=2               ! constrain lengths of bonds having hydrogen atoms
+ atoms
+ntpr=1, ntwr=1, ntwx=1    ! output settings 
+ifqnt=1                   ! switch on QM/MM coupled potential 
+/ 
+&amp;qmmm qmmask=&#39;:ACE,ALA,NME&#39;, ! residues treated using QM 
+qmcharge=0,            ! charge on QM region is 0 
+qmshake=0,             ! no SHAKE for QM region 
+qm_theory=&#39;PM3&#39;,       ! use the PM3 semi-empirical Hamiltonian 
+qmcut=8.0              ! use 8 angstrom cut off for QM region 
+/ </code></pre>
+<p>One can run either a serial job (using <code>sander</code> ):</p>
+<pre><code>$ sander -O -i qmmm.in -p ala.top -c ala.crd -o qmmm.out -r qmmm.rst \
+  -x qmmm.crd -info qmmm.info</code></pre>
+<p>or a parallel job (using <code>sander.MPI</code> ):</p>
+<pre><code>$ mpirun -np 4 sander.MPI -O -i qmmm.in -p ala.top -c ala.crd \
+  -o qmmm.out -r qmmm.rst -x qmmm.crd -info qmmm.info</code></pre>
+
+
+<h3 id="replica-exchange-molecular-dynamics">Replica exchange molecular dynamics</h3>
+<h4 id="h-remd-input-using-the-langevin-thermostat-with-the-lfmiddle-scheme-for-the-ace-ala-ala-ala-nme-in-vacuum.lengths-of-the-bonds-having-hydrogen-atoms-are-constrained.">(h) REMD input using the Langevin thermostat with the “LFMiddle” scheme for the ACE-ALA-ALA-ALA-NME in vacuum.Lengths of the bonds having hydrogen atoms are constrained.</h4>
+<p>Test: <em>$AMBERHOME/test/middle-scheme/REMD_Constr_ALA</em></p>
+<p>Below is the input file for one of the replicas. The target temperatures are 300, 325, 350, and 400K for the 4 replicas, respectively.</p>
+<pre><code>REMD test with 4 replicas  
+&amp;cntrl         
+imin = 0, nstlim = 100,     ! MD for 100 steps         
+irest=1,ntx = 5,            ! read coordinates and velocities   
+tempi = 0.0, temp0 = 300.0, ! initial and target temperature         
+ischeme= 1,                 !! leapfrog middle scheme   
+ithermostat = 1,            !! Langevin thermostat  
+therm_par = 1.0,            !! thermostat parameter,in 1/ps   
+dt = 0.002,                 ! time step, in ps  
+ig=6666,                    ! random seed         
+ntc = 2, ntf = 2,           ! constrain lengths of the bonds having hydrogen atoms         
+ntwx = 50, ntwr =50, ntpr = 50,  ! output setting     
+ntb=0,                      ! no periodicity         
+cut = 99.0,                 ! non bond cut off         
+numexchg=5,                 ! exchange frequency 
+&amp;end</code></pre>
+<p>When one runs REMD in AMBER, a groupfile is needed. The groupfile <em>groupfile</em> may look like:</p>
+<pre><code>-O -rem 1 -remlog rem.log -i rem.in.000 -p ala3.top -c mdrestrt -o rem.out.000
+ -r rem.r.000 -inf reminfo.000
+-O -rem 1 -remlog rem.log -i rem.in.001 -p ala3.top -c mdrestrt -o rem.out.001
+ -r rem.r.001 -inf reminfo.001
+-O -rem 1 -remlog rem.log -i rem.in.002 -p ala3.top -c mdrestrt -o rem.out.002
+ -r rem.r.002 -inf reminfo.002
+-O -rem 1 -remlog rem.log -i rem.in.003 -p ala3.top -c mdrestrt -o rem.out.003
+ -r rem.r.003 -inf reminfo.003 </code></pre>
+<p>Note that each line starts with <code>-O</code> and ends with <code>-inf &lt;info&gt;</code> . The groupfile has 4 lines, which means 4 replicas are employed in REMD. <code>sander.MPI</code> is executed via the following command:</p>
+<pre><code>$ mpirun -np 4 sander.MPI -ng 4 -groupfile groupfile</code></pre>
+<p>The number of processes (4) that is specified by <code>-np</code> can be replaced by any multiple of the number of replicas used in REMD (4 in this case).</p>
+
+
+<h3 id="Pmemd-examples-for-GPUs">Pmemd examples for CPU and GPU</h3>
+<h4 id="i-GPU-1">(i) Pmemd input for liquid water with 4096 water molecules in a cell </h4>
+<p>Test: <em>$AMBRHOME/test/middle-scheme/4096wat</em></p>
+<pre><code>MD: NVT simulation of liquid water
+&cntrl
+ntx = 5, irest = 1, ! read coordinates
+ntc = 2, ntf = 2, ! constrain lengths of bonds
+tol = 0.0000001, ! having hydrogen atoms
+nstlim = 10, ! MD for 10 steps
+ntpr = 1, ntwr = 10000 ! output settings
+dt = 0.001, ! timestep in ps
+ig = 71277, ! random seed
+cut = 7.0, ! non-bond cut off
+ischeme = 1, !! Leapfrog middle scheme
+ithermostat = 1, !! Langevin thermostat
+therm_par = 5.0, !! thermostat parameter
+midpoint = 1 ! use midpoint method, only for pmemd.MPI;
+! remove this flag otherwise
+/
+&amp;end</code></pre>
+
+
+<h4 id="j-GPU-2">(j) Pmemd input for liquid water with 4096 water molecules in the isothermal-isobaric (NPT) in a cell </h4>
+<p>Test: <em>$AMBRHOME/test/middle-scheme/4096wat</em></p>
+<pre><code>MD: NPT simulation of liquid water
+&amp;cntrl
+ntx = 5, irest = 1,         ! read coordinates
+ntc = 2, ntf = 2,           ! constrain lengths of bonds
+tol = 0.0000001,            ! having hydrogen atoms
+ntb = 2,                    ! constant pressure simulation
+ntp = 1,                    ! md with isotropic position scaling
+barostat = 1,               ! using Berendsen barostat
+baro_stochastic = 1,        !! Adds a stochastic term to the barostat
+taup = 2.0,                 ! pressure relaxation time, in ps
+pres0 = 1.013,              ! reference external pressure, in bar
+nstlim = 10,                ! MD for 10 steps
+ntpr = 1, ntwr = 10000      ! output settings
+dt = 0.001,                 ! timestep in ps
+ig = 71277,                 ! random seed
+cut = 7.0,                  ! non-bond cut off
+ischeme = 1,                !! Leapfrog middle scheme
+ithermostat = 1,            !! Langevin thermostat
+therm_par = 5.0,            !! thermostat parameter, in 1/ps
+/
+&amp;end</code></pre>
+
+
+<h4 id="k-GPU-3">(k) Pmemd input for DNA A7 −T7 duplex solvated in a cell with 3351 water molecules and 12 sodium ions as counter-ions </h4>
+<p>Test: <em>$AMBERHOME/test/middle-scheme/DNA7</em></p>
+<pre><code>MD: NVT simulation of DNA duplex
+&cntrl
+ntx = 5, irest = 1, ! read coordinates
+ntc = 2, ntf = 2, ! constrain lengths of bonds
+tol = 0.0000001, ! having hydrogen atoms
+nstlim = 10, ! MD for 10 steps
+ntpr = 1, ntwr = 10000 ! output settings
+dt = 0.001, ! timestep in ps
+ig = 71277, ! random seed
+cut = 9.0, ! non-bond cut off
+ischeme = 1, !! Leapfrog middle scheme
+ithermostat = 1, !! Langevin thermostat
+therm_par = 5.0, !! thermostat parameter
+midpoint = 1 ! use midpoint method, only for pmemd.MPI;
+! remove this flag otherwise
+/
+</code></pre>
+
+
+<h4 id="l-GPU-4">(l) Pmemd input for Ethaline Deep Eutectic Solvent(512 choline chloride and 1024 ethylene glycol molecules) </h4>
+<p>Test: <em> $AMBERHOME/test/middle-scheme/ETH</em></p>
+<pre><code>MD: NVT simulation of Ethaline Deep Eutectic Solvent
+&cntrl
+ntx = 5, irest = 1, ! read coordinates
+ntc = 2, ntf = 2, ! constrain lengths of bonds
+tol = 0.0000001, ! having hydrogen atoms
+nstlim = 10, ! MD for 10 steps
+ntpr = 1, ntwr = 10000 ! output settings
+dt = 0.001, ! timestep in ps
+ig = 71277, ! random seed
+cut = 10.0, ! non-bond cut off
+ischeme = 1, !! Leapfrog middle scheme
+ithermostat = 1, !! Langevin thermostat
+therm_par = 5.0, !! thermostat parameter
+midpoint = 1 ! use midpoint method, only for pmemd.MPI;
+! remove this flag otherwise
+/
+&amp;end</code></pre>
+
+
+<h4 id="m-GPU-5">(m) Pmemd input for 1:6 methanol-zinc chloride solution (290 zinc chloride and 1740 methanol molecules) </h4>
+<p>Test: <em> $AMBERHOME/test/middle-scheme/MeOHZnCl2</em></p>
+<pre><code>MD: NPT simulation of 1:6 methanol-zinc chloride solution
+&amp;cntrl
+ntx=5, irest=1,                   ! read coordinates
+ntb = 2,                          ! constant pressure simulation
+ntp = 1,                          ! md with isotropic position scaling
+barostat = 1,                     ! using Berendsen barostat
+baro_stochastic = 1,              !! Adds a stochastic term to the barostat
+taup = 2.0,                       ! pressure relaxation time, in ps
+pres0 = 1.013,                    ! reference external pressure, in bar
+nstlim=10,                        ! MD for 10 steps
+ntpr=1, ntwr=10000,               ! output settings
+dt=0.002,                         ! timestep in ps
+ig=71277,                         ! random seed
+cut = 7.0,                        ! non-bond cut off
+temp0 = 300, tempi = 300,         ! temerature settings
+ischeme = 1,                      !! Leapfrog middle scheme
+ithermostat = 1,                  !! Langevin thermostat
+therm_par = 5.0,                  !! thermostat parameter in ps^-1
+/
+&amp;end</code></pre>
+
+<p>All those pmemd examples can be executed in a serial job(using sander or pmemd):</p>
+<pre><code>$ sander -O -i mdin -o mdout -p prmtop -c inpcrd -r restrt</code></pre>
+<p>or</p>
+<pre><code>$ pmemd -O -i mdin -o mdout -p prmtop -c inpcrd -r restrt</code></pre>
+<p>or a parallel job(using sander.MPI or pmemd.MPI):</p>
+<pre><code>$ sander.MPI -O -i mdin -o mdout -p prmtop -c inpcrd -r restrt</code></pre>
+<p>or</p>
+<pre><code>$ pmemd.MPI -O -i mdin -o mdout -p prmtop -c inpcrd -r restrt</code></pre>
+<p>or a GPU-accelerated job(using pmemd.cuda):</p>
+<pre><code>$ pmemd.cuda_DPFP -O -i mdin -o mdout -p prmtop -c inpcrd -r restrt
+$ pmemd.cuda_SPFP -O -i mdin -o mdout -p prmtop -c inpcrd -r restrt</code></pre>
+
+
+<h2 id="references" class="unnumbered">References</h2>
+<div id="refs" class="references" role="doc-bibliography">
+<div id="ref-middle-scheme-2017">
+<p>[1] Zhang, Z.; Liu, X.; Chen, Z.; Zheng, H.; Yan, K.; Liu<sup>*</sup>, J. A unified thermostat scheme for efficient configurational sampling for classical/quantum canonical ensembles via molecular dynamics. <em>The Journal of Chemical Physics</em> <strong>2017</strong>, <em>147</em> (3), 034109 [DOI: <a href="https://doi.org/10.1063/1.4991621">10.1063/1.4991621</a>]. <a href="../paper/paper/11.pdf">[pdf version]</a> </p>
+</div>
+<div id="ref-PIMD-BAOAB-2016">
+<p>[2] Liu<sup>*</sup>, J.; Li, D.; Liu, X. A simple and accurate algorithm for path integral molecular dynamics with the Langevin thermostat. <em>The Journal of Chemical Physics</em> <strong>2016</strong>, <em>145</em> (2), 024103 [DOI: <a href="https://doi.org/10.1063/1.4954990">10.1063/1.4954990</a>].[<a href="../paper/paper/14.pdf">pdf version</a>]</p>
+</div>
+<div id="ref-Langevin-virtual-2017">
+<p>[3] Li, D.; Han, X.; Chai, Y.; Wang, C.; Zhang, Z.; Chen, Z.; Liu<sup>*</sup>, J.; Shao<sup>*</sup>, J. Stationary state distribution and efficiency analysis of the Langevin equation via real or virtual dynamics. <em>The Journal of Chemical Physics</em> <strong>2017</strong>, <em>147</em> (18), 184104 [DOI: <a href="https://doi.org/10.1063/1.4996204">10.1063/1.4996204</a>]. <a href="../paper/paper/10.pdf">[pdf version] </a>  </p>
+</div>
+<div id="ref-Andersen-virtual-2017">
+<p>[4] Li, D.; Chen, Z.; Zhang, Z.; Liu<sup>*</sup>, J. Understanding Molecular Dynamics with Stochastic Processes via Real or Virtual Dynamics. <em>Chinese Journal of Chemical Physics</em> <strong>2017</strong>, <em>30</em> (6), 735–760 [DOI: <a href="https://doi.org/10.1063/1674-0068/30/cjcp1711223">10.1063/1674-0068/30/cjcp1711223</a>][<a href="http://cjcp.ustc.edu.cn/hxwlxb_en/ch/reader/create_pdf.aspx?file_no=cjcp1711223">The paper is available from the official CJCP website</a>]. <a href="../paper/paper/8.pdf">[pdf version]</a>  </p>
+</div>
+<div id="ref-LFMiddle-Constr-2018">
+<p>[5] Zhang, Z.; Yan, K.; Liu, X.; Liu<sup>*</sup>, J. A Leap-Frog Algorithm-Based Efficient Unified Thermostat Scheme for Molecular Dynamics. <em>Chinese Science Bulletin</em> <strong>2018</strong>, <em>63</em> (33), 3467–3483 [DOI: <a href="https://doi.org/10.1360/N972018-00908">10.1360/N972018-00908</a>]. <a href="../paper/paper/5.pdf">[pdf version] </a>  </p>
+</div>
+<div id="ref-BAOAB-AMRX-2013">
+<p>[6] Leimkuhler, B.; Matthews, C. Rational Construction of Stochastic Numerical Methods for Molecular Sampling. <em>Applied Mathematics Research eXpress</em> <strong>2013</strong>, <em>2013</em> (1), 34–56 [DOI: <a href="https://doi.org/10.1093/amrx/abs010">10.1093/amrx/abs010</a>].</p>
+</div>
+<div id="ref-GF-BAOAB-2012">
+<p>[7] Grønbech-Jensen, N.; Farago, O. A simple and effective Verlet-type algorithm for simulating Langevin dynamics. <em>Molecular Physics</em> <strong>2013</strong>, <em>111</em> (8), 983–991 [DOI: <a href="https://doi.org/10.1080/00268976.2012.760055">10.1080/00268976.2012.760055</a>].</p>
+</div>
+<div id="ref-RamanWater2018">
+<p>[8] Liu, X.; Liu<sup>*</sup>, J. Critical role of quantum dynamical effects in the Raman spectroscopy of liquid water. <em>Molecular Physics</em> <strong>2018</strong>, <em>116</em> (7-8), 755–779 [DOI: <a href="https://doi.org/10.1080/00268976.2018.1434907">10.1080/00268976.2018.1434907</a>]. <a href="../paper/paper/7.pdf">[pdf version]</a></p>
+</div>
+<div id="ref-SHAKE1977">
+<p>[9] Ryckaert, J.-P.; Ciccotti, G.; Berendsen, H. J. Numerical Integration of the Cartesian Equations of Motion of a System with Constraints: Molecular Dynamics of N-Alkanes. <em>Journal of Computational Physics</em> <strong>1977</strong>, <em>23</em> (3), 327–341 [DOI: <a href="https://doi.org/10.1016/0021-9991(77)90098-5">10.1016/0021-9991(77)90098-5</a>].</p>
+</div>
+<div id="ref-RATTLE1983">
+<p>[10] Andersen, H. C. RATTLE: A "velocity" version of the shake algorithm for molecular dynamics calculations. <em>Journal of Computational Physics</em> <strong>1983</strong>, <em>52</em> (1), 24–34 [DOI: <a href="https://doi.org/10.1016/0021-9991(83)90014-1">10.1016/0021-9991(83)90014-1</a>].</p>
+</div>
+<div id="ref-SETTLE1992">
+<p>[11] Miyamoto, S.; Kollman, P. A. Settle: An analytical version of the SHAKE and RATTLE algorithm for rigid water models. <em>Journal of Computational Chemistry</em> <strong>1992</strong>, <em>13</em> (8), 952–962 [DOI: <a href="https://doi.org/10.1002/jcc.540130805">10.1002/jcc.540130805</a>].</p>
+</div>
+<div id="ref-Middle-Constr-SINR-2019">
+<p>[12] Zhang, Z.; Liu X.; Yan, K.; Tuckerman, M.; Liu<sup>*</sup>, J. A unified efficient thermostat scheme for the canonical ensemble with holonomic or isokinetic constraints via molecular dynamics. <em>Journal of Physical Chemistry A</em> <strong>2019</strong>, <em>123</em> (28), 6056-6079 [DOI: <a href="https://doi.org/10.1021/acs.jpca.9b02771">10.1021/acs.jpca.9b02771</a>].  (Invited contribution to "Young Scientist Virtual Special Issue"; Highlighted in <a href="https://pubs.acs.org/doi/10.1021/acs.jpca.0c04262">JPC Virtual Issue on New Tools and Methods</a> ) </p>
+</div>
+<div id="ref-Andersen1980">
+<p>[13] Andersen, H. C. Molecular dynamics simulations at constant pressure and/or temperature. <em>The Journal of Chemical Physics</em> <strong>1980</strong>, <em>72</em> (4), 2384–2393 [DOI: <a href="https://doi.org/10.1063/1.439486">10.1063/1.439486</a>].</p>
+</div>
+<div id="ref-Middle-2021">
+<p>[14]  Sun, Z.;  Kalhor, P.;  Xu, Y.; Liu<sup>*</sup>, J., Extensive Numerical Tests of Leapfrog Integrator in Middle Thermostat Scheme in Molecular Simulations. <em>Chinese Journal of Chemical Physics</em> <strong>2021</strong>, <em>34</em>. 
+ [DOI: <a href="https://doi.org/10.1063/1674-0068/cjcp2111242">10.1063/1674-0068/cjcp2111242</a>].</p>
+</div>
+<div id="ref-Rogge-2015">
+<p>[15] Rogge, S. M. J.;  Vanduyfhuys, L.;  Ghysels, A.;  Waroquier, M.;  Verstraelen, T.;  Maurin, G.; Van Speybroeck<sup>*</sup>, V., A Comparison of Barostats for the Mechanical Characterization of Metal–Organic Frameworks. <em>The Journal of Chemical Theory and Computation</em> <strong>2015</strong>, <em>11</em>, 5583-5597. 
+ [DOI: <a href="http://dx.doi.org/10.1021/acs.jctc.5b00748">10.1021/acs.jctc.5b00748</a>].</p>
+</div>
+<div id="ref-SCR-2020">
+<p>[16] Bernetti, M.; Bussi<sup>*</sup>, G., Pressure Control Using Stochastic Cell Rescaling. <em>The Journal of Chemical Physics</em> <strong>2020</strong>, <em>153</em>, 114107.  [DOI: <a href="http://dx.doi.org/10.1063/5.0020514">10.1063/5.0020514</a>].</p>
+</div>
+<div id="ref-Martyna-1999">
+<p>[17] Martyna, G. J.;  Hughes, A.; Tuckerman<sup>*</sup>, M. E., Molecular Dynamics Algorithms for Path Integrals at Constant Pressure. <em>The Journal of Chemical Physics</em> <strong>1999</strong>, <em>110</em>, 3275-3290. [DOI: <a href="https://doi.org/10.1063/1.478193">10.1063/1.478193</a>].</p>
+</div>
+</div>
+<h3>
+<em><u>Related links:</u></em>
+</h3>
+<p>
+<a href="http://jianliugroup.pku.edu.cn/index.html">Jian Liu research group (Peking University)</a>
+</p>
+<p>
+<i><a href="http://ambermd.org/">AMBER</a> <a href="http://ambermd.org/doc12/">(2018/2019 versions)</a>.</i>
+</p>
+</div>
+</body>
+</html>

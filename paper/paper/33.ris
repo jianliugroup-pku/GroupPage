@@ -1,0 +1,20 @@
+TY  - JOUR
+T1  - Symmetries and detailed balance in forward–backward semiclassical dynamics
+AU  - Liu, Jian
+AU  - Makri, Nancy
+JO  - Chemical Physics
+VL  - 322
+IS  - 1
+SP  - 23
+EP  - 29
+PY  - 2006
+DA  - 2006/03/06/
+T2  - Real-time dynamics in complex quantum systems
+SN  - 0301-0104
+DO  - https://doi.org/10.1016/j.chemphys.2005.08.010
+UR  - http://www.sciencedirect.com/science/article/pii/S0301010405003563
+KW  - Semiclassical
+KW  - Dynamics
+KW  - Correlation functions
+AB  - Symmetry properties of time correlation functions within the forward–backward semiclassical dynamics (FBSD) approximation are considered. It is shown that FBSD autocorrelation functions of momentum and position-dependent operators satisfy rigorously the time symmetry relation of the quantum mechanical expression. The detailed balance condition follows from this symmetry in the special case where the density is given by the Boltzmann operator. The derived properties are illustrated with numerical simulations on liquid neon.
+ER  - 

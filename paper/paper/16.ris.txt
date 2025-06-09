@@ -1,0 +1,12 @@
+TY  - BOOK
+AU  - Liu, Jian
+AU  - Li, Dezhang
+AU  - Liu, Xinzijian
+PY  - 2016/01/15
+SP  - 27
+EP  - 37
+T1  - Further study of path integral Liouville dynamics
+VL  - 46
+DO  - 10.1360/N032015-00143
+JO  - Scientia Sinica Chimica
+ER  - 

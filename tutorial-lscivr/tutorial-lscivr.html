@@ -1,0 +1,1662 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutorial | AMBER | LSC-IVR</title>
+<link rel="stylesheet" href="style.css" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108786458-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-108786458-1');
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/MathJax.js?config=TeX-AMS_CHTML-full" 
+ type="text/javascript"
+integrity="sha256-fCth3p2B4cZMzlr7OFizmo5RkdJAHJ4vOHpE7FaNcR8="
+crossorigin="anonymous"></script>
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]  // 配置行内公式分隔符
+    }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+<div class="container">
+<h1>Tutorial – Quantum dynamical effects in liquid water: A semiclassical study on the diffusion constant and the infrared absorption spectrum</h1>
+
+<p>TABLE OF CONTENTS</p>
+
+<p><div class="toc">
+<ul>
+<li><a href="#1-introduction">1. Introduction</a></li>
+<li><a href="#2-preparing-topology-and-coordinate-files">2. Preparing topology and coordinate files</a><ul>
+<li><a href="#21-creating-a-pdb-file-for-a-single-water-molecule">2.1 Creating a pdb file for a single water molecule</a></li>
+<li><a href="#22-creating-a-pdb-file-for-a-water-box-with-216-molecules">2.2 Creating a pdb file for a water box with 216 molecules</a></li>
+<li><a href="#23-imposing-periodic-boundary-conditions-and-creating-the-topology-and-coordinate-files">2.3 Imposing periodic boundary conditions and creating the topology and coordinate files</a></li>
+<li><a href="#24-minimizing-the-energy-of-the-system">2.4 Minimizing the energy of the system</a></li>
+</ul>
+</li>
+<li><a href="#3-classical-dynamics">3. Classical Dynamics</a><ul>
+<li><a href="#31-equilibrating-the-system-using-classical-dynamics-npt">3.1 Equilibrating the system using classical dynamics (NPT)</a></li>
+<li><a href="#32-equilibrating-the-system-using-classical-dynamics-nvt">3.2 Equilibrating the system using classical dynamics (NVT)</a></li>
+<li><a href="#33-sampling-from-the-nvt-ensemble">3.3 Sampling from the NVT ensemble</a></li>
+<li><a href="#34-propagating-classical-trajectories-in-the-nve-ensemble">3.4 Propagating classical trajectories in the NVE ensemble</a></li>
+<li><a href="#35-analysis">3.5 Analysis</a><ul>
+<li><a href="#351-diffusion-constant">3.5.1 Diffusion constant</a></li>
+<li><a href="#352-infrared-spectrum">3.5.2 Infrared spectrum</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#4-quantum-dynamics">4. Quantum Dynamics</a><ul>
+<li><a href="#41-equilibrating-the-system-with-pimd-npt">4.1 Equilibrating the system with PIMD (NPT)</a></li>
+<li><a href="#42-equilibrating-the-system-with-pimd-nvt">4.2 Equilibrating the system with PIMD (NVT)</a></li>
+<li><a href="#43-sampling-with-pimd-nvt">4.3 Sampling with PIMD (NVT)</a></li>
+<li><a href="#44-lsc-ivr-calculations">4.4 LSC-IVR calculations</a></li>
+<li><a href="#45-analysis">4.5 Analysis</a><ul>
+<li><a href="#451-diffusion-constant">4.5.1 Diffusion constant</a></li>
+<li><a href="#452-infrared-spectrum">4.5.2 Infrared spectrum</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#5-results-and-discussion">5. Results and Discussion</a><ul>
+<li><a href="#51-velocity-and-bond-length-distributions">5.1 Velocity and bond length distributions</a></li>
+<li><a href="#52-radial-distribution-functions">5.2 Radial distribution functions</a></li>
+<li><a href="#53-about-correlation-functions">5.3 About correlation functions</a></li>
+<li><a href="#54-diffusion-constant">5.4 Diffusion constant</a></li>
+<li><a href="#55-infrared-spectrum">5.5 Infrared spectrum</a></li>
+</ul>
+</li>
+<li><a href="#6-appendix">6. Appendix</a><ul>
+<li><a href="#61-test-of-parameters-in-the-npt-ensemble-for-classical-dynamics">6.1 Test of parameters in the NPT ensemble for classical dynamics</a><ul>
+<li><a href="#611-gammaln-for-langevin-dynamics">6.1.1 gamma_ln for Langevin dynamics</a></li>
+<li><a href="#612-taup-for-npt-simulation">6.1.2 taup for NPT simulation</a></li>
+</ul>
+</li>
+<li><a href="#62-test-of-parameters-for-pimd-simulation">6.2 Test of parameters for PIMD simulation</a><ul>
+<li><a href="#621-number-of-beads-and-size-of-time-step">6.2.1 Number of beads and size of time step</a></li>
+<li><a href="#622-number-of-nosé-hoover-chains-of-thermostats">6.2.2 Number of Nosé-Hoover chains of thermostats</a></li>
+</ul>
+</li>
+<li><a href="#63-using-gnuplot-in-analysis">6.3 Using gnuplot in analysis</a><ul>
+<li><a href="#631-plotting-a-figure-with-data-file">6.3.1 Plotting a figure with data file</a></li>
+<li><a href="#632-plotting-distribution-of-data">6.3.2 Plotting distribution of data</a></li>
+</ul>
+</li>
+<li><a href="#64-using-ptraj-in-analysis">6.4 Using ptraj in analysis</a><ul>
+<li><a href="#641-calculating-radial-distribution-function">6.4.1 Calculating radial distribution function</a></li>
+<li><a href="#642-calculating-bond-and-angle-distribution">6.4.2 Calculating bond and angle distribution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</p>
+
+
+
+<h1 id="1-introduction">1. Introduction</h1>
+
+<p>This tutorial reproduces the calculations of the diffusion constant and IR spectrum of liquid water by employing path integral molecular dynamics (PIMD) and linearized semiclassical initial value representation (LSC-IVR) as described in the following paper:</p>
+
+<p><a href="http://scitation.aip.org/content/aip/journal/jcp/131/16/10.1063/1.3254372" title="Liu2009">Jian Liu, William H. Miller, Francesco Paesani, Wei Zhang and David A. Case. J. Chem. Phys. 131, 164509 (2009).</a></p>
+
+<p>It is designed for those who are going to run molecular dynamics simulations with quantum dynamic methods, PIMD and LSC-IVR. The prerequisites are listed as below:</p>
+
+<ul>
+<li><p><a href="http://ambermd.org/" title="Amber">AMBER 12 software package</a> - <em>sander</em> and its parallel version, <em>sander.MPI</em>, are used to run dynamics simulations. In addition, <em>LEaP</em> (<em>tleap</em> and its graphical user interface, <em>xleap</em>) is utilized to generate the topology file of the water molecule and water box.</p></li>
+<li><p><a href="http://www.ime.unicamp.br/~martinez/packmol/" title="Packmol">Packmol</a> - Create the pdb file of water box, by packing single molecules in a defined region.</p></li>
+<li><p><a href="http://www.ks.uiuc.edu/Research/vmd/" title="VMD">VMD</a> - Visualize the structures and motions of molecules. It is optional here, but can be helpful to build the image of the model.</p></li>
+</ul>
+
+<blockquote>
+  <p>Note: </p>
+  
+  <ul>
+  <li>The PIMD calculations in this tutorial require over 24 CPUs. Be sure you can afford such a job.</li>
+  <li>One is supposed to know or can find the meanings of basic shell commands in Linux, such as <code>ls</code>, <code>pwd</code>, <code>cd</code>, <code>mkdir</code>, <code>cp</code>, <code>mv</code>, and so on.</li>
+  <li>The shell scripts used in this tutorial are run in Linux platform, and should be set as executable first, then run in the terminal. For example, suppose one has a script file named ‘example.sh’, one may set it as executable by <code>chmod +x example.sh</code>, then run in the terminal using the command <code>./example.sh</code>.</li>
+  </ul>
+</blockquote>
+
+<p>The tutorial is organized as follows: first we prepare topology and coordinate files for water model and minimize the energy. Then classical dynamics or quantum dynamics can be used to equilibrate and sample the system. We will show the two procedures separately. Finally, the results from classical dynamics and quantum dynamics are compared and discussed.</p>
+
+
+
+<h1 id="2-preparing-topology-and-coordinate-files">2. Preparing topology and coordinate files</h1>
+
+<p>In this section, we shall use <em>LEaP</em> and <em>Packmol</em> to create topology (<strong>prmtop</strong>) and coordinate (<strong>inpcrd</strong>) files for water box containing 216 water molecules.</p>
+
+
+
+<h2 id="21-creating-a-pdb-file-for-a-single-water-molecule">2.1 Creating a pdb file for a single water molecule</h2>
+
+<p>To begin with, we use the <em>xleap</em> tool to create a pdb file for a single water molecule. Start <em>xleap</em> with the following command:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs bash">$ xleap <span class="hljs-operator">-s</span> <span class="hljs-operator">-f</span> leaprc.ff99SB</code></pre>
+
+<blockquote>
+  <p>Note: the character '$' denotes that this command is carried out in the terminal. Type the stuff after '$', then hit ‘Enter’.</p>
+</blockquote>
+
+<p>The <em>xleap</em> window is now opened with the force field ‘FF99SB’ loaded, as shown in the figure below:</p>
+
+<center><img src="figures/xleap.png" alt="xleap window" title=""></center> <br>
+<center>Fig. 2.1. Screenshot of <em>xleap</em> window</center> <br>
+Then use the edit command to start an editor window named as ‘water’:
+
+
+
+<pre class="prettyprint"><code class=" hljs markdown"><span class="hljs-blockquote">&gt; edit water</span></code></pre>
+
+<blockquote>
+  <p>Note: the character ‘&gt;’ denotes that this command is carried out in the <em>xleap</em> window. Type the stuff after ‘&gt;’, then hit ‘Enter’.</p>
+</blockquote>
+
+<p>The editor window will look like this:</p>
+
+<center><img src="figures/xleap_edit.png" alt="xleap editor window" title=""></center> <br>
+<center>Fig. 2.2. Screenshot of <em>xleap</em> editor window</center> <br>
+To draw the water molecule, first click on the <strong>O</strong> button in the <strong>Elements</strong> label and click on the black background to create an oxygen atom. Then click on <strong>H</strong> to draw two hydrogen atoms, then click on the oxygen and drag a line to each hydrogen to make ‘bond’. Afterwards, click the <strong>Select</strong> button in <strong>Manipulation</strong> label and double-click the background to select the whole molecule. At last, use <strong>Edit → Relax</strong> to ensure a right size of the water molecule. Remember to close the window by <strong>Unit → Close</strong> instead of <strong>X</strong> button at the corner, or you will exit <em>xleap</em>.
+
+<blockquote>
+  <p>Note: you may turn off the Num/Caps lock to make the menu work.</p>
+</blockquote>
+
+<center><img src="figures/xleap_water.png" alt="xleap water" title=""></center> <br>
+<center>Fig. 2.3. Screenshot of <em>xleap</em> editor window with a relaxed water molecule.</center> <br>
+Use the following command in <em>xleap</em> to save a pdb file for the water molecule:
+
+
+
+<pre class="prettyprint"><code class=" hljs markdown"><span class="hljs-blockquote">&gt; savepdb water water1.pdb</span></code></pre>
+
+<p>Use <strong>File → Quit</strong> to close the <em>xleap</em> window. Then we have a pdb file named as ‘water1.pdb’. Here is an example:</p>
+
+<center>water1.pdb</center>
+
+
+
+<pre class="prettyprint"><code class=" hljs ruleslanguage">   ATOM      <span class="hljs-number">1</span>  O1  wat    <span class="hljs-number">1</span>       <span class="hljs-number">0.770</span>  -<span class="hljs-number">0.484</span>   <span class="hljs-number">0.000</span>  <span class="hljs-number">1.00</span>  <span class="hljs-number">0.00</span>
+   ATOM      <span class="hljs-number">2</span>  H2  wat    <span class="hljs-number">1</span>       <span class="hljs-number">1.745</span>  -<span class="hljs-number">0.706</span>   <span class="hljs-number">0.000</span>  <span class="hljs-number">1.00</span>  <span class="hljs-number">0.00</span>
+   ATOM      <span class="hljs-number">3</span>  H3  wat    <span class="hljs-number">1</span>       <span class="hljs-number">0.235</span>  -<span class="hljs-number">1.329</span>   <span class="hljs-number">0.000</span>  <span class="hljs-number">1.00</span>  <span class="hljs-number">0.00</span>
+   TER
+   <span class="hljs-keyword">END</span>   </code></pre>
+
+<p>The third and fourth columns should be changed manually to:</p>
+
+<center><a href="files/water1.pdb">water1.pdb</a></center>
+
+
+
+<pre class="prettyprint"><code class=" hljs ruleslanguage">   ATOM      <span class="hljs-number">1</span>  O   WAT    <span class="hljs-number">1</span>       <span class="hljs-number">0.770</span>  -<span class="hljs-number">0.484</span>   <span class="hljs-number">0.000</span>  <span class="hljs-number">1.00</span>  <span class="hljs-number">0.00</span>
+   ATOM      <span class="hljs-number">2</span>  H1  WAT    <span class="hljs-number">1</span>       <span class="hljs-number">1.745</span>  -<span class="hljs-number">0.706</span>   <span class="hljs-number">0.000</span>  <span class="hljs-number">1.00</span>  <span class="hljs-number">0.00</span>
+   ATOM      <span class="hljs-number">3</span>  H2  WAT    <span class="hljs-number">1</span>       <span class="hljs-number">0.235</span>  -<span class="hljs-number">1.329</span>   <span class="hljs-number">0.000</span>  <span class="hljs-number">1.00</span>  <span class="hljs-number">0.00</span>
+   TER
+   <span class="hljs-keyword">END</span></code></pre>
+
+<p>Otherwise, the water molecule will be treated as solvent instead of solute, or unrecognizable for AMBER package.</p>
+
+<blockquote>
+  <p>Note: the generated coordinates are probably different from the example, but the format should be consistent.</p>
+</blockquote>
+
+
+
+<h2 id="22-creating-a-pdb-file-for-a-water-box-with-216-molecules">2.2 Creating a pdb file for a water box with 216 molecules</h2>
+
+<p>The Packmol program (you can download <em>Packmol</em> from <a href="http://www.ime.unicamp.br/~martinez/packmol/">http://www.ime.unicamp.br/~martinez/packmol/</a> and follow the installation instructions) is used to produce a file named ‘water216.pdb’ that describes 216 water molecules by inputting the file ‘water1.pdb’. The detailed steps are as follows:</p>
+
+<p>1) Copy ‘water1.pdb’ file to the Packmol directory;  <br>
+2) An input script named as ‘water.inp’ is required to be placed in the directory. Here is an example:</p>
+
+<center><a href="files/water.inp">water.inp</a></center>
+
+
+
+<pre class="prettyprint"><code class=" hljs livecodeserver">tolerance <span class="hljs-number">2.0</span>
+output water216.pdb
+filetype pdb
+structure water1.pdb
+<span class="hljs-built_in">number</span> <span class="hljs-number">216</span>
+inside cube <span class="hljs-number">0.</span> <span class="hljs-number">0.</span> <span class="hljs-number">0.</span> <span class="hljs-number">19.</span>
+<span class="hljs-function"><span class="hljs-keyword">end</span> <span class="hljs-title">structure</span></span></code></pre>
+
+<table>
+<thead>
+<tr>
+  <th>Settings</th>
+  <th>Summary</th>
+</tr>
+</thead>
+<tbody><tr>
+  <td>tolerance 2.0</td>
+  <td>Defines the distance among the water molecules, with Angstrom (Å) as the unit.</td>
+</tr>
+<tr>
+  <td>output water216.pdb</td>
+  <td>Specifies the name of the output file, ‘water216.pdb’.</td>
+</tr>
+<tr>
+  <td>filetype pdb</td>
+  <td>Defines the format of output file.</td>
+</tr>
+<tr>
+  <td>structure water1.pdb</td>
+  <td>Declares the input structure file, ‘water1.pdb’.</td>
+</tr>
+<tr>
+  <td>number 216</td>
+  <td>Specifies the number of water molecules</td>
+</tr>
+<tr>
+  <td>inside cube 0. 0. 0. 19.</td>
+  <td>Defines the size of the box: a cubic box with side length of 19 Å.</td>
+</tr>
+</tbody></table>
+
+
+<p>The box length is estimated by</p>
+
+<center><img src="figures/eq/eq-box-length.png"></center>
+
+<p>3) Run the script with the command:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>./packmol &lt; water.inp</code></pre>
+
+<p>Then a file ‘water216.pdb’ is created as follows:</p>
+
+<center><a href="files/water216.pdb">water216.pdb</a></center>
+
+
+
+<pre class="prettyprint"><code class=" hljs lasso"> <span class="hljs-keyword">HEADER</span>
+ TITLE      Built <span class="hljs-keyword">with</span> Packmol
+ REMARK   Packmol generated pdb file
+ REMARK   Home<span class="hljs-attribute">-Page</span>: http:<span class="hljs-comment">//www.ime.unicamp.br/~martinez/packmol</span>
+ REMARK
+ ATOM      <span class="hljs-number">1</span>  O   WAT A   <span class="hljs-number">1</span>      <span class="hljs-number">10.714</span>   <span class="hljs-number">1.608</span>  <span class="hljs-number">13.554</span>  <span class="hljs-number">1.00</span>  <span class="hljs-number">0.00</span>
+ ATOM      <span class="hljs-number">2</span>  H1  WAT A   <span class="hljs-number">1</span>      <span class="hljs-number">11.071</span>   <span class="hljs-number">2.541</span>  <span class="hljs-number">13.506</span>  <span class="hljs-number">1.00</span>  <span class="hljs-number">0.00</span>
+ ATOM      <span class="hljs-number">3</span>  H2  WAT A   <span class="hljs-number">1</span>      <span class="hljs-number">11.474</span>   <span class="hljs-number">0.958</span>  <span class="hljs-number">13.538</span>  <span class="hljs-number">1.00</span>  <span class="hljs-number">0.00</span>
+ <span class="hljs-attribute">...</span><span class="hljs-attribute">...</span>
+ <span class="hljs-attribute">...</span><span class="hljs-attribute">...</span></code></pre>
+
+<p>It should be mentioned that this pdb file cannot be used directly for the <em>leap</em> tool to create the <strong>prmtop</strong> and <strong>inpcrd</strong> files. To refine the pdb file generated by  Packmol to be readable for AMBER, the following commands should be executed:</p>
+
+<p>Call <em>xleap</em> with the force field ‘FF99SB’ loaded in the terminal:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs bash">$ xleap <span class="hljs-operator">-s</span> <span class="hljs-operator">-f</span> leaprc.ff99SB</code></pre>
+
+<p>In the <em>xleap</em> window, load and save pdb files by typing in following commands:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs markdown"><span class="hljs-blockquote">&gt; wat216=loadpdb water216.pdb</span>
+<span class="hljs-blockquote">&gt; savepdb wat216 water216new.pdb</span></code></pre>
+
+<p>The structure is then loaded in <em>LEaP</em> and converted into a new pdb file named ‘water216new.pdb’, which will be used to setup the <strong>prmtop</strong> and <strong>inpcrd</strong> files for the water model in the following stages.</p>
+
+<center><a href="files/water216new.pdb">water216new.pdb</a></center>
+
+
+
+<pre class="prettyprint"><code class=" hljs lasso"> ATOM      <span class="hljs-number">1</span>  O   WAT     <span class="hljs-number">1</span>      <span class="hljs-number">10.714</span>   <span class="hljs-number">1.608</span>  <span class="hljs-number">13.554</span>  <span class="hljs-number">1.00</span>  <span class="hljs-number">0.00</span>
+ ATOM      <span class="hljs-number">2</span>  H1  WAT     <span class="hljs-number">1</span>      <span class="hljs-number">11.071</span>   <span class="hljs-number">2.541</span>  <span class="hljs-number">13.506</span>  <span class="hljs-number">1.00</span>  <span class="hljs-number">0.00</span>
+ ATOM      <span class="hljs-number">3</span>  H2  WAT     <span class="hljs-number">1</span>      <span class="hljs-number">11.474</span>   <span class="hljs-number">0.958</span>  <span class="hljs-number">13.538</span>  <span class="hljs-number">1.00</span>  <span class="hljs-number">0.00</span>
+ TER
+ ATOM      <span class="hljs-number">4</span>  O   WAT     <span class="hljs-number">2</span>      <span class="hljs-number">17.338</span>   <span class="hljs-number">2.985</span>  <span class="hljs-number">12.846</span>  <span class="hljs-number">1.00</span>  <span class="hljs-number">0.00</span>
+ ATOM      <span class="hljs-number">5</span>  H1  WAT     <span class="hljs-number">2</span>      <span class="hljs-number">17.363</span>   <span class="hljs-number">2.369</span>  <span class="hljs-number">12.058</span>  <span class="hljs-number">1.00</span>  <span class="hljs-number">0.00</span>
+ ATOM      <span class="hljs-number">6</span>  H2  WAT     <span class="hljs-number">2</span>      <span class="hljs-number">17.850</span>   <span class="hljs-number">3.818</span>  <span class="hljs-number">12.636</span>  <span class="hljs-number">1.00</span>  <span class="hljs-number">0.00</span>
+ TER
+ <span class="hljs-attribute">...</span><span class="hljs-attribute">...</span>
+ <span class="hljs-attribute">...</span><span class="hljs-attribute">...</span></code></pre>
+
+
+
+<h2 id="23-imposing-periodic-boundary-conditions-and-creating-the-topology-and-coordinate-files">2.3 Imposing periodic boundary conditions and creating the topology and coordinate files</h2>
+
+<p>In this step, <em>tleap</em> is used to generate the <strong>inpcrd</strong> and <strong>prmtop</strong> files for further simulations. Here, a <em>tleap</em> script named ‘leaprc’ is written as follows:</p>
+
+<center><a href="files/leaprc">leaprc</a></center>
+
+
+
+<pre class="prettyprint"><code class=" hljs avrasm">source leaprc.protein.ff14SB
+loadOff solvents.lib
+WAT = SPG
+loadAmberParams frcmod<span class="hljs-preprocessor">.qspcfw</span>
+<span class="hljs-keyword">set</span> default FlexibleWater on
+water = loadpdb <span class="hljs-string">"water216new.pdb"</span>
+setBox water centers <span class="hljs-number">0.0</span>
+saveamberparm water wat216<span class="hljs-preprocessor">.prmtop</span> wat216<span class="hljs-preprocessor">.inpcrd</span>
+quit</code></pre>
+
+<p>The script calls <em>LEaP</em> to load the AMBER parameters of the ‘q-SPC/Fw’ model, a water model including quantum effects. Then the pdb file of the water box is loaded and the center of box is set to 0.0. <code>set default FlexibleWater on</code> is used to avoid performing SHAKE to restraint bond lengths. Finally, the AMBER parameters, together with the topology information, and coordinates from the pdb file are saved to the <strong>prmtop</strong> and <strong>inpcrd</strong> files, respectively.</p>
+
+<p>Run the script with <em>tleap</em>:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>tleap leaprc</code></pre>
+
+<p>Then the <strong>prmtop</strong> and <strong>inpcrd</strong> files are generated. Take a look at the ‘wat216.inpcrd’ file: </p>
+
+<center><a href="files/wat216.inpcrd">wat216.inpcrd</a></center>
+
+
+
+<pre class="prettyprint"><code class=" hljs lasso"> default_name
+ <span class="hljs-number">648</span>
+ <span class="hljs-number">10.5626559</span>   <span class="hljs-number">1.7106296</span>  <span class="hljs-number">12.9585540</span>  <span class="hljs-number">10.9196559</span>   <span class="hljs-number">2.6436296</span>  <span class="hljs-number">12.9105540</span>
+ <span class="hljs-number">11.3226559</span>   <span class="hljs-number">1.0606296</span>  <span class="hljs-number">12.9425540</span>  <span class="hljs-number">17.1866559</span>   <span class="hljs-number">3.0876296</span>  <span class="hljs-number">12.2505540</span>
+ <span class="hljs-attribute">...</span><span class="hljs-attribute">...</span>
+ <span class="hljs-attribute">...</span><span class="hljs-attribute">...</span>
+ <span class="hljs-number">14.2776559</span>  <span class="hljs-number">11.9276296</span>  <span class="hljs-number">10.9425540</span>  <span class="hljs-number">13.1276559</span>   <span class="hljs-number">2.0116296</span>   <span class="hljs-number">6.5545540</span>
+ <span class="hljs-number">13.4336559</span>   <span class="hljs-number">1.1126296</span>   <span class="hljs-number">6.2375540</span>  <span class="hljs-number">12.2416559</span>   <span class="hljs-number">2.2266296</span>   <span class="hljs-number">6.1465540</span>
+ <span class="hljs-number">19.0010000</span>  <span class="hljs-number">19.0000000</span>  <span class="hljs-number">19.0000000</span>  <span class="hljs-number">90.0000000</span>  <span class="hljs-number">90.0000000</span>  <span class="hljs-number">90.0000000</span></code></pre>
+
+<p>The first line gives the name of this <strong>inpcrd</strong> file, which was not defined and is default here. The second line specifies the number of atoms in this system, and the following data are the coordinates of each atom. The last line defines the cubic box with a size of 19.0 Å *19.0 Å *19.0 Å , which remains to be further optimized in the following sections.</p>
+
+<blockquote>
+  <p>Note: the generated box size will be probably not exactly 19.0 Å, but should be close.</p>
+</blockquote>
+
+<p>The ‘wat216.prmtop’ file gives the parameter and topology information of the system, such as atomic number, atom type, charges, bonding and non-bonded interactions, etc. For more details of the <strong>prmtop</strong> file, please visit <a href="http://ambermd.org/formats.html#topology">http://ambermd.org/formats.html#topology</a>.</p>
+
+<center><a href="files/wat216.prmtop">wat216.prmtop</a></center>
+
+
+
+<pre class="prettyprint"><code class=" hljs r">%VERSION  VERSION_STAMP = V0001.000  DATE = <span class="hljs-number">06</span>/<span class="hljs-number">04</span>/<span class="hljs-number">14</span>  <span class="hljs-number">16</span>:<span class="hljs-number">08</span>:<span class="hljs-number">11</span>
+%FLAG TITLE
+%FORMAT(20a4)
+default_name
+%FLAG POINTERS
+%FORMAT(10I8)
+     <span class="hljs-number">648</span>       <span class="hljs-number">2</span>     <span class="hljs-number">648</span>       <span class="hljs-number">0</span>     <span class="hljs-number">216</span>       <span class="hljs-number">0</span>       <span class="hljs-number">0</span>       <span class="hljs-number">0</span>       <span class="hljs-number">0</span>       <span class="hljs-number">0</span>
+     <span class="hljs-number">864</span>     <span class="hljs-number">216</span>       <span class="hljs-number">0</span>       <span class="hljs-number">0</span>       <span class="hljs-number">0</span>       <span class="hljs-number">2</span>       <span class="hljs-number">1</span>       <span class="hljs-number">0</span>       <span class="hljs-number">2</span>       <span class="hljs-number">1</span>
+       <span class="hljs-number">0</span>       <span class="hljs-number">0</span>       <span class="hljs-number">0</span>       <span class="hljs-number">0</span>       <span class="hljs-number">0</span>       <span class="hljs-number">0</span>       <span class="hljs-number">0</span>       <span class="hljs-number">1</span>       <span class="hljs-number">3</span>       <span class="hljs-number">0</span>
+       <span class="hljs-number">0</span>
+%FLAG ATOM_NAME
+%FORMAT(20a4)
+O   H1  H2  O   H1  H2  O   H1  H2  O   H1  H2  O   H1  H2  O   H1  H2  O   H1
+<span class="hljs-keyword">...</span> <span class="hljs-keyword">...</span> <span class="hljs-keyword">...</span>
+H1  H2  O   H1  H2  O   H1  H2  
+%FLAG CHARGE                                                                    
+%FORMAT(<span class="hljs-number">5E16</span><span class="hljs-number">.8</span>)                                                                 
+ -<span class="hljs-number">1.53067320E+01</span>  <span class="hljs-number">7.65336600E+00</span>  <span class="hljs-number">7.65336600E+00</span> -<span class="hljs-number">1.53067320E+01</span>  <span class="hljs-number">7.65336600E+00</span>
+  <span class="hljs-number">7.65336600E+00</span> -<span class="hljs-number">1.53067320E+01</span>  <span class="hljs-number">7.65336600E+00</span>  <span class="hljs-number">7.65336600E+00</span> -<span class="hljs-number">1.53067320E+01</span>
+<span class="hljs-keyword">...</span> <span class="hljs-keyword">...</span> <span class="hljs-keyword">...</span></code></pre>
+
+
+
+<h2 id="24-minimizing-the-energy-of-the-system">2.4 Minimizing the energy of the system</h2>
+
+<p>It is necessary to run minimization to optimize the coordinates of the water box. The input file ‘min.in’ that includes the settings for minimization is as follows:</p>
+
+<center><a href="files/min.in">min.in</a></center>
+
+
+
+<pre class="prettyprint"><code class=" hljs fix"><span class="hljs-attribute"> minimization
+ &amp;cntrl
+ imin   </span>=<span class="hljs-string"> 1,
+ maxcyc = 50000, 
+ ncyc   = 25000,
+ ntb    = 1,
+ cut    = 7.0
+  /</span></code></pre>
+
+<table>
+<thead>
+<tr>
+  <th>Settings</th>
+  <th>Summary</th>
+</tr>
+</thead>
+<tbody><tr>
+  <td>imin=1</td>
+  <td>Do minimization</td>
+</tr>
+<tr>
+  <td>maxcyc=50000</td>
+  <td>Specify the number of maximum cycles for minimization</td>
+</tr>
+<tr>
+  <td>ncyc=25000</td>
+  <td>Use the steepest descent algorithm for the first 0-ncyc cycles, then switch to the conjugate gradient algorithm for ncyc-maxcyc cycles</td>
+</tr>
+<tr>
+  <td>ntb=1</td>
+  <td>Periodic boundary conditions are employed, with constant volume</td>
+</tr>
+<tr>
+  <td>cut=7.0</td>
+  <td>Non-bonded cutoff distance in Angstroms</td>
+</tr>
+</tbody></table>
+
+
+<p>Run the minimization with <em>sander</em>:</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ sander -O -i min.in -p wat216.prmtop -c wat216.inpcrd -o min.out -r min.rst</code></pre>
+
+<p>After minimization, two files, ‘min.out’ and ‘min.rst’, are obtained.</p>
+
+<p>The ‘min.out’ file contains information of energy, bond length, angle, and so on. The script <em>process_minout.perl</em> in $AMBERHOME/AmberTools/bin/ can be used to analyse the output.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ process_minout.perl min.out</code></pre>
+
+<p>The energy must be converged after minimization. Otherwise, you need to increase the numbers <code>maxcyc</code> and <code>ncyc</code> and redo the minimization.</p>
+
+<p>The <strong>restrt</strong> file ‘min.rst’ includes the information of coordinates which will be used for the following stage. Here is an example of ‘min.rst’ file.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs r">default
+<span class="hljs-number">648</span>
+<span class="hljs-number">11.7654710</span>   <span class="hljs-number">1.3373752</span>  <span class="hljs-number">13.0319944</span>  <span class="hljs-number">11.6694818</span>   <span class="hljs-number">2.0964767</span>  <span class="hljs-number">12.3503829</span>
+<span class="hljs-number">11.7890772</span>   <span class="hljs-number">0.4629812</span>  <span class="hljs-number">12.4992566</span>  <span class="hljs-number">16.0994647</span>   <span class="hljs-number">3.2814888</span>  <span class="hljs-number">11.4881731</span>
+<span class="hljs-number">16.2442149</span>   <span class="hljs-number">2.2743210</span>  <span class="hljs-number">11.3714834</span>  <span class="hljs-number">16.2335751</span>   <span class="hljs-number">3.4755383</span>  <span class="hljs-number">12.4814771</span>
+<span class="hljs-keyword">...</span>
+<span class="hljs-keyword">...</span>
+<span class="hljs-number">16.6067259</span>  <span class="hljs-number">10.5627386</span>   <span class="hljs-number">9.8208016</span>  <span class="hljs-number">16.4186102</span>  <span class="hljs-number">11.5458786</span>   <span class="hljs-number">9.9309056</span>
+<span class="hljs-number">16.3603299</span>  <span class="hljs-number">10.1591423</span>  <span class="hljs-number">10.7382855</span>  <span class="hljs-number">12.0189548</span>   <span class="hljs-number">1.7739896</span>   <span class="hljs-number">6.4213408</span>
+<span class="hljs-number">12.8127279</span>   <span class="hljs-number">1.1745325</span>   <span class="hljs-number">6.1790117</span>  <span class="hljs-number">11.9893955</span>   <span class="hljs-number">2.5238504</span>   <span class="hljs-number">5.7258450</span>
+<span class="hljs-number">19.0040000</span>  <span class="hljs-number">19.0280000</span>  <span class="hljs-number">19.0180000</span>  <span class="hljs-number">90.0000000</span>  <span class="hljs-number">90.0000000</span>  <span class="hljs-number">90.0000000</span></code></pre>
+
+<p>Till now, the topology and coordinate files, ‘wat216.prmtop’ and ‘min.rst’ respectively, have been prepared. They will be used to start classical dynamics and quantum dynamics simulations in the following stages.</p>
+
+
+
+<h1 id="3-classical-dynamics">3. Classical Dynamics</h1>
+
+<p>The flowchart for classical dynamics is as follows:</p>
+
+<center><img src="figures/classical-flowchart.png"></center>
+
+<p>In this section, we use classical molecular dynamics to calculate the diffusion constant and IR spectrum of 216 water molecules. The simulations are performed in a cubic box with the periodic boundary conditions. We run an NPT simulation first to obtain the density for liquid water under the condition of 298.15 K and 1 atm, and then an NVT simulation to obtain canonical equilibrium properties. After equilibrating the system, we sample the coordinates and velocities from the NVT ensemble, which will be used as the initial conditions for classical trajectories in the NVE ensemble. We have analyzed our results and shown them at the end of  section.</p>
+
+<blockquote>
+  <p>NVE: constant number (N), volume (V), and energy (E); the sum of kinetic (KE) and potential energy (PE) is conserved, temperature (T) and pressure (P) are unregulated.</p>
+  
+  <p>NVT: constant number (N), volume (V), and temperature (T); T is regulated via a thermostat; P is unregulated.</p>
+  
+  <p>NPT: constant number (N), temperature (T) and pressure (P); T is regulated via a thermostat and P is regulated via a bariostat; V is unregulated.</p>
+</blockquote>
+
+
+
+<h2 id="31-equilibrating-the-system-using-classical-dynamics-npt">3.1 Equilibrating the system using classical dynamics (NPT)</h2>
+
+<p>The ‘min.rst’ file obtained from minimization is used as the <strong>inpcrd</strong> file, together with the <strong>prmtop</strong> file ‘wat216.prmtop’ to run an NPT simulation. In this stage, the NPT simulation is carried out for 1.3 ns to obtain convergent density. The whole simulation can be separated into 6 steps. The input files (‘npt1.in’ and ‘npt2.in’) are as follows:</p>
+
+<div class="col-md-12"><div class="col-md-6-inline"><center><a href="files/npt1.in">npt1.in</a></center><pre> 
+NPT simulation of liquid water 
+&amp;cntrl 
+imin = 0, 
+irest = 0, ntx = 1, 
+ntb = 2, cut = 7.0, 
+ntp = 1,taup = 4.0, pres0 = 1.013, barostat = 1, 
+tempi = 298.15, temp0 = 298.15, 
+ntt = 3, gamma_ln = 5.0, ig = -1, 
+nstlim = 600000, dt = 0.0005, 
+ntpr = 10, ntwx = 10, ntwr = 10 
+/ 
+&amp;ewald 
+skinnb = 2.0 
+/ 
+</pre></div><div class="col-md-6-inline"><center><a href="files/npt2.in">npt2.in</a></center><pre> 
+NPT simulation of liquid water 
+&amp;cntrl 
+imin = 0, 
+irest = 1, ntx = 5, 
+ntb = 2, cut = 7.0, 
+ntp = 1,taup = 4.0, pres0 = 1.013, barostat = 1,
+tempi = 298.15, temp0 = 298.15, 
+ntt = 3, gamma_ln = 5.0, ig = -1, 
+nstlim = 400000, dt = 0.0005, 
+ntpr = 10, ntwx = 10, ntwr = 10 
+/ 
+&amp;ewald 
+skinnb = 2.0 
+ / 
+</pre></div></div>
+
+<table>
+<thead>
+<tr>
+  <th>Settings</th>
+  <th>Summary</th>
+</tr>
+</thead>
+<tbody><tr>
+  <td>imin = 0</td>
+  <td>Do not do minimization</td>
+</tr>
+<tr>
+  <td>irest = 0</td>
+  <td>Do not restart the simulation</td>
+</tr>
+<tr>
+  <td>ntx = 1</td>
+  <td>Only read coordinates from input</td>
+</tr>
+<tr>
+  <td>irest = 1</td>
+  <td>Restart the simulation</td>
+</tr>
+<tr>
+  <td>ntx = 5</td>
+  <td>Read both the coordinates and velocities from input</td>
+</tr>
+<tr>
+  <td>ntb = 2</td>
+  <td>Constant pressure periodic boundary conditions are used</td>
+</tr>
+<tr>
+  <td>cut = 7.0</td>
+  <td>Non-bonded cutoff distance in Angstroms</td>
+</tr>
+<tr>
+  <td>ntp = 1</td>
+  <td>With isotropic position scaling</td>
+</tr>
+<tr>
+  <td>taup = 4.0</td>
+  <td>Pressure relaxation time (in ps), recommended value is between 1.0 and 5.0, default is 1.0.</td>
+</tr>
+<tr>
+  <td>pres0 = 1.013</td>
+  <td>Reference pressure (in bar) at which the system is to be kept</td>
+</tr>
+<tr>
+  <td>barostat = 1</td>
+  <td>Use Berendsen barostat</td>
+</tr>
+<tr>
+  <td>tempi = 298.15</td>
+  <td>Initial temperature (in K)</td>
+</tr>
+<tr>
+  <td>temp0 = 298.15</td>
+  <td>Reference temperature (in K) at which the system is to be kept</td>
+</tr>
+<tr>
+  <td>ntt = 3</td>
+  <td>Langevin thermostat is used</td>
+</tr>
+<tr>
+  <td>gamma_ln = 5.0</td>
+  <td>Collision frequency (in ps<sup>-1</sup>) for Langevin dynamics</td>
+</tr>
+<tr>
+  <td>ig = -1</td>
+  <td>Random seed is initialized with current date and time.</td>
+</tr>
+<tr>
+  <td>nstlim = 600000</td>
+  <td>Number of steps to be performed</td>
+</tr>
+<tr>
+  <td>dt = 0.0005</td>
+  <td>The size of time step (in ps)</td>
+</tr>
+<tr>
+  <td>ntpr = 10</td>
+  <td>Energy information will be written to <strong>mdout</strong> and <strong>mdinfo</strong> every 10 steps</td>
+</tr>
+<tr>
+  <td>ntwx = 10</td>
+  <td>The coordinates will be written to the <strong>mdcrd</strong> file every 10 steps</td>
+</tr>
+<tr>
+  <td>ntwr = 10</td>
+  <td>The <strong>restrt</strong> file will be written every 10 steps during dynamics</td>
+</tr>
+<tr>
+  <td>skinnb=2.0</td>
+  <td>Width of the nonbonded “skin” (in Å), default is 2.0 Å. The direct sum nonbonded list is extended to <code>cut</code>+<code>skinnb</code></td>
+</tr>
+</tbody></table>
+
+
+<p>We note that the periodic boundary conditions involve truncation of interactions. In Amber 12, there are two parameters relative to truncation of interaction, <code>cut</code> and <code>skinnb</code>. Use of <code>skinnb</code> is required for energy conservation, and the value 2.0 (Å) is recommended for all particle mesh Ewald (PME) runs. The direct sum non-bonded list is extended to <code>cut</code> + <code>skinnb</code>, and the van der Waals and direct electrostatic interactions are truncated at <code>cut</code>. A larger cutoff introduces less error in the non-bonded force evaluation but increases the computational complexity and thus calculation time. You need to choose a value for the non-bonded cutoff for this liquid water system. Note that when the periodic boundary condition is on, the largest value of cutoff should be less than half the side length of the periodic box. Here, this value should be 9.0 Å (7.0 Å for <code>cut</code> and 2.0 Å for <code>skinnb</code>). <br>
+We use Langevin dynamics as the thermostatting method, with the collision frequency given by <code>gamma_ln</code> (in ps<sup>-1</sup>). Note that it is not necessary that <code>gamma_ln</code> approximates the physical collision frequency, which is about 50 ps<sup>-1</sup> for liquid water. It is often advantageous to use much smaller value around 2 to 5 ps<sup>-1</sup>. The <code>ig</code> option determines the random seed. When <code>ig</code> is set as -1, the random seed is initialized with current date and time.</p>
+
+<p>One can run the NPT simulation with the shell script below:</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/bin/bash</span>
+sander -O -i npt1.in -p wat216.prmtop -c min.rst  -o npt.out.<span class="hljs-number">1</span> -r npt.rst.<span class="hljs-number">1</span> -x mdcrd1
+sander -O -i npt2.in -p wat216.prmtop -c npt.rst.<span class="hljs-number">1</span> -o npt.out.<span class="hljs-number">2</span> -r npt.rst.<span class="hljs-number">2</span> -x mdcrd2
+sander -O -i npt2.in -p wat216.prmtop -c npt.rst.<span class="hljs-number">2</span> -o npt.out.<span class="hljs-number">3</span> -r npt.rst.<span class="hljs-number">3</span> -x mdcrd3
+sander -O -i npt2.in -p wat216.prmtop -c npt.rst.<span class="hljs-number">3</span> -o npt.out.<span class="hljs-number">4</span> -r npt.rst.<span class="hljs-number">4</span> -x mdcrd4
+sander -O -i npt2.in -p wat216.prmtop -c npt.rst.<span class="hljs-number">4</span> -o npt.out.<span class="hljs-number">5</span> -r npt.rst.<span class="hljs-number">5</span> -x mdcrd5
+sander -O -i npt2.in -p wat216.prmtop -c npt.rst.<span class="hljs-number">5</span> -o npt.out.<span class="hljs-number">6</span> -r npt.rst.<span class="hljs-number">6</span> -x mdcrd6</code></pre>
+
+<p>Here, ‘min.rst’, ‘npt1.in’, ‘npt2.in’ and ‘wat216.prmtop’ are the input files, while the files ‘npt.out.*’, ‘npt.rst.*’ and ‘mdcrd*’ (* represents 1-6) are the results of the NPT simulation.</p>
+
+<p>Note that the size of the box indicated in ‘npt.rst.1’ is no longer 19.0Å*19.0Å*19.0Å, but 18.52Å*18.54Å*18.53Å or something around this. We can summary the results and analyze the distribution by using some tools provided by Amber. For example, use the <em>process_mdout.perl</em> script (You can find it in $AMBERHOME/AmberTools/bin/) as follows:</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ process_mdout.perl npt.out.<span class="hljs-number">3</span> npt.out.<span class="hljs-number">4</span> npt.out.<span class="hljs-number">5</span> npt.out.<span class="hljs-number">6</span></code></pre>
+
+<p>Then we have a series of summary files. Use <em>gnuplot</em> to plot the results:</p>
+
+<div class="col-md-12"><div class="col-md-4-inline"><img class="img-responsive" src="figures/classical/md-npt-ep1.png" alt="MD-NPT-EPTOT" title=""></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/classical/md-npt-temp1.png" alt="MD-NPT-TEMP" title=""> </div><div class="col-md-4-inline"><img class="img-responsive" src="figures/classical/md-npt-den1.png" alt="MD-NPT-DENSITY" title=""></div></div><center>Fig. 3.1. The potential energy, temperature and density of MD NPT simulation.</center><div class="col-md-12"><div class="col-md-4-inline"><img class="img-responsive" src="figures/classical/md-npt-ep2.png" alt="MD-NPT-EPTOT-dist" title=""></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/classical/md-npt-temp2.png" alt="MD-NPT-TEMP-dist" title=""> </div><div class="col-md-4-inline"><img class="img-responsive" src="figures/classical/md-npt-den2.png" alt="MD-NPT-DENSITY-dist" title=""></div></div><center>Fig. 3.2. The distributions of potential energy, temperature and density of MD NPT simulation.</center>
+
+Each distribution of potential energy, temperature and density obtained from every 10 time steps between 0.5 to 1.3 ns is a Gaussian distribution, and the average density is stable, around the value of 1.017 g/ml. At this point we are able to start a classical NVT simulation, in which ‘npt.rst.6’ will be used as **inpcrd** file and ‘wat216.prmtop’ as **prmtop** file.
+
+&gt; Note: the density of the last time step should be around the average value, otherwise it is not a good point to start NVT simulation.
+
+
+
+
+
+
+
+<h2 id="32-equilibrating-the-system-using-classical-dynamics-nvt">3.2 Equilibrating the system using classical dynamics (NVT)</h2>
+
+<p>In the previous stage, we have obtained a convergent density about 1.017 g/ml, for the liquid water system. In this stage, an NVT simulation will be carried out for a targeted temperature, 298.15 K. The whole simulation of 800 ps, will be separated into 4 steps. The input file is as follows: </p>
+
+<center><a href="files/nvt.in">nvt.in</a></center>
+
+
+
+<pre class="prettyprint"><code class=" hljs makefile">NVT simulation of liquid water
+&amp;cntrl
+<span class="hljs-constant">imin</span> = 0,                 
+<span class="hljs-constant">irest</span> = 1, ntx = 5,   
+<span class="hljs-constant">ntb</span> = 1, cut = 7.0,
+<span class="hljs-constant">ntt</span> = 3, gamma_ln = 5.0, ig = -1, 
+<span class="hljs-constant">tempi</span> = 298.15, temp0 = 298.15,
+<span class="hljs-constant">nstlim</span> = 400000, dt = 0.0005,
+<span class="hljs-constant">ntpr</span> = 10, ntwr = 10, ntwv = 10, ntwx = 10
+/
+&amp;ewald                   
+<span class="hljs-constant">skinnb</span> = 2.0             
+/        </code></pre>
+
+<p>In this <strong>mdin</strong> file, most settings are similar to the NPT simulation, except <code>ntb=1</code>, which means periodic boundaries are imposed on the system with constant volume. The option <code>ntp=0</code> is default for no pressure scaling and not required to written here. <br>
+Run the NVT simulation with the following Shell script:  <br>
+</p><center><a href="files/nvt.sh">nvt.sh</a></center>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/bin/bash</span>
+sander -O -i nvt.in -p wat216.prmtop -c npt.rst.<span class="hljs-number">6</span>  -o nvt.out.<span class="hljs-number">1</span> -r nvt.rst.<span class="hljs-number">1</span> -x mdcrd7
+sander -O -i nvt.in -p wat216.prmtop -c nvt.rst.<span class="hljs-number">1</span> -o nvt.out.<span class="hljs-number">2</span> -r nvt.rst.<span class="hljs-number">2</span> -x mdcrd8
+sander -O -i nvt.in -p wat216.prmtop -c nvt.rst.<span class="hljs-number">2</span> -o nvt.out.<span class="hljs-number">3</span> -r nvt.rst.<span class="hljs-number">3</span> -x mdcrd9
+sander -O -i nvt.in -p wat216.prmtop -c nvt.rst.<span class="hljs-number">3</span> -o nvt.out.<span class="hljs-number">4</span> -r nvt.rst.<span class="hljs-number">4</span> -x mdcrd10</code></pre>
+
+<p>Here ‘npt.rst.6’, ‘nvt.in’, ‘wat216.prmtop’ are the input files. After the simulation is done, use the following command to obtain the summary files:</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ process_mdout.perl nvt.out.<span class="hljs-number">1</span> nvt.out.<span class="hljs-number">2</span> nvt.out.<span class="hljs-number">3</span> nvt.out.<span class="hljs-number">4</span></code></pre>
+
+<p>Then you may use <em>gnuplot</em> to obtain the distribution diagrams of potential energy and temperature:</p>
+
+<div class="col-md-12"><div class="col-md-6-inline"><img class="img-responsive" src="figures/classical/md-nvt-ep1.png" alt="MD-NVT-EPTOT-dist" title=""> </div><div class="col-md-6-inline"><img class="img-responsive" src="figures/classical/md-nvt-temp1.png" alt="MD-NVT-TEMP-dist" title=""></div></div>
+
+<p>Also, the distribution of coordinates and velocities during this step is shown below:</p>
+
+<div class="col-md-12"><div class="col-md-6-inline"><img class="img-responsive" src="figures/classical/md-nvt-oh.png" alt="MD-NVT-OH-dist" title=""> </div><div class="col-md-6-inline"><img class="img-responsive" src="figures/classical/md-nvt-hh.png" alt="MD-NVT-HH-dist" title=""></div></div>
+
+<div class="col-md-12"><div class="col-md-6-inline"><img class="img-responsive" src="figures/classical/md-nvt-vO.png" alt="MD-NVT-vO-dist" title=""> </div><div class="col-md-6-inline"><img class="img-responsive" src="figures/classical/md-nvt-vH.png" alt="MD-NVT-vH-dist" title=""></div></div>
+
+<p>Fig. 3.3. Distribution of coordinates and velocities of water molecule during 2.0-2.1 ns</p>
+
+
+
+<h2 id="33-sampling-from-the-nvt-ensemble">3.3 Sampling from the NVT ensemble</h2>
+
+<p>Now the system of 216 water molecules is in canonical equilibrium. Initial coordinates and velocities will be sampled in the NVT ensemble for the following NVE simulation. The time interval for the sampling will be 2 ps. Correlation functions from classical dynamics will be both time-averaged and trajectory-averaged. In this tutorial, 100 samples are produced with the <b>restrt</b> file 'nvt.rst.4' in the previous step. The samples are then used to gain good statistics for the correlation functions.</p>
+
+<p>For convenience, a loop script is used for sampling:</p>
+
+<center><a href="files/sample.sh">sample.sh</a></center>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/bin/bash</span>
+<span class="hljs-keyword">for</span> (( i=<span class="hljs-number">1</span>; i&lt;=<span class="hljs-number">100</span>; i++ )); <span class="hljs-keyword">do</span>        
+    <span class="hljs-built_in">echo</span> <span class="hljs-variable">$i</span>
+    sander -O -i sample.in -c nvt.rst.<span class="hljs-number">4</span> -p wat216.prmtop -r sample.rst -o sample.out 
+    mkdir <span class="hljs-variable">$i</span>
+    cp sample.rst <span class="hljs-variable">$i</span>/ 
+    mv sample.rst nvt.rst.<span class="hljs-number">4</span>       
+<span class="hljs-keyword">done</span></code></pre>
+
+<p>and the input file is shown below, which indicates that we take the sampling for every 2 ps.</p>
+
+<center><a href="files/sample.in">sample.in</a></center>
+
+
+
+<pre class="prettyprint"><code class=" hljs makefile">Classical MD sample 
+&amp;cntrl
+<span class="hljs-constant">imin</span> = 0,                 
+<span class="hljs-constant">irest</span> = 1, ntx = 5,   
+<span class="hljs-constant">ntb</span> = 1, cut = 7.0 
+<span class="hljs-constant">ntt</span> = 3, gamma_ln = 5.0, ig = -1, 
+<span class="hljs-constant">tempi</span> = 298.15, temp0 = 298.15
+<span class="hljs-constant">nstlim</span> = 4000, dt = 0.0005,
+<span class="hljs-constant">ntpr</span> = 10, ntwr = 10, ntwv = 10, ntwx = 10
+/
+&amp;ewald                   
+<span class="hljs-constant">skinnb</span> = 2.0             
+/     </code></pre>
+
+<p>After executing the loop script, we then have 100 folders named from 1 to 100, each with an <strong>restrt</strong> file ‘sample.rst’ inside.</p>
+
+
+
+<h2 id="34-propagating-classical-trajectories-in-the-nve-ensemble">3.4 Propagating classical trajectories in the NVE ensemble</h2>
+
+<p>In this step, we use the samples obtained from the previous NVT simulation to carry out NVE simulations to propagate classical trajectories. A loop script is used here: </p>
+
+<center><a href="files/nve.sh">nve.sh</a></center>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/bin/bash</span>
+<span class="hljs-keyword">for</span> (( i=<span class="hljs-number">1</span>; i&lt;=<span class="hljs-number">100</span>; i++ )); <span class="hljs-keyword">do</span>        
+    <span class="hljs-built_in">echo</span> <span class="hljs-variable">$i</span>
+    cp nve.in wat216.prmtop <span class="hljs-variable">$i</span>
+    <span class="hljs-built_in">cd</span> <span class="hljs-variable">$i</span>
+    sander -O -i nve.in -c sample.rst -p wat216.prmtop -r nve.rst -o nve.out 
+    <span class="hljs-built_in">cd</span> ..
+<span class="hljs-keyword">done</span></code></pre>
+
+<p>The coordinates and velocities contained in the sample, i.e. ‘sample.rst’ in each folder, are used as initial conditions of each trajectory. The input file is as follows: </p>
+
+<center><a href="files/nve.in">nve.in</a></center>
+
+
+
+<pre class="prettyprint"><code class=" hljs makefile">NVE simulation of liquid water
+&amp;cntrl
+<span class="hljs-constant">imin</span> = 0,                 
+<span class="hljs-constant">irest</span> = 1, ntx = 5,   
+<span class="hljs-constant">ntt</span> = 0, cut = 7.0,
+<span class="hljs-constant">ntb</span> = 1,
+<span class="hljs-constant">nstlim</span> = 40000, dt = 0.0005,
+<span class="hljs-constant">nscm</span> = 1,
+<span class="hljs-constant">ntpr</span> = 1, ntwr = 1, ntwx = 1, ntwv = 1
+/
+&amp;ewald                   
+<span class="hljs-constant">skinnb</span> = 2.0             
+/        </code></pre>
+
+<p>The parameter <code>nscm</code> is set as a flag for the removal of translational and rotational center-of-mass (COM) motion at regular intervals (default is 1000). Here we do the removal at each step. <br>
+The input files are: <a href="files/nve.in">nve.in</a>, <a href="files/nve.sh">nve.sh</a>, <a href="files/wat216.prmtop">wat216.prmtop</a>.</p>
+
+
+
+<h2 id="35-analysis">3.5 Analysis</h2>
+
+<p>The velocities in each <strong>mdvel</strong> file of the corresponding trajectory are used to calculate the center-of-mass velocity autocorrelation function and the dipole-derivative autocorrelation function required for diffusion constant and IR spectrum calculation.</p>
+
+
+
+<h3 id="351-diffusion-constant">3.5.1 Diffusion constant</h3>
+
+<p>The self-diffusion constant of a single water molecule can be obtained from the center-of-mass velocity autocorrelation function:</p>
+
+<center><img src="figures/eq/eq-md-dif.png"></center>
+
+<p>The center-of-mass velocity of single water molecule can be obtained from the center-of-mass momentum, which is the sum of the momenta of the two hydrogen atoms and that of the oxygen atom.</p>
+
+<p>Fortran code <a href="files/com-vacf.f90">com-vacf.f90</a> is used to calculate center-of-mass velocity autocorrelation function. The parameters in the code e.g. <code>nstep</code>, <code>dt</code> etc. may be modified according to your own settings.</p>
+
+<center><img src="figures/classical/md-com-vacf.png"></center><center>Fig. 3.4. The center-of-mass velocity autocorrelation function</center>
+
+<p>The result of integral of center-of-mass velocity autocorrelation function should be around 0.0013. Note that the default unit of velocity in mdvel file is Å/ (1/20.455) ps, thus the integral has the unit of Å<sup>2</sup>/ (1/20.455)2 ps. To convert the unit to Å<sup>2</sup>/ps, one should multiply 0.0013 by 20.4552, which gives out 0.54. Then according to the equation above, the diffusion constant of liquid water is obtained by dividing 0.54 by 3, which is 0.18 Å<sup>2</sup>/ps.</p>
+
+
+
+<h3 id="352-infrared-spectrum">3.5.2 Infrared spectrum</h3>
+
+<p>The experimental IR spectrum is given in terms of two frequency-dependent properties, the Beer-Lambert absorption constant α(ω) and the refractive index n(ω). These quantities are related to the Fourier transform of the dipole-derivative autocorrelation function: <br>
+</p><center><img src="figures/eq/eq-md-ir.png"></center> <br>
+The fortran code <a href="files/duacf.f90">duacf.f90</a> is used to calculate dipole-derivative autocorrelation function: <br>
+<center><img src="figures/eq/eq-duacf.png"></center>
+
+<p>The parameters in the code e.g. <code>nstep</code>, <code>dt</code> etc. may be modified according to your own settings. <br>
+</p><center><img src="figures/classical/md-dotdipacf.png"></center><center>Fig. 3.5. Dipole-derivative autocorrelation functions</center>
+
+<p>The infrared intensities is obtained from the Fourier transform of dipole-derivative autocorrelation function. The results are plotted below:</p>
+
+<center><img src="figures/classical/md-IR-1.png" alt="MD-IR" title=""></center><center>Fig. 3.6. Infrared spectrum</center>
+
+
+
+<h1 id="4-quantum-dynamics">4. Quantum Dynamics</h1>
+
+<p>After preparation of the liquid water model and energy minimization, quantum dynamics methods are used to study the diffusion constant and infrared spectrum in this section. The results are then compared with those from classical dynamics. <br>
+The flowchart for quantum dynamics is as follows:</p>
+
+<center><img src="figures/quantum-flowchart.png"></center>
+
+
+
+<h2 id="41-equilibrating-the-system-with-pimd-npt">4.1 Equilibrating the system with PIMD (NPT)</h2>
+
+<p>The PIMD NPT simulation is required for the density of the system. Before simulation, one may estimate the size of time step (<em>dt</em>) from the vibration period of a ring polymer (<em>T<sub>p</sub></em>), which can be deduced from the equation below: <br>
+</p><center><img src="figures/eq/eq-tp.png"></center> <br>
+A reasonable estimate for the size of time step is <em>dt</em> = <em>T<sub>p</sub></em>/300, e.g. about 0.1 fs for 24 beads at 298.15 K. The number of beads should be tested and chosen carefully for convergence of results.
+
+<p>To run the PIMD NPT simulation, parallel version of Amber program with <em>sander.MPI</em> exploiting the multisander scheme is used.</p>
+
+<p>An example of the command is as follows:</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ mpirun -np <span class="hljs-number">24</span> sander.MPI -ng <span class="hljs-number">24</span> -groupfile gf_npt_pimd1</code></pre>
+
+<p>With this command, the job will be run using <em>sander.MPI</em> with 24 CPU cores which are separated into 24 groups, and the <strong>groups</strong> file ‘gf_npt_pimd1’ contains the options for <em>sander.MPI</em>, which might be like this:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs r">-O -i pimd_npt1.in -p wat216.prmtop -c min.rst -r npt1.rst
+-O -i pimd_npt1.in -p wat216.prmtop -c min.rst -r npt2.rst
+<span class="hljs-keyword">...</span> <span class="hljs-keyword">...</span> <span class="hljs-keyword">...</span>
+-O -i pimd_npt1.in -p wat216.prmtop -c min.rst -r npt24.rst</code></pre>
+
+<p>A simple shell script can be used to generate this <strong>groups</strong> file with a loop:</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/bin/bash</span>
+<span class="hljs-comment"># write gf_npt_pimd</span>
+n=<span class="hljs-number">24</span>
+<span class="hljs-keyword">for</span> (( i=<span class="hljs-number">1</span>; i&lt;=<span class="hljs-variable">$n</span>; i++ )); <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"-O -i pimd_npt1.in -p wat216.prmtop -c min.rst -r npt<span class="hljs-variable">${i}</span>.rst"</span> 
+<span class="hljs-keyword">done</span> &gt; gf_npt_pimd1</code></pre>
+
+<p>The <strong>mdin</strong>, <strong>prmtop</strong> and <strong>inpcrd</strong> files are essential for the computation. The <strong>prmtop</strong> file is the same as the one used in classical dynamics simulation which is generated from model preparation. The <strong>inpcrd</strong> file is ‘min.rst’, obtained from energy minimization, which is also the same as the one initially used in classical dynamics simulation. The <strong>mdin</strong> file (‘pimd_npt1.in’) which contains settings for PIMD NPT is given below, together with the <strong>mdin</strong> file which reads both coordinates and velocities from previous <strong>restrt</strong> file.</p>
+
+<div class="col-md-12"><div class="col-md-6-inline"><center><a href="files/pimd_npt1.in">pimd_npt1.in</a></center><pre>NPT simulation of liquid water
+ &amp;cntrl
+ ipimd = 2
+ irest = 0, ntx = 1
+ ntb = 2, cut = 7.0, ntp = 1
+ pres0 = 1.013, taup=4.0,
+ tempi = 298.15, temp0 = 298.15
+ ntt = 4, nchain = 4, gamma_ln = 2                             
+ nscm = 1000                               
+ nstlim = 2000000, dt = 0.0001
+ ntpr = 1000, ntwx = 1000, ntwr = 1000  
+  /
+ &amp;ewald                                 
+ skinnb = 2.0                            
+ /
+</pre>
+</div><div class="col-md-6-inline"><center><a href="files/pimd_npt2.in">pimd_npt2.in</a></center><pre>NPT simulation of liquid water
+&amp;cntrl
+ipimd = 2
+irest = 1, ntx = 5
+ntb = 2, cut = 7.0, ntp = 1
+pres0 = 1.013, taup=4.0,
+tempi = 298.15, temp0 = 298.15
+ntt = 4, nchain = 4, gamma_ln = 2                           
+nscm = 1000                               
+nstlim = 2000000, dt = 0.0001
+ntpr = 1000, ntwx = 1000, ntwr = 1000  
+ /
+&amp;ewald                                 
+skinnb = 2.0                            
+/
+</pre></div></div>
+
+<table>
+<thead>
+<tr>
+  <th>Settings</th>
+  <th>Summary</th>
+</tr>
+</thead>
+<tbody><tr>
+  <td>ipimd=2</td>
+  <td>Normal Mode Path Integral Molecular Dynamics (NMPIMD) is used</td>
+</tr>
+<tr>
+  <td>irest=0</td>
+  <td>Do not restart the simulation</td>
+</tr>
+<tr>
+  <td>ntx=1</td>
+  <td>Only read coordinates from input</td>
+</tr>
+<tr>
+  <td>irest=1</td>
+  <td>Restart the simulation</td>
+</tr>
+<tr>
+  <td>ntx=5</td>
+  <td>Read both the coordinates and velocities from input</td>
+</tr>
+<tr>
+  <td>ntb=2</td>
+  <td>Constant pressure periodic boundary conditions are used</td>
+</tr>
+<tr>
+  <td>ntp=1</td>
+  <td>with isotropic position scaling</td>
+</tr>
+<tr>
+  <td>cut=7.0</td>
+  <td>Non-bonded cutoff distance in Angstroms</td>
+</tr>
+<tr>
+  <td>tempi=298.15</td>
+  <td>Initial temperature (in K)</td>
+</tr>
+<tr>
+  <td>temp0=298.15</td>
+  <td>Reference temperature (in K) at which the system is to be kept</td>
+</tr>
+<tr>
+  <td>ntt=4</td>
+  <td>Constant temperature, use Nosé-Hoover chain method for thermostats</td>
+</tr>
+<tr>
+  <td>nchain=4</td>
+  <td>Number of thermostats in each Nosé-Hoover chain of thermostats (default 2, recommended &gt;= 4)</td>
+</tr>
+<tr>
+  <td>taup=4.0</td>
+  <td>Pressure relaxation time (in ps), recommended value is between 1.0 and 5.0, default is 1.0.</td>
+</tr>
+<tr>
+  <td>pres0=1.013</td>
+  <td>Reference pressure (in bar) at which the system is to be kept</td>
+</tr>
+<tr>
+  <td>nscm=1000</td>
+  <td>Remove translational and rotational center-of-mass motions every 1000 steps, default</td>
+</tr>
+<tr>
+  <td>nstlim=2000000</td>
+  <td>Number of steps to be performed</td>
+</tr>
+<tr>
+  <td>dt=0.0001</td>
+  <td>The size of time step (in ps)</td>
+</tr>
+<tr>
+  <td>ntpr=1000</td>
+  <td>Energy information will be written to mdout and mdinfo every 1000 steps</td>
+</tr>
+<tr>
+  <td>ntwx=1000</td>
+  <td>The coordinates will be written to the mdcrd file every 1000 steps</td>
+</tr>
+<tr>
+  <td>ntwr=1000</td>
+  <td>The <strong>restrt</strong> file will be written every 10 steps during dynamics</td>
+</tr>
+<tr>
+  <td>skinnb=2.0</td>
+  <td>Width of the nonbonded “skin” (in Å), default is 2.0 Å. The direct sum nonbonded list is extended to cut+skinnb</td>
+</tr>
+</tbody></table>
+
+
+<p>As the job runs, <strong>pimdout</strong> file which reports the quantum results for the whole system (i.e. total, kinetic and potential energy, pressure, volume, density, etc.) will be generated. Because Nosé-Hoover chains of thermostats are employed, an additional file ‘NHC.dat’ is written with the conserved energy for the extended system. The simulation may be time-consuming to achieve convergence, therefore it is necessary to separate the simulation into several steps, and run them sequently. For the first step only the coordinates are read and the velocities are generated, so <code>irest=0</code> and <code>ntx=1</code> are used. For the following steps, both the coordinates and velocities are read from the <strong>restrt</strong> files generated by the previous step, so <code>irest=1</code> and <code>ntx=5</code> are used, and the <strong>mdin</strong> file and <strong>groups</strong> file should be modified respectively. When each job finishes, the results shall be checked carefully.</p>
+
+<p>Here is an example script to run the whole job: <br>
+</p><center><a href="files/pimd_npt.sh">pimd_npt.sh</a></center>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/bin/bash</span>
+<span class="hljs-comment"># run 1 step using min.rst as coordinate file in the groups file (gf_npt_pimd1), </span>
+<span class="hljs-comment"># and then 4 steps using the generated <strong>restrt</strong> files (npt*.rst) as coordinate files in the groups file (gf_npt_pimd2)</span>
+
+nc=<span class="hljs-number">24</span>
+<span class="hljs-comment"># write gf_npt_pimd1</span>
+<span class="hljs-keyword">for</span> (( i=<span class="hljs-number">1</span>; i&lt;=<span class="hljs-variable">${nc}</span>; i++ )); <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"-O -i pimd_npt1.in -p wat216.prmtop -c min.rst -r npt<span class="hljs-variable">${i}</span>.rst"</span> 
+<span class="hljs-keyword">done</span> &gt; gf_npt_pimd1
+
+<span class="hljs-comment"># run the first step</span>
+mpirun -np <span class="hljs-variable">${nc}</span> sander.MPI -ng <span class="hljs-variable">${nc}</span> -groupfile gf_npt_pimd1
+<span class="hljs-keyword">for</span> (( i=<span class="hljs-number">1</span>; i&lt;=<span class="hljs-variable">${nc}</span>; i++ )); <span class="hljs-keyword">do</span>
+    cp npt<span class="hljs-variable">${i}</span>.rst npt<span class="hljs-variable">${i}</span>.rst.<span class="hljs-number">0</span> <span class="hljs-comment"># backup the <strong>restrt</strong> files</span>
+<span class="hljs-keyword">done</span>
+cp pimdout pimdout.<span class="hljs-number">0</span> <span class="hljs-comment"># backup pimdout file</span>
+
+<span class="hljs-comment"># write gf_npt_pimd2</span>
+<span class="hljs-keyword">for</span> (( i=<span class="hljs-number">1</span>; i&lt;=<span class="hljs-variable">${nc}</span>; i++ )); <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"-O -i pimd_npt2.in -p wat216.prmtop -c npt<span class="hljs-variable">${i}</span>.rst -r npt<span class="hljs-variable">${i}</span>.rst.new"</span> 
+<span class="hljs-keyword">done</span> &gt; gf_npt_pimd2
+
+nstep=<span class="hljs-number">4</span>
+<span class="hljs-keyword">for</span> (( j=<span class="hljs-number">1</span>; j&lt;=<span class="hljs-variable">${nstep}</span>; j++ )); <span class="hljs-keyword">do</span>
+    <span class="hljs-comment"># each run is a restart from previous step</span>
+    mpirun -np <span class="hljs-variable">${nc}</span> sander.MPI -ng <span class="hljs-variable">${nc}</span> -groupfile gf_npt_pimd2
+    <span class="hljs-keyword">for</span> (( i=<span class="hljs-number">1</span>; i&lt;=<span class="hljs-variable">${nc}</span>; i++ )); <span class="hljs-keyword">do</span>
+        cp npt<span class="hljs-variable">${i}</span>.rst.new npt<span class="hljs-variable">${i}</span>.rst.<span class="hljs-variable">${j}</span> <span class="hljs-comment"># backup the <strong>restrt</strong> files</span>
+        mv npt<span class="hljs-variable">${i}</span>.rst.new npt<span class="hljs-variable">${i}</span>.rst <span class="hljs-comment"># prepare the <strong>restrt</strong> files for next run        </span>
+    <span class="hljs-keyword">done</span>
+    cp pimdout pimdout.<span class="hljs-variable">${j}</span>  <span class="hljs-comment"># backup pimdout file</span>
+<span class="hljs-keyword">done</span></code></pre>
+
+<div class="col-md-12"><div class="col-md-4-inline"><img class="img-responsive" src="figures/pimd-npt-EPTOT.jpg"></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/pimd-npt-TEMP.jpg"></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/pimd-npt-DENSITY.jpg"></div></div>
+
+<center>Fig. 4.1. The potential energy, temperature and density from PIMD NPT simulation (200-1000 ps)</center>
+
+<div class="col-md-12"><div class="col-md-4-inline"><img class="img-responsive" src="figures/pimd-npt-dist-EPTOT.jpg"></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/pimd-npt-dist-TEMP.jpg"></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/pimd-npt-dist-DENSITY.jpg"></div></div>
+
+<center>Fig. 4.2. The distributions of potential energy, temperature and density from PIMD NPT simulation (200-1000 ps)</center>
+
+<p>Once the density is converged, it is time to start PIMD simulation in the NVT ensemble in the next stage.</p>
+
+<blockquote>
+  <p>Note: the density of the last time step should be around the average value, otherwise it is not a good point to start NVT simulation.</p>
+</blockquote>
+
+
+
+<h2 id="42-equilibrating-the-system-with-pimd-nvt">4.2 Equilibrating the system with PIMD (NVT)</h2>
+
+<p>In this stage, a long-time PIMD job (separated to several steps) is carried out in the NVT ensemble for the equilibrium of the system. The simulation is carried out with <em>sander.MPI</em> using the following command:</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ mpirun -n <span class="hljs-number">24</span> sander.MPI -ng <span class="hljs-number">24</span> -groupfile gf_nvt_pimd</code></pre>
+
+<p>The corresponding <strong>groups</strong> file ‘gf_nvt_pimd’ is like this:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs lasso"> <span class="hljs-attribute">-O</span> <span class="hljs-attribute">-i</span> pimd_nvt<span class="hljs-built_in">.</span><span class="hljs-keyword">in</span> <span class="hljs-attribute">-p</span> wat216<span class="hljs-built_in">.</span>prmtop <span class="hljs-attribute">-c</span> npt1<span class="hljs-built_in">.</span>rst <span class="hljs-attribute">-r</span> nvt1<span class="hljs-built_in">.</span>rst
+ <span class="hljs-attribute">-O</span> <span class="hljs-attribute">-i</span> pimd_nvt<span class="hljs-built_in">.</span><span class="hljs-keyword">in</span> <span class="hljs-attribute">-p</span> wat216<span class="hljs-built_in">.</span>prmtop <span class="hljs-attribute">-c</span> npt2<span class="hljs-built_in">.</span>rst <span class="hljs-attribute">-r</span> nvt2<span class="hljs-built_in">.</span>rst
+<span class="hljs-attribute">...</span><span class="hljs-attribute">...</span> 
+ <span class="hljs-attribute">-O</span> <span class="hljs-attribute">-i</span> pimd_nvt<span class="hljs-built_in">.</span><span class="hljs-keyword">in</span> <span class="hljs-attribute">-p</span> wat216<span class="hljs-built_in">.</span>prmtop <span class="hljs-attribute">-c</span> npt24<span class="hljs-built_in">.</span>rst <span class="hljs-attribute">-r</span> nvt24<span class="hljs-built_in">.</span>rst</code></pre>
+
+<p>Here the options are similar to the ones of PIMD simulation in the NPT ensemble. The <strong>restrt</strong> files produced from the previous step (‘npt*.rst’, * denotes 1-24) are used as the initial coordinates and velocities. 24 <strong>restrt</strong> files named as ‘nvt*.rst’ (here * denotes 1-24) are produced during the simulation. The energy information are written in the <strong>pimdout</strong> file. </p>
+
+<center><a href="files/pimd_nvt.in">pimd_nvt.in</a></center>
+
+
+
+<pre class="prettyprint"><code class=" hljs fix"><span class="hljs-attribute">pimd nvt
+ &amp;cntrl
+  ipimd </span>=<span class="hljs-string"> 2
+  ntb = 1,cut = 7.0,
+  temp0  = 298.15, tempi = 298.15,
+  ntt = 4, nchain = 4,
+  dt = 0.0001, nstlim = 2000000,
+  nscm = 1000,
+  ntx = 5, irest = 1,
+  ntwx = 1000,     
+  ntwr = 1000,       
+  ntpr = 1000,         
+ /
+ &amp;ewald
+  skinnb = 2.0
+ /</span></code></pre>
+
+<p>The PIMD simulation in the NVT ensemble is carried out for 1 ns, separated into 5 steps. Here a script <a href="files/pimd_nvt.sh">pimd_nvt.sh</a> is used to do the job, which is similar to the one used in previous PIMD NPT simulation. The <strong>mdin</strong> file 'pimd_nvt.in' is the same in each step. The <strong>restrt</strong> files are used as <strong>inpcrd</strong> files for the next step.</p>
+
+<p>The convergence of results shall be checked in the way as what is done in the PIMD NPT simulation. The distribution of the coordinates generated from the PIMD NVT simulation should satisfy Gaussian distribution.</p>
+
+<p>For example, the results are plotted as follows:</p>
+
+<div class="col-md-12"><div class="col-md-6-inline"><img class="img-responsive" src="figures/pimd-nvt-TEMP.jpg"></div><div class="col-md-6-inline"><img class="img-responsive" src="figures/pimd-nvt-EPTOT.jpg"></div></div>
+
+<center>Fig. 4.3. The temperature and potential energy from PIMD NVT simulation (1.0 ns)</center>
+
+<div class="col-md-12"><div class="col-md-4-inline"><img class="img-responsive" src="figures/pimd-nvt-dist-TEMP.jpg"></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/pimd-nvt-dist-EPTOT.jpg"></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/pimd-nvt-dist-OH.jpg"></div></div>
+
+<center>Fig. 4.4. The distributions of temperature, potential energy, and O-H bond length from PIMD NVT simulation (1.0 ns)</center>
+
+
+
+<h2 id="43-sampling-with-pimd-nvt">4.3 Sampling with PIMD (NVT)</h2>
+
+<p>After the equilibrium is achieved, sampling of coordinates from the NVT ensemble with PIMD is required for LSC-IVR simulation. This can be done by continuing the equilibrating process step by step, each for, e.g. 1 ps, The <strong>restrt</strong> files generated from the previous step are used as the <strong>inpcrd</strong> file for the next step, and more importantly, saved for further use as the <strong>inpcrd</strong> file for the LSC-IVR calculation, i.e., the ‘sample’. In this tutorial, 4000 steps are conducted to collect enough samples, with <strong>restrt</strong> files from each step saved in a different directory.</p>
+
+<p>The following shell script is used to do this job:</p>
+
+<center><a href="files/pimd-sample.sh">pimd-sample.sh</a></center>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/bin/bash</span>
+nsamp=<span class="hljs-number">3000</span>
+nc=<span class="hljs-number">24</span>
+<span class="hljs-keyword">for</span> (( i=<span class="hljs-number">1</span>; i&lt;=<span class="hljs-variable">${nsamp}</span>; ++i ))
+<span class="hljs-keyword">do</span>
+    mkdir <span class="hljs-variable">${i}</span> <span class="hljs-comment"># make work dir</span>
+    mpirun -n <span class="hljs-variable">${nc}</span> sander.MPI -ng <span class="hljs-variable">${nc}</span> -groupfile gf_sample <span class="hljs-comment"># run pimd</span>
+    <span class="hljs-keyword">for</span> (( j=<span class="hljs-number">1</span>; j&lt;=<span class="hljs-variable">${nc}</span>; ++j ))
+    <span class="hljs-keyword">do</span>
+        cp nvt<span class="hljs-variable">${j}</span>.rst.new <span class="hljs-variable">${i}</span>/        <span class="hljs-comment"># copy generated coordinate files to work dir</span>
+        mv nvt<span class="hljs-variable">${j}</span>.rst.new nvt<span class="hljs-variable">${j}</span>.rst  <span class="hljs-comment"># for next run</span>
+    <span class="hljs-keyword">done</span>
+<span class="hljs-keyword">done</span></code></pre>
+
+<center><a href="files/gf_sample">gf_sample</a></center>
+
+
+
+<pre class="prettyprint"><code class=" hljs r">-O -i pimd-sample.in -c nvt1.rst -p wat216.prmtop -r nvt1.rst.new -o nvt1.out
+-O -i pimd-sample.in -c nvt2.rst -p wat216.prmtop -r nvt2.rst.new -o nvt2.out
+<span class="hljs-keyword">...</span> <span class="hljs-keyword">...</span> <span class="hljs-keyword">...</span>
+-O -i pimd-sample.in -c nvt24.rst -p wat216.prmtop -r nvt24.rst.new -o nvt24.out</code></pre>
+
+<center><a href="files/pimd-sample.in">pimd-sample.in</a></center>
+
+
+
+<pre class="prettyprint"><code class=" hljs fix"><span class="hljs-attribute">sample from NVT
+ &amp;cntrl
+  ipimd </span>=<span class="hljs-string"> 2
+  ntb = 1,cut = 7.0,
+  temp0  = 298.15, tempi = 298.15,
+  ntt = 4, nchain = 4,
+  dt = 0.0001, nstlim = 10000,
+  nscm = 1000,
+  ntx = 5, irest = 1,
+  ntwx = 10,     
+  ntwr = 10,       
+  ntpr = 10,         
+ /
+ &amp;ewald
+  skinnb = 2.0
+ /</span></code></pre>
+
+<p>The samples should be checked for the distribution of coordinates, which should resemble a Gaussian distribution.</p>
+
+
+
+<h2 id="44-lsc-ivr-calculations">4.4 LSC-IVR calculations</h2>
+
+<p>After the sampling is done, linearized semiclassical initial value representation (LSC-IVR) method is used to propagate real time trajectories from which the quantum thermal correlation functions can be obtained. The initial coordinates are randomly selected from the 24 <strong>restrt</strong> files generated in the previous step. Initial velocities are generated from the 0th step of LSC-IVR using LGA.</p>
+
+<p>The example of <strong>mdin</strong> file for LSC-IVR is as follows:</p>
+
+<center><a href="files/lsc.in">lsc.in</a></center>
+
+
+
+<pre class="prettyprint"><code class=" hljs fix"><span class="hljs-attribute">LSC-IVR
+ &amp;cntrl
+ ilscivr </span>=<span class="hljs-string"> 1, icorf_lsc = 4,                          
+ ntx = 1, irest = 0, 
+ ntb = 1, cut = 7.0,
+ ntt = 0,  temp0 = 298.15
+ nscm = 1,
+ dt = 0.0002, nstlim = 10000   
+
+ ntpr = 1, ntwx = 1, ntwv = 1   
+ /
+ &amp;ewald
+ skinnb=2.0
+ /</span></code></pre>
+
+<table>
+<thead>
+<tr>
+  <th>Settings</th>
+  <th>Summary</th>
+</tr>
+</thead>
+<tbody><tr>
+  <td>ilscivr = 1</td>
+  <td>Use LSC-IVR</td>
+</tr>
+<tr>
+  <td>icorf_lsc = 4</td>
+  <td>Kubo-transformed correlation functions. This option affects output files for LSC-IVR only.</td>
+</tr>
+</tbody></table>
+
+
+<blockquote>
+  <p>Note: besides <strong>mdin</strong>, <strong>inpcrd</strong> and <strong>prmtop</strong> files, LSC-IVR requires a file named ‘LSC_rhoa.dat’ with an arbitary integer number between 0 and 10000 in it, which is used to generate the initial random number for the LSC-IVR calculation. As the number of trajectories for LSC-IVR is increased, it will automatically be updated.</p>
+</blockquote>
+
+<p>A bash script can be used to run the LSC-IVR calculation for all the samples.</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/bin/bash</span>
+<span class="hljs-comment"># do LSC-IVR in each sample directory</span>
+nsamp=<span class="hljs-number">3000</span>  <span class="hljs-comment"># number of samples</span>
+nc=<span class="hljs-number">24</span>
+<span class="hljs-keyword">for</span> (( i=<span class="hljs-number">1</span>; i&lt;=<span class="hljs-variable">${nsamp}</span>; ++i ))
+<span class="hljs-keyword">do</span>
+    cp lsc.in wat216.prmtop <span class="hljs-variable">${i}</span>  <span class="hljs-comment"># copy essential files into work dir</span>
+    <span class="hljs-built_in">cd</span> <span class="hljs-variable">${i}</span>                                    <span class="hljs-comment"># enter work dir</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$i</span>"</span> &gt; LSC_rhoa.dat                   <span class="hljs-comment"># preparation for LSC-IVR, here i should in the range between 0 and 10000</span>
+    samp=$(( RANDOM%<span class="hljs-variable">${nc}</span> + <span class="hljs-number">1</span> ))               <span class="hljs-comment"># randomly select sample as initial configuration</span>
+    cp nvt<span class="hljs-variable">${samp}</span>.rst.new sample.rst
+    <span class="hljs-built_in">echo</span> <span class="hljs-variable">${samp}</span> &gt; selected_sample             <span class="hljs-comment"># record selected sample for debug</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"LSC-IVR for sample <span class="hljs-variable">$i</span>"</span>
+    sander -O -i lsc.in -p wat216.prmtop -c sample.rst -r lsc.rst -o lsc.out
+    <span class="hljs-built_in">cd</span> ..                                      <span class="hljs-comment"># exit work dir, back to parent dir</span>
+<span class="hljs-keyword">done</span></code></pre>
+
+<p>Before running a long time job, it is necessary to test the settings are right.  This can be done by running a job with only the initialization of LSC-IVR by setting <code>nstlim=0</code>  in ‘lsc.in’. One can find the generated initial velocities in the ‘LSC_rhoa.dat’ file in each sample directory. The velocity distributions of oxygen and hydrogen atom should be Gaussian distribution. Example results are plotted below:</p>
+
+<div class="col-md-12"><div class="col-md-4-inline"><img src="figures/dist_vO.png"></div><div class="col-md-4-inline"><img src="figures/dist_vH1.png"></div><div class="col-md-4-inline"><img src="figures/dist_vH2.png"></div></div>
+
+<div class="col-md-12"><div class="col-md-4-inline"><img src="figures/dist_vx.png"></div><div class="col-md-4-inline"><img src="figures/dist_vy.png"></div><div class="col-md-4-inline"><img src="figures/dist_vz.png"></div></div>
+
+<center>Fig. 4.5. Velocity distributions of oxygen and hydrogen atoms in x, y, z directions, respectively.</center>
+
+<blockquote>
+  <p>Note: The generated trajectory files <strong>mdvel</strong> and <strong>mdcrd</strong> usually occupy disk space of hundreds of MB per sample. To save space, it is recommended to calculate the correlation functions cumulatively, and remove the used trajectories after correlation function calculation.</p>
+</blockquote>
+
+
+
+<h2 id="45-analysis">4.5 Analysis</h2>
+
+<p>To analyze the trajectories (<strong>mdvel</strong> and <strong>mdcrd</strong> files) propagated from the LSC-IVR calculations, a fortran code <a href="files/lsc_cor.f90">lsc_cor.f90</a> is written to summarize the results and calculate the correlation functions required for the diffusion constant and IR spectrum cumulatively. The parameters <code>nstep</code> and <code>dtstep</code> in ‘lsc_cor.f90’ should be modified to your own settings. A directory ‘lsc’ is built to place the results. In the parent directory, one can find that ‘lsc’ is parallel to the sample directories ‘1’, ‘2’, and so on using the <code>ls</code> command.</p>
+
+<p>Before running the executable from compilation of ‘lsc_cor.f90’, a file named as ‘LSC_cor-216-vv.dat’ with the number ‘0’ inside should be placed in the directory ‘lsc’ with the trajectory files. As the executable runs, the autocorrelation functions of velocities and dipole-derivatives will be written into this file. The file ‘LSC_rhoa.dat’ is also required because the initial coordinates and velocities for each sample are stored in it. A bash script is used to do the job.</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs bash"><span class="hljs-shebang">#!/bin/bash
+</span>
+<span class="hljs-comment"># preparation before calculating correlation function</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"0"</span> &gt; LSC_cor-<span class="hljs-number">216</span>-vv.dat   <span class="hljs-comment"># create LSC_cor-216-vv.dat with number 0 inside</span>
+gfortran lsc_cor.f90 -o lsc.x   <span class="hljs-comment"># compile lsc_cor.f90, the executable is lsc.x</span>
+
+<span class="hljs-comment"># calculate correlation function, </span>
+<span class="hljs-comment"># LSC_cor-216-vv.dat will be updated and reused for each sample</span>
+nsamp=<span class="hljs-number">3000</span>
+<span class="hljs-keyword">for</span> (( i=<span class="hljs-number">1</span>; i&lt;=<span class="hljs-variable">${nsamp}</span>; ++i ))
+<span class="hljs-keyword">do</span>    
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Calculate correlation functions for sample <span class="hljs-variable">$i</span>"</span>
+    <span class="hljs-built_in">cd</span> <span class="hljs-variable">$i</span>
+    cp LSC_rhoa.dat  ../lsc/
+    mv mdcrd mdvel ../lsc/
+    <span class="hljs-built_in">cd</span> ../lsc/
+    ./lsc.x
+    <span class="hljs-built_in">cd</span> ..
+<span class="hljs-keyword">done</span></code></pre>
+
+
+
+<h3 id="451-diffusion-constant">4.5.1 Diffusion constant</h3>
+
+<p>The self-diffusion constant of a single water molecule can be obtained from the center-of-mass momentum autocorrelation function: <br>
+</p><center><img src="figures/eq/eq-kubo-ppacf.png"></center>
+
+<p>Here, center-of-mass momentum autocorrelation function corresponds to the sixth column of data in ‘LSC_cor-216-vv.dat’ file. The <code>awk</code> command can be used to get the 6th column from the data file:</p>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ awk <span class="hljs-string">'NF&gt;1{print $6}'</span> LSC_cor-<span class="hljs-number">216</span>-vv.dat &gt; <span class="hljs-number">6</span>.dat</code></pre>
+
+<p>Since the oxygen atom is much heavier than the hydrogen atom, a reasonable way is to use the oxygen momentum autocorrelation function to calculate the diffusion constant. Here is a comparison of the two kinds of correlation functions (results with 3000 trajectories), see also <a href="http://scitation.aip.org/content/aip/journal/jcp/131/16/10.1063/1.3254372" title="Liu2009">Fig. 6. in Liu et al.</a></p>
+
+<center><img src="figures/vv-oo.png" alt="" title=""></center><center>Fig. 4.6. Kubo-transformed momentum autocorrelation functions </center>
+
+<p>The integration of the correlation functions can be computed numerically. For example, <a href="https://en.wikipedia.org/wiki/Trapezoidal_rule">the Trapezoidal rule</a> can be used. The result value of diffusion constant will be around 0.50 if converged.</p>
+
+
+
+<h3 id="452-infrared-spectrum">4.5.2 Infrared spectrum</h3>
+
+<p>The experimental IR spectrum is given in terms of two frequency-dependent properties, the Beer-Lambert absorption constant α(ω) and the refractive index n(ω). These quantities are directly related to the dipole-derivative absorption line shape by</p>
+
+<center><img src="figures/eq/eq-quantum-ir.png"></center>
+
+<p>The infrared intensities along with the frequencies are obtained by Fourier transformation using the (dipole-derivative)-(dipole-derivative) Kubo-transformed correlation function, which is the fifth column of the ‘LSC_cor-216-vv.dat’ file. One can get the values from the data file by running the <code>awk</code> command in the terminal:</p>
+
+<pre class="prettyprint"><code class="language-bash hljs ">$ awk <span class="hljs-string">'NF&gt;1{print $5}'</span> LSC_cor-<span class="hljs-number">216</span>-vv.dat &gt; <span class="hljs-number">5</span>.dat</code></pre>
+
+Here the results (with 3000 trajectories) by ignoring the cross-terms between different molecules in the correlations ("single-water-Kubo"), further neglecting the cross-terms between relative velocities for different H-atoms to O-atom in the same water molecule ("single-HO-Kubo"), and approximating the correlation function in terms of the velocity autocorrelation function of a single H-atom ("single-H-Kubo") are compared with the collective dipole-derivative autocorrelation function ("sum-water-Kubo") separately as the figures below:
+
+<div class="col-md-12"><div class="col-md-4-inline"><img class="img-responsive" src="figures/uu-wat.png" alt="" title=""></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/uu-oh.png" alt="" title=""></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/uu-hh.png" alt="" title=""></div></div><center>Fig. 4.7. Kubo-transformed dipole-derivative correlation functions</center>
+
+<p>Fourier transformation is performed to obtain the infrared intensities. The infrared spectrum will be like</p>
+
+<center><img src="figures/quantum-IR.jpg" alt="" title=""></center><center>Fig. 4.8. Infrared spectrum from quantum dynamics</center>
+
+
+
+
+<h1 id="5-results-and-discussion">5. Results and Discussion</h1>
+
+
+
+<h2 id="51-velocity-and-bond-length-distributions">5.1 Velocity and bond length distributions</h2>
+
+<div class="col-md-12"><div class="col-md-6-inline"><img class="img-responsive" src="figures/compare_vel_distr.jpg" alt="compare_velocity_distribution" title=""><center>Fig.5.1. Velocity distribution of oxygen atom</center></div><div class="col-md-6-inline"><img src="figures/compare_bond_distr.jpg" alt="compare_bond_distribution" title=""><center>Fig.5.2. O-H bond length distribution</center></div></div>
+
+<p>We first consider the configuration distribution (e.g. O-H bond length distribution) and velocity distribution (e.g. oxygen atom velocity distribution) of MD and PIMD before sampling. We can see from Fig. 5.1 and Fig. 5.2 that PIMD results have broader distribution than those of MD, since the density distribution in Wigner phase space is given by:  <br>
+ </p><center><img src="figures/eq/eq-rhow.png"></center> <br>
+ where <em>u<sub>k</sub> = βℏω<sub>k</sub></em>,<em>P<sub>k</sub></em> is the <em>k</em>-th component of the mass-weighted normal mode momentum <em>P</em> and the quantum correction factor with the LGA ansatz proposed by <a href="http://scitation.aip.org/content/aip/journal/jcp/131/7/10.1063/1.3202438" title="LGA">Liu and Miller</a> for both real and imaginary frequencies is given by: 
+
+<center><img src="figures/eq/eq-qu.png"></center>
+
+<p>When <em>u</em> &gt; 0, <em>Q</em>(<em>u</em>) &gt; 1 (see Fig. 5.3), so the width of distribution will become broader. <br>
+</p><center><img class="col-md-6" src="figures/Qu.png" alt="" title=""></center> <br>
+<center>Fig. 5.3. Quantum correction factor <em>Q</em>(<em>u</em>). Imaginary frequencies <em>i</em>|ω| are shown as -|ω| on the negative axis.</center>
+
+
+
+<h2 id="52-radial-distribution-functions">5.2 Radial distribution functions</h2>
+
+<p>The radial distribution functions (RDFs) computed with the q-SPC/fw model using the PIMD method are compared with the corresponding classical and experimental results as shown in Fig. 5.4. By comparing both the height and the position of peaks, it is shown that quantum RDFs agree better with the experimental results than classical results. The results computed here are also compared with <a href="http://scitation.aip.org/content/aip/journal/jcp/125/18/10.1063/1.2386157" title="qSPCfw">reference values</a></p>
+
+<div class="col-md-12"><div class="col-md-4-inline"><img class="img-responsive" src="figures/compare_O-O_distr.jpg" alt="" title=""></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/compare_O-H_distr.jpg" alt="" title=""></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/compare_H-H_distr.jpg" alt="" title=""></div></div>
+
+<center>Fig. 5.4. Comparison of radial distribution functions in (a) oxygen-oxygen, (b) oxygen-hydrogen and (c) hydrogen-hydrogen between MD, PIMD and experimental results.</center>
+
+
+
+
+<h2 id="53-about-correlation-functions">5.3 About correlation functions</h2>
+
+<p>The LSC-IVR formulation of the quantum correlation function is</p>
+<p><span class="math display">\[ C_{AB}(t) = \int \frac{1}{Z} \left&lt;\mathbf{x}_0\right|e^{-\beta\hat{H}}\left|\mathbf{x}_0\right&gt;
+\left|\frac{2\pi}{\beta}\mathbf{M}_\text{therm}(\mathbf{x}_0)\right|^{-1/2} \exp \left[-\frac{\beta}{2} \mathbf{p}_0^T \mathbf{M}_\text{therm}^{-1}(\mathbf{x}_0) \mathbf{p}_0 \right] \ 
+f_{A^\beta}^W (\mathbf{x}_0,\mathbf{p}_0) B_W (\mathbf{x}_t,\mathbf{p}_t) d\mathbf{x}_0 d\mathbf{p}_0 \]</span></p>
+<p>Here, the thermal mass matrix is given by <span class="math inline">\(\mathbf{M}_\text{therm}=\mathbf{M}^{1/2} \mathbf{T} \mathbf{Q} \mathbf{T}^T \mathbf{M}^{1/2}\)</span> in the LGA ansatz, where <span class="math inline">\(\mathbf{M}\)</span> is the diagonal mass matrix, <span class="math inline">\(\mathbf{T}\)</span> is the orthogonal matrix that diagonalized the mass-weighted Hessian matrix of the PES</p>
+<p><span class="math display">\[ \mathbf{T}^T \mathbf{M}^{-1/2} \frac{\partial^2 V }{ \partial \mathbf{x}^2} \mathbf{M}^{-1/2} \mathbf{T} = \text{diag}\left\{\omega_1^2,\cdots,\omega_{3N}^2\right\} \]</span></p>
+<p>And <span class="math inline">\(\mathbf{Q}\)</span> is a diagonal matrix whose elements are quantum correction factors discussed above <span class="math inline">\(\mathbf{Q} = \text{diag}\left\{ Q(\beta\hbar\omega_1),\cdots,Q(\beta\hbar\omega_{3N})\right\}\)</span>. <span class="math inline">\(f_{A^\beta}^W\)</span> and <span class="math inline">\(B_W\)</span> are functions depend on operators <span class="math inline">\(\hat{A}\)</span> and <span class="math inline">\(\hat{B}\)</span>.</p>
+<p>For the center-of-mass momentum correlation function, the center-of-mass momentum is a linear function of momentum. So does the dipole-derivative in the point charge model. In these cases, the LSC-IVR formulation of the Kubo-transformed correlation function is</p>
+<p><span class="math display">\[ C_{\dot{A}\dot{A}}^\text{Kubo}(t) = \int \frac{1}{Z} \left&lt;\mathbf{x}_0\right|e^{-\beta\hat{H}}\left|\mathbf{x}_0\right&gt; \left|\frac{2\pi}{\beta}\mathbf{M}_\text{therm}(\mathbf{x}_0)\right|^{-1/2} \exp \left[-\frac{\beta}{2} \mathbf{p}_0^T \mathbf{M}_\text{therm}^{-1}(\mathbf{x}_0) \mathbf{p}_0 \right] \ 
+\left(\frac{\partial A}{\partial \mathbf{x}}\right)^T \mathbf{M}_\text{therm}^{-1}(\mathbf{x}_0) \mathbf{p}_0 \ 
+\left(\frac{\partial A}{\partial \mathbf{x}}\right)^T \mathbf{M}^{-1} \mathbf{p}_t \ d\mathbf{x}_0 d\mathbf{p}_0 \]</span></p>
+<p>where <span class="math inline">\(A\)</span> can be the components of center-of-mass coordinate or dipole moment, and <span class="math inline">\(\partial A/\partial \mathbf{x}\)</span> is constant. Therefore, we only need to save the initial thermal velocity <span class="math inline">\(\mathbf{v}_\text{therm} \equiv \mathbf{M}_\text{therm}^{-1}(\mathbf{x}) \mathbf{p}\)</span> for each LSC-IVR trajectory and velocity <span class="math inline">\(\mathbf{v} = \mathbf{M}^{-1}\mathbf{p}\)</span> at each step of each LSC-IVR trajectory for calculating these correlation functions.</p>
+<p>However, for general dipole moment surfaces, the dipole moment may be a nonlinear function of coordinate. In this case, the LSC-IVR formulation of the dipole-derivative correlation function can be expressed as</p>
+<p><span class="math display">\[ C_{\dot{A}\dot{A}}^\text{Kubo}(t) \approx \int \frac{1}{Z} \left&lt;\mathbf{x}_0\right|e^{-\beta\hat{H}}\left|\mathbf{x}_0\right&gt; \left|\frac{2\pi}{\beta}\mathbf{M}_\text{therm}(\mathbf{x}_0)\right|^{-1/2} \exp \left[-\frac{\beta}{2} \mathbf{p}_0^T \mathbf{M}_\text{therm}^{-1}(\mathbf{x}_0) \mathbf{p}_0 \right] \ 
+\left(\frac{\partial A}{\partial \mathbf{x}_0}\right)^T \mathbf{M}_\text{therm}^{-1}(\mathbf{x}_0) \mathbf{p}_0 \ 
+\left(\frac{\partial A}{\partial \mathbf{x}_t}\right)^T \mathbf{M}^{-1} \mathbf{p}_t \ d\mathbf{x}_0 d\mathbf{p}_0 \]</span></p>
+<p>where <span class="math inline">\(A\)</span> can be the components of dipole moment whose analytical derivative may be complicated to obtain. It is more efficient to estimate the term <span class="math inline">\(\left(\partial A/\partial \mathbf{x}\right)^T \mathbf{M}_\text{therm}^{-1}(\mathbf{x}) \mathbf{p}\)</span> by using the finite difference scheme</p>
+<p><span class="math display">\[ \left(\frac{\partial A}{\partial \mathbf{x}}\right)^T \mathbf{M}_\text{therm}^{-1}(\mathbf{x}) \mathbf{p} \approx
+\frac{A\left(\mathbf{x} + \varepsilon \mathbf{M}_\text{therm}^{-1}(\mathbf{x}) \mathbf{p}\right) - A\left(\mathbf{x} - \varepsilon \mathbf{M}_\text{therm}^{-1}(\mathbf{x}) \mathbf{p}\right) }{2\varepsilon} \]</span></p>
+<p>where <span class="math inline">\(\varepsilon\)</span> is a small quantity to guarantee the convergence. <span class="math inline">\(\varepsilon\)</span> should be adjusted as the vector <span class="math inline">\(\mathbf{M}_\text{therm}^{-1}(\mathbf{x}) \mathbf{p}\)</span> varies. A reasonable choice could be</p>
+<p><span class="math display">\[ \varepsilon = \frac{\delta x}{\left\|\mathbf{M}_\text{therm}^{-1}(\mathbf{x}) \mathbf{p}\right\|} \]</span></p>
+<p>where <span class="math inline">\(\delta x\)</span> is a small constant parameter depend on the system and <span class="math inline">\(\left\|\mathbf{M}_\text{therm}^{-1}(\mathbf{x}) \mathbf{p}\right\|\)</span> represents the length of the vector <span class="math inline">\(\mathbf{M}_\text{therm}^{-1}(\mathbf{x}) \mathbf{p}\)</span>. Note that such finite difference only need to be computed for the initial condition of each LSC-IVR trajectory. For the dipole-derivative at time <span class="math inline">\(t\)</span>, <span class="math inline">\(\left(\partial A / \partial \mathbf{x}_t\right)^T \mathbf{M}^{-1} \mathbf{p}_t = \dot{A} \left(\mathbf{x}_t,\mathbf{p}_t\right)\)</span>, the finite difference <span class="math inline">\([A(t+\Delta t)-A(t-\Delta t)]/2\Delta t\)</span> along the real-time trajectory can be used if the real-time stepsize is relatively small.</p>
+
+
+
+<h2 id="54-diffusion-constant">5.4 Diffusion constant</h2>
+
+<p>As shown in Table 5.1, the diffusion constant computed with classical dynamics is 0.18, while the diffusion constant given by LSC-IVR with PIMD sampling is 0.50. Both of these two results are consistent with those from the reference we cited, respectively. However, one should note that direct comparison between the result of LSC-IVR and that of experiment makes no sense, since the diffusion constant, as one of the dynamic properties, was selected to optimize the parameters of the q-SPC/fw model, which was originally used in CMD calculation to reproduce the experimental value.</p>
+
+<blockquote>
+  <p>Note: the results listed in the table below are calculated from 3000 trajectories in a single simulation, which is insufficient to get an error bar.</p>
+</blockquote>
+
+<center>Table 5.1. Diffusion constants for liquid water (in Å<sup>2</sup>/ps) computed with classical and quantum methods.</center>
+
+<center><table><thead><tr><th>Method</th><th>Calc.</th><th>Ref.</th></tr></thead><tbody><tr><td>Classical</td><td>0.18</td><td>0.18±0.01</td></tr><tr><td>Quantum</td><td>0.50</td><td>0.50±0.01</td></tr></tbody></table></center>
+
+<p>The comparison of the velocity autocorrelation functions obtained from classical and quantum dynamics can also been seen in Fig. 5.5.</p>
+
+<center><img src="figures/compare_vacf.jpg" alt="" title=""></center>
+
+<center>Fig. 5.5. Comparison of velocity autocorrelation functions with classical and quantum methods.</center>
+
+
+
+<h2 id="55-infrared-spectrum">5.5 Infrared spectrum</h2>
+
+<p>Fig. 5.6 shows the comparison of LSC-IVR dipole-derivative correlation functions with those of classical MD method. These two results are rather similar, except that the LSC-IVR result predicts a more rapid decay of the amplitude and longer oscillation periods of the correlation function than that is seen in classical MD simulation.</p>
+
+<center><img src="figures/dip_cor_compare.jpg" alt="" title=""></center><center>Fig. 5.6. Normalized dipole-derivative correlation functions computed with classical and quantum methods</center> <br>
+<center><img src="figures/classical-quantum-IR.jpg" alt="" title=""></center><center>Fig. 5.7. Comparison of simulated IR spectra using classical and quantum methods.</center>
+
+
+
+<h1 id="6-appendix">6. Appendix</h1>
+
+
+
+<h2 id="61-test-of-parameters-in-the-npt-ensemble-for-classical-dynamics">6.1 Test of parameters in the NPT ensemble for classical dynamics</h2>
+
+
+
+<h3 id="611-gammaln-for-langevin-dynamics">6.1.1 <code>gamma_ln</code> for Langevin dynamics</h3>
+
+<p>In classical dynamics, Langevien thermostat (<code>ntt=3</code>) is used to maintain the temperature of the liquid system at 298.15K. This temperature control method uses Langevin dynamics with a collision frequency given by <code>gamma_ln</code> (in ps<sup>-1</sup>). As Amber Reference Manual says, it is not necessary that gamma approximates the physical collision frequency, which is about 50 ps<sup>-1</sup> for liquid water. Here we give the results about tests of gamma in the NPT ensemble in Figure 6.1. Clearly, we can see that too small and too large values of <code>gamma_ln</code> will lead to a big fluctuation of temperatures and energies, and the value of <code>gamma_ln</code> around 5 – 20 ps<sup>-1</sup> is suitable for the system here.</p>
+
+<div class="col-md-12"><div class="col-md-4-inline"><img class="img-responsive" src="figures/test/npt-gamma-den1.png"></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/test/npt-gamma-den2.png"></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/test/npt-gamma-den3.png"></div></div><div class="col-md-12"><div class="col-md-4-inline"><img class="img-responsive" src="figures/test/nvt-gamma-ep1.png"></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/test/nvt-gamma-ep2.png"></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/test/nvt-gamma-ep3.png"></div></div><div class="col-md-12"><div class="col-md-4-inline"><img class="img-responsive" src="figures/test/nvt-gamma-etot1.png"></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/test/nvt-gamma-etot2.png"></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/test/nvt-gamma-etot3.png"></div></div><div class="col-md-12"><div class="col-md-4-inline"><img class="img-responsive" src="figures/test/nvt-gamma-temp1.png"></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/test/nvt-gamma-temp2.png"></div><div class="col-md-4-inline"><img class="img-responsive" src="figures/test/nvt-gamma-temp3.png"></div></div><center>Fig. 6.1. Test of `gamma_ln` in the NPT ensemble. The results of potential energy, total energy and temperature.</center>
+
+
+
+
+
+
+
+<h3 id="612-taup-for-npt-simulation">6.1.2 <code>taup</code> for NPT simulation</h3>
+
+<p>In ‘constant pressure’ dynamics, <code>taup</code> is used to define the pressure relaxation time (in ps). The recommended value is between 1.0 and 5.0 ps as Amber Reference Manual says. Here are some testing results:</p>
+
+<div class="col-md-12"><div class="col-md-6-inline"><img class="img-responsive" src="figures/test/npt-taup-ep.png"></div><div class="col-md-6-inline"><img class="img-responsive" src="figures/test/npt-taup-etot.png"></div></div><div class="col-md-12"><div class="col-md-6-inline"><img class="img-responsive" src="figures/test/npt-taup-temp.png"></div><div class="col-md-6-inline"><img class="img-responsive" src="figures/test/npt-taup-den.png"></div></div>
+
+<center>Fig. 6.2. Test of <code>taup</code> in the NPT ensemble. The results of potential energy, total energy, temperature, and density.</center> <br>
+Our results gives the comparison of the density, temperature and energy information at <code>taup=1</code> and <code>taup=4</code> for the liquid water system in Figure 6.2. In this work, <code>taup=1</code> and <code>taup=4</code> simulation give almost the same fluctuation around a constant mean value for temperature, potential energy and total energy, however, the latter one seems to be more stable in density. Thus, <code>taup=4</code> is used for classical dynamics in the NPT ensemble.
+
+
+
+<h2 id="62-test-of-parameters-for-pimd-simulation">6.2 Test of parameters for PIMD simulation</h2>
+
+
+
+<h3 id="621-number-of-beads-and-size-of-time-step">6.2.1 Number of beads and size of time step</h3>
+
+<p>One must be mentioned at the outset that no quantum dynamical properties can be generated using the techniques in normal classical MD methods. Fortunately, the formulation by Feynman of quantum statistical mechanics in terms of path integrals has provided us the ability to analyze the properties of quantum many-body systems at finite temperature. The continuous functional representation of the path integral is mathematically elegant, however, it is not suitable for direct numerical evaluation. The classical isomorphism known as the connection between quantum system and the P-particle fictitious classical system (Fig. 6.3) can evaluate the numerical evaluation by applying the equations of motion derived from fictitious Hamiltonian to classical MD methods.</p>
+
+<center><div class="col-md-6"><div class="col-md-6-inline"><img class="img-responsive" src="figures/PIMD.jpg"></div><div class="col-md-6-inline"><img class="img-responsive" src="figures/eq/eq-tp.png"></div></div></center>
+
+<center>Fig. 6.3. Schematic view of fictitious classical system with 8 beads (left) and equation of the vibration period (right).</center>
+
+<p>Generally speaking, the more the number of beads in fictitious classical system is, the better will fictitious classical system describe quantum system. In practice this is not possible. A suitable size of <em>P</em> (the number of beads) combined computational efficiency and accuracy is important. Energies are computed in PIMD simulation with various <em>P</em> and time steps, to obtain an optimal <em>P</em> and a suitable time step (<em>dt</em>).</p>
+
+<center>Table 6.1. Potential energies (<em>V</em>, in kcal/mol) and densities (ρ, in g/ml) at different path integral beads (<em>P</em>) and time step sizes (<em>dt</em>, in fs) after equilibrium from PIMD NPT simulation.</center>
+<center><table><thead><tr><th>P</th><th>dt</th><th>V</th><th>ρ</th></tr></thead><tbody><tr><td>1</td><td>0.5</td><td>-2326.50 ± 5.65</td><td>1.0177 ± 0.0011</td></tr><tr><td>12</td><td>0.125</td><td>-1204.74 ± 3.68</td><td>0.9999 ± 0.0021</td></tr><tr><td>24</td><td>0.1</td><td>-1050.15 ± 4.05</td><td>0.9996 ± 0.0016</td></tr><tr><td>36</td><td>0.05</td><td>-1011.45 ± 5.18</td><td>0.9987 ± 0.0016</td></tr></tbody></table></center>
+
+
+<div class="col-md-12"><div class="col-md-6-inline"><img class="img-responsive" src="figures/eptot.png" alt="" title=""> </div><div class="col-md-6-inline"><img class="img-responsive" src="figures/density.png" alt="" title=""></div></div>
+
+<center>Fig. 6.4. Potential energies (left) and densities (right) at different beads</center>
+
+<p>From the above tables and figures, it is clear that 24 beads with the choice of time step of 0.1 fs is sufficient for convergence of potential energies and densities obtained from the PIMD simulation.</p>
+
+
+
+<h3 id="622-number-of-nosé-hoover-chains-of-thermostats">6.2.2 Number of Nosé-Hoover chains of thermostats</h3>
+
+<p>The averages obtained in a conventional MD simulation are equivalent to ensemble averages in the microcanonical (constant-NVE) ensemble instead of canonical ensemble. Several technologies implemented to perform MD simulation at constant temperature could generate a canonical distribution. As recommended in Amber 12 Reference Manual, Nosé-Hoover chains of thermostats is implemented for NMPIMD (<code>ipimd=2</code>) in this tutorial. More Nosé-hoover chains of thermostats leads to more stable temperature, but also more computation burden. Therefore, the determination of chain’s number also need to be careful. The choice of an appropriate number of chains depends on the system. Typically, 4 chains of thermostats (<code>nchain=4</code>) are sufficient to guarantee an efficient sampling of the phase space. Here are some testing results:</p>
+
+<center><img src="figures/test/nchain.jpg" alt="" title=""></center><center>Fig. 6.5. Fluctuations of temperature with different numbers of Nosé-Hoover chain.</center> <br>
+As shown in Figure 6.5, the fluctuation of the temperature for the system with 2 chains of thermostats is larger than that of 4 chains and 6 chains before equilibrium, while systems with 4 chains and 6 chains give almost the same fluctuation in temperature before equilibrium and the same density distribution in 200 ps after equilibrium. Based on these, 4 chains of thermostats would be an optimal choice for an efficient sampling of the phase space. Moreover, note that you must carefully check the timestep used in the simulation, which should be small enough to guarantee conservation of the energy of the extended system of the Nosé-Hoover chains of thermostats. From Figure 6.6, we can see that <code>dt=0.0001</code> (ps) is a suitable choice.
+
+<center><img src="figures/test/NHC.png" alt="" title=""> </center><center>Fig. 6.6. Energy of the extended system of Nosé-Hoover chains of thermostats in the NPT ensemble</center>
+
+
+
+<h2 id="63-using-gnuplot-in-analysis">6.3 Using <em>gnuplot</em> in analysis</h2>
+
+<p><a href="http://www.gnuplot.info/" title="gnuplot">gnuplot</a> is a free, command-driven, interactive, function and data plotting program. It is used to plot most figures in this tutorial. In this section, we introduce two examples of <em>gnuplot</em> usage, one plots the figure with two columns of data as x and y respectively, the other plots the distribution of the second column of data. For more details, please refer to the help files of <em>gnuplot</em> and search engine.</p>
+
+
+
+<h3 id="631-plotting-a-figure-with-data-file">6.3.1 Plotting a figure with data file</h3>
+
+<p><em>gnuplot</em> can be used interactively by type <code>gnuplot</code> in terminal:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>gnuplot</code></pre>
+
+<p>then type the following commands in the <em>gnuplot</em> interface:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs livecodeserver">gnuplot&gt; <span class="hljs-built_in">set</span> term png enhanced
+gnuplot&gt; <span class="hljs-built_in">set</span> output <span class="hljs-string">'HH-distance.png'</span>
+gnuplot&gt; <span class="hljs-built_in">set</span> xlabel <span class="hljs-string">'nstep'</span>
+gnuplot&gt; <span class="hljs-built_in">set</span> ylabel <span class="hljs-string">'H-H (Angstrom)'</span>
+gnuplot&gt; plot <span class="hljs-string">'HH-distance.dat'</span> <span class="hljs-keyword">using</span> <span class="hljs-number">1</span>:<span class="hljs-number">2</span> <span class="hljs-operator">with</span> points title <span class="hljs-string">'HH-distance'</span></code></pre>
+
+<blockquote>
+  <p>Note: type the stuff after ‘gnuplot&gt;’ then hit ‘Enter’.</p>
+</blockquote>
+
+<p>A figure will be created as below:</p>
+
+<center><img src="figures/HH-distance.png" alt="" title=""></center> <br>
+<center>Fig. 6.7. <em>gnuplot</em> example: plotting H-H bond length (in Angstrom) versus number of steps.</center> <br>
+Here is the example input data file <a href="files/HH-distance.dat">HH-distance.dat</a>.
+
+<p>One can also plot the figure without entering the <em>gnuplot</em> interface. First write the <em>gnuplot</em> commands in a text file, say, <a href="files/plot.gnu">plot.gnu</a>, then run the command in terminal:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>gnuplot plot.gnu</code></pre>
+
+<p>The same figure will be obtained as above.</p>
+
+
+
+<h3 id="632-plotting-distribution-of-data">6.3.2 Plotting distribution of data</h3>
+
+<p>We do almost the same thing as   <a href="http://psy.swansea.ac.uk/staff/carter/gnuplot/gnuplot_frequency.htm" title="gnuplot-distribution">gnuplot Frequency Plot</a> except the setting of ‘bin_width’. A shell script is used to get the minimum and maximum value of data, then ‘bin_width’ is computed as separating the values into 100 intervals. <br>
+</p><center><a href="files/plot_dist.sh">plot_dist.sh</a></center>
+
+
+
+<pre class="prettyprint"><code class="language-bash hljs "><span class="hljs-shebang">#!/bin/bash
+</span>
+f=<span class="hljs-string">"HH-distance.dat"</span>
+v=<span class="hljs-string">"H-H"</span>
+list=(`awk <span class="hljs-string">'{print $2}'</span> <span class="hljs-variable">$f</span> | sort -n`)
+min=<span class="hljs-variable">${list[0]}</span>
+max=<span class="hljs-variable">${list[${#list[@]}</span>-<span class="hljs-number">1</span>]}
+
+<span class="hljs-comment"># write the file for gnuplot</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"set term png enhanced
+
+set output 'dist_<span class="hljs-variable">${v}</span>.png'
+set xlabel '<span class="hljs-variable">${v}</span> (Angstrom)'
+set ylabel 'Frequencies'
+min=<span class="hljs-variable">$min</span>
+max=<span class="hljs-variable">$max</span>
+bin_width=(max-min)/100.;     # set bin width    
+bin_num(x)=floor(x/bin_width)  
+rounded(x)=bin_width*(bin_num(x) + 0.5)
+plot '<span class="hljs-variable">${f}</span>' u (rounded(\$2)):(1) t '' smooth frequency with lines
+"</span> |  gnuplot</code></pre>
+
+<p>Then a figure named ‘dist_H-H.png’ will be plotted. <br>
+</p><center><img src="figures/dist_H-H.png" alt="Distribution of H-H bond length (in Angstrom)" title=""></center> <br>
+<center>Fig. 6.8. <em>gnuplot</em> example: plotting distribution of H-H bond length (in Angstrom).</center>
+
+
+
+<h2 id="64-using-ptraj-in-analysis">6.4 Using <em>ptraj</em> in analysis</h2>
+
+<p>As one of the main analysis code for Amber, <a href="http://ambermd.org/#AmberTools" title="AmberTools"><em>ptraj</em></a> is a program to process and analyze a series of 3-D atomic coordinates (one molecular configuration or frame at a time). In this tutorial, it is used to calculate radial distribution functions (RDFs), bond-lengths and bond-angles from the trajectory file.</p>
+
+
+
+<h3 id="641-calculating-radial-distribution-function">6.4.1 Calculating radial distribution function</h3>
+
+<p>In order to calculate the radial distribution funtions  (RDFs), <em>ptraj</em> is used to analyze sets of 3-D coordinates from trajectory file ‘mdcrd’. In the liquid water, we will calculate the RDFs of the H and O atoms. <br>
+First, we create an input file <a href="files/ptraj_rdf.in">ptraj_rdf.in</a></p>
+
+
+
+<pre class="prettyprint"><code class=" hljs ruby">trajin mdcrd
+radial <span class="hljs-constant">O</span>-<span class="hljs-constant">H</span> <span class="hljs-number">0</span>.<span class="hljs-number">05</span> <span class="hljs-number">9.0</span> <span class="hljs-symbol">:WAT</span><span class="hljs-variable">@O</span> <span class="hljs-symbol">:WAT</span><span class="hljs-variable">@H1</span>,<span class="hljs-constant">H2</span> 
+radial <span class="hljs-constant">H</span>-<span class="hljs-constant">H</span> <span class="hljs-number">0</span>.<span class="hljs-number">05</span> <span class="hljs-number">9.0</span> <span class="hljs-symbol">:WAT</span><span class="hljs-variable">@H1</span> <span class="hljs-symbol">:WAT</span><span class="hljs-variable">@H1</span>,<span class="hljs-constant">H2</span> 
+radial <span class="hljs-constant">O</span>-<span class="hljs-constant">O</span> <span class="hljs-number">0</span>.<span class="hljs-number">05</span> <span class="hljs-number">9.0</span> <span class="hljs-symbol">:WAT</span><span class="hljs-variable">@O</span> <span class="hljs-symbol">:WAT</span><span class="hljs-variable">@O</span> </code></pre>
+
+<p>Here,  ‘O-H’,  ‘H-H’ and ‘O-O’ are the headers for output file names, respectively; 0.05 is the bin size, 9.0 is the maximum for the histogram, and <code>:WAT@O</code> is the mask for selecting atoms we want to use for our analysis. Then, run this command in terminal:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span> ptraj wat216.prmtop ptraj_rdf.<span class="hljs-keyword">in</span></code></pre>
+
+<p>The output file after running the ptraj_rdf.in file will be:  <br>
+ O-H_standard.xmgr,  O-H_volume.xmgr, O-H_carnal.xmgr,  <br>
+ H-H_standard.xmgr,  H-H_volume.xmgr,  H-H_carnal.xmgr,  <br>
+ O-O_standard.xmgr,  O-O_volume.xmgr, O-O_carnal.xmgr.</p>
+
+<p>Use <em>gnuplot</em> to plot the resulting graph of the RDFs, then we have the figures in Fig. 5.4.</p>
+
+
+
+<h3 id="642-calculating-bond-and-angle-distribution">6.4.2 Calculating bond and angle distribution</h3>
+
+<p>In the MD and PIMD NVT stages, it is recommended that the bond and angle distribution of the trajectory should be checked. Here, we can still use <em>ptraj</em> script to collect the bond length and angles along the trajectory. <br>
+Here is an example of input file <a href="files/ptraj_dist.in">ptraj_dist.in</a>:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs avrasm">trajin mdcrd
+distance H2-H1 <span class="hljs-localvars">@3</span> <span class="hljs-localvars">@2</span> <span class="hljs-keyword">out</span> HH-distance<span class="hljs-preprocessor">.dat</span> 
+angle H1-O-H2  <span class="hljs-localvars">@2</span> <span class="hljs-localvars">@1</span> <span class="hljs-localvars">@3</span> <span class="hljs-keyword">out</span> HOH-angle<span class="hljs-preprocessor">.dat</span></code></pre>
+
+<blockquote>
+  <p>Note: the residue <code>:WAT</code> cannot be included in the mask for selecting atoms </p>
+</blockquote>
+
+<p>Then, run this command in terminal:</p>
+
+
+
+<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>ptraj wat216.prmtop ptraj_dist.<span class="hljs-keyword">in</span></code></pre>
+
+<p>The output file after running the ptraj_dist.in file will be: ‘HH-distance.dat’, and ‘HOH-angle.dat’. <br>
+Then <em>gnuplot</em> is used to plot the distribution of data in these files, just like what’s done in the 6.3.2 section.</p>
+<hr>
+<h3><em><u>Note:</u></em></h3>
+Do the following to obtain all necessary files for the tutorial.
+<pre class="prettyprint"><code class=" hljs ruby"><span class="hljs-variable">$ </span>git clone https://github.com/jianliugroup/LSC-IVR-Amber.git</code></pre>
+
+<hr>
+<h3><em><u>References</u></em></h3>
+
+<p>In addition to the paper,</p>
+<a href="http://dx.doi.org/10.1063/1.3254372">Jian Liu, William H. Miller, Francesco Paesani, Wei Zhang, and David Case, “Quantum dynamical effects in liquid water: A semiclassical study on the diffusion and the infrared absorption spectrum” Journal of Chemical Physics, 131, 164509 (2009)</a> [<a href="http://jianliugroup.pku.edu.cn/paper/paper/25.pdf">pdf version</a>]
+
+<p>please refer to the following references for more detail about the LGA/LSC-IVR and its recent progress</p>
+
+<p><a href="http://dx.doi.org/10.1063/1.3202438">Jian Liu, William H. Miller, “A simple model for the treatment of imaginary frequencies in chemical reaction rates and molecular liquids”, Journal of Chemical Physics, 131, 074113 (2009)</a> [<a href="../paper/paper/26.pdf">pdf version</a>]</p>
+<p><a href="http://dx.doi.org/10.1063/1.3670960" target="_blank">Jian Liu, William H. Miller, Georgios S. Fanourgakis, Sotiris S. Xantheas, Imoto Sho, and Shinji Saito “Insights in quantum dynamical effects in the Infrared spectroscopy of liquid water from a semiclassical study with an ab initio-based flexible and polarizable force field”, Journal of Chemical Physics, 135, 244503 (2011)</a> [<a href="paper/paper/23.pdf">pdf version</a>] </p>
+
+<p><a href="http://onlinelibrary.wiley.com/doi/10.1002/qua.24872/full">Jian Liu, "Recent advances in the linearized semiclassical initial value representation/classical Wigner model for the thermal correlation function", International Journal of Quantum Chemistry, 115(11), 657-670 (2015)</a> [Cover of this issue. Invited contribution.] [<a href="../paper/paper/18.pdf">pdf version</a>]</p>
+<p><a href="https://doi.org/10.1080/00268976.2018.1434907">Xinzijian Liu, Jian Liu, "Critical role of quantum dynamical effects in the Raman spectroscopy of liquid water", Molecular Physics, 116(7-8), 755-779  (2018)</a> [Cover of this issue. Invited contribution.] <a href="http://www.tandfonline.com/eprint/4TjwwWZaju4fFGpwnKF3/full">Free eprints</a> [<a href="https://arxiv.org/ftp/arxiv/papers/1710/1710.04126.pdf">arXiv preprint</a>] [<a href="../paper/paper/7.pdf">pdf version</a>]</p>
+
+</div>
+</body></html>
