@@ -1,311 +1,457 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-<meta name="description" content="">
-<meta name="author" content="Jian Liu Group">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="Jian Liu Group">
 
-<title>Jian Liu Research Group, Peking University</title>
+    <title>Jian Liu Research Group, Peking University</title>
 
-<!-- Bootstrap core CSS -->
-<link href="css/bootstrap.min.css" rel="stylesheet">
-<link href="css/font-awesome.min.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
 
-<!-- Custom styles for this template -->
-<link href="css/style.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet">
 
-<!-- The following scripts do not work for IE8, so you'd better use latest browsers -->
-<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-<!--[if lt IE 9]>
+    <!-- The following scripts do not work for IE8, so you'd better use latest browsers -->
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
       <script src="js/html5shiv.min.js"></script>      
       <script src="js/respond.min.js"></script>	  
     <![endif]-->
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108786458-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108786458-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-  gtag('config', 'UA-108786458-1');
-</script>
+        gtag('config', 'UA-108786458-1');
+    </script>
 </head>
 
 <body>
 
-<header class="header">
-    <div class="container">
-	<div style="display:inline-block;">
-	    <div class="pull-left">
-		<h3>Jian Liu Group @PKU</h3>
-	    </div>
-	    <div class="pull-left">	
-		<h3><small>Theoretical Chemistry / Chemical Dynamics</small></h3>
-	    </div>
-	</div>
-	<div class="pull-right">
-	    <img class="img-responsive" src="images/logo/group-logo-sword-pild.jpg"/>
-	</div>
-	<nav>
-	    <!--<div id="navbar" class="collapse navbar-collapse">--><!-- for mobile menu -->
-	    <div id="navbar" class="collapse navbar-collapse">
-		<ul class="nav nav-justified navbar-custom">
-		    <li><a href="index.html">Home</a></li>
-		    <li><a href="members.html">Members</a></li>
-		    <li><a href="research.html">Research</a></li>
-		    <li><a href="publications.html">Publications</a></li>
-		    <li><a href="teaching.html">Teaching</a></li>
-		    <li><a href="tutorials.html">Tutorials</a></li>
-		    <li class="active"><a href="#">Software</a></li>
-		    <li><a href="links.html">Links</a></li>
-		</ul>
-	    </div>
-	    <!--</div>-->
-	</nav>
-	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-	    <span class="sr-only">Toggle navigation</span>
-	    <span class="icon-bar"></span>
-	    <span class="icon-bar"></span>
-	    <span class="icon-bar"></span>
-	</button>
-    </div>
-
-</header>
-
-<div class="container mg-top-20 mg-bottom-20">
-    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-        <li class="active"><a href="#overview" data-toggle="tab">Overview</a></li>
-        <li><a href="#msat" data-toggle="tab">MiddleScheme</a></li>
-	<li><a href="#hnaf" data-toggle="tab">hNaF</a></li>
-        <li><a href="#psinad" data-toggle="tab">PSiNAD</a></li>
-        <li><a href="#psiqmd" data-toggle="tab">PSiQMD</a></li>
-    </ul>
-    <div id="overview-tab-content" class="tab-content">
-        <div class="tab-pane active" id="overview">
-            <h1 class="page-header">Overview</h1>
-	    <p>High-throughput computation of important properties of chemical systems with the latest theoretical chemistry methods is a fundamental quest from the realm of computational chemistry. We have been working on implementing our theory on existing or new quantum molecular dynamics computer programs to fulfill the requirement. We hope these programs can build a bridge between theorists and experimentalists, making convenient use of our novel path integral molecular dynamics and nonadiabatic dynamics methods.</p>
-	    <p>
-Currently we have been developing the following programs:
-	    </p>
-	    <ul>
-		    <li>
-hNaF: Nonadiabatic Field for Heterogeneous Hardware
-</li>
-
-		    <li>
-PSiNAD: Phase Space Integrated Nonadiabatic Dynamics
-		    </li>
-		    <li>
-PSiQMD: Phase Space Integrated Quantum Molecular Dynamics 
-		    </li>
-	    </ul>
-	    <p>
-Currently we have been working on adding the following features to the corresponding existing programs: 
-	    </p>
-<ul>
-	<li>
-The "middle" scheme thermostat and barostat to Amber, AmberTools, GROMACS and DL-POLY
-	</li>
-</ul>
-
-	</div>
-
-        <div class="tab-pane" id="psinad">
-            <h1 class="page-header">PSiNAD: Phase Space Integrated Nonadiabatic Dynamics</h1>
-            <div class="tutorial">
-		    <div class="row">
-		<h2 class="tutorial-heading">Introduction</h2>
-		<div class="tutorial-text">
-		<p>PSiNad (Phase Space Integrated Nonadiabatic Dynamics) is an open-source framework specifically designed for simulating chemical and physical dynamics at atomic and molecular scales in condensed matter. It excels in classical and quantum dynamics simulations, accommodating small systems, few-body systems, reduced systems, and large many-particle systems such as molecules and condensed matter. PSiNad offers a robust, versatile platform with multiple interfaces for developing advanced algorithms, ensuring ease of use and accessibility with third-party language wrappers, such as Python.</p>
-		<p>PSiNad features a comprehensive array of models and solvers, including harmonic models, forcefield models, and ab initio interfaces, meeting diverse simulation needs. It supports a wide range of computational approaches, from classical dynamics based on Newtonian and Hamiltonian mechanics to sophisticated quantum dynamics incorporating quantum phase space approximations, quantum trajectories, path integral techniques, influence functional methods, and semi-classical wavepackets.</p>
-		<p>Continual development efforts focus on expanding the library of models and solvers, with community contributions highly encouraged. To further extend its accessibility, PSiNad is now available as a Python package (PyPSiNad).</p>
-                <p>Related papers:</p>
-		<ul>
-			<li>
-				<p>Xin He, Haocheng Lu, Jian Liu<sup>*</sup>, "PSiNAD: An Extensible Solution for Nonadiabatic Dynamics Based on Phase Space Formulations", (Invited contribution)</p>
-			</li>
-		</ul>
-		</div>
-		    </div>
-	    </div>
-	</div>
-	
-        <div class="tab-pane" id="psiqmd">
-            <h1 class="page-header">PSiQMD: Phase Space Integrated Quantum Molecular Dynamics</h1>
-            <div class="tutorial">
-		    <div class="row">
-            	<h2 class="tutorial-heading">Introduction</h2>
-		<div class="tutorial-text">
-		<p>PSiQMD includes molecular dynamics, path integral molecular dynamics, path integral Liouville dynamics, nonadiabatic molecular dynamics, and so on. It not only collects progress of our coding in</p>
-		<ul>
-			<li><a href="#hnaf" data-toggle="tab">hNaF</a></li>
-			<li><a href="#psinad" data-toggle="tab">PSiNAD</a></li>
-		</ul>
-		<p>and for</p>
-		<ul>
-			<li><a href="#msat" data-toggle="tab">novel integrators of the "middle" thermostat-barostat scheme in AMBER, AmberTools, GROMACS</a></li>
-		</ul>
-		<p>but also includes phase space quantum dynamics approaches and other trajectory-based dynamics/thermodynamics methods for real molecular systems.</p>
-		</div>    
-		    </div>
-	    </div>
-        </div>
-	
-	<div class="tab-pane" id="hnaf">
-	<h1 class="page-header">hNaF: Nonadiabatic Field for Heterogeneous Hardware</h1>
-    <div class="tutorial"><!-- The layout is similar to tutorials -->
-        <div class="row">
-            <div class="col-sm-4">
-                <div class="tutorial-img">
-                        <img src="images/research/hNAD-logo.png" alt="image: " class="img-responsive center-block">
+    <header class="header">
+        <div class="container">
+            <div style="display:inline-block;">
+                <div class="pull-left">
+                    <h3>Jian Liu Group @PKU</h3>
                 </div>
-                <div class="tutorial-img">
-                        <img src="images/research/hNAD-structure.png" alt="image: " class="img-responsive center-block">
+                <div class="pull-left">
+                    <h3><small>Theoretical Chemistry / Chemical Dynamics</small></h3>
                 </div>
             </div>
-            <div class="col-sm-8">
-                    <h2 class="tutorial-heading">
-	    		Introduction
-                    </h2>
-                <div class="tutorial-text">
-			<p>hNaF is a nonadiabatic dynamics program designed for ultra-high throughput model tests and method developments on heterogeneous computation platforms. Homemade computational platforms are usually equipped with specially designed heterogeneous hardwares, parallel interfaces and limited supports to the programming languages. By modularizing the computation tasks and separating out the parallel layers, hNaF enables us to test our new nonadiabatic dynamics methods rapidly, making full use of the homemade hardwares, for example, the new Sunway supercomputer.</p>
-			<p>Related papers:</p>
-			<ul>
-				<li><p>Baihua Wu, Bingqi Li, Xin He, Xiangsong Cheng, Jiajun Ren, Jian Liu<sup>*</sup>, "Nonadiabatic Field: A Conceptually Novel Approach for Nonadiabatic Quantum Molecular Dynamics", Journal of Chemical Theory and Computation, 21(8), 3775-3813 (2025) (Invited contribution to the Special Issue "Developments of Theoretical and Computational Chemistry Methods in Asia") [<a href="https://pubs.acs.org/doi/10.1021/acs.jctc.5c00181">https://doi.org/10.1021/acs.jctc.5c00181</a>]</p>
-				</li>
-			</ul>
-		</div>
-	    </div>
-	</div>
-    </div>
-    </div>
-
-	 <div class="tab-pane" id="msat">
-            <h1 class="page-header">The "middle" thermostat and barostat scheme in molecular dynamics programs</h1>
-
-
-    <div class="tutorial"><!-- The layout is similar to tutorials -->    
-        <div class="row">
-            <div class="col-sm-4">
-                <div class="tutorial-img">
-		    <a href="http://ambermd.org/GetAmber.php#ambertools">
-                        <img src="images/research/pimd-water-middle.png" alt="image: " class="img-responsive center-block">
-                    </a>
-                </div>
-		<div class="tutorial-img">
-                    <a href="http://ambermd.org/GetAmber.php#ambertools">
-                        <img src="images/research/Amber19_cover.png" alt="image: " class="img-responsive center-block">
-                    </a>
-                </div>
-            </div>	    
-            <div class="col-sm-8">
-                    <h2 class="tutorial-heading">
-                            The "middle" thermostat and barostat scheme in Amber, AmberTools, GROMACS and DL-POLY
-                        </h2>
-                <div class="tutorial-text">
-                    <p> <!-- description for how to download it -->
-		    	[NEW!] We have implemented a recommended "middle" scheme for the isobaric-isothermal ensemble in molecular dynamics packages, e.g., AMBER, GROMACS, and DL-POLY. An detailed description is on the way.</p>
-		    <p>
-                        We have implemented the efficient "middle" thermostat scheme into the lastest version of AmberTools since 2019. It can be obtained by following the instructions on <a href="http://ambermd.org/GetAmber.php#ambertools">the official website</a>.
-                        For the users who can only use AmberTools18, the updated files for the "middle" scheme for AmberTools18 can be downloaded from <a href="https://github.com/jianliugroup/AMBER-addition">the GitHub webpage</a>.
-                    </p>
-                    <p><!-- description for how to use it -->
-                        The tutorial for the "middle" scheme is available on the <a href="tutorial-testcase/tutorial-testcase.html">webpage</a>.
-			One is also encouraged to read the <a href="http://ambermd.org/doc12/Amber19.pdf">AMBER manual</a> for more details.  The "middle" thermostat scheme has been implemented for MD for classical statistics as well as primitive PIMD for quantum statistics.  It can be used together with QM/MM and enhanced sampling techniques (such as replica exchange) in AMBER. One can do <i>ab initio</i> PIMD or MD for the canonical ensemble by using AMBER combined with other quantum chemistry packages.
-                    </p>
-                    <p>Related papers:</p>
-                        <ul>
-				<li><p>Weihao Liang, Sihan Wang, Cong Wang, Weizhou Wang, Xinchen She, Chongbin Wang, Jiushu Shao, Jian Liu<sup>*</sup>, "An Efficient Integrator Scheme for Sampling the (Quantum) Isobaric-Isothermal Ensemble in (Path Integral) Molecular Dynamics Simulations", Journal of Chemical Theory and Computation. (Accepted. Invited Contribution) [<a href="https://arxiv.org/abs/2504.08342">https://arxiv.org/abs/2504.08342</a>]</p>
-			    <li><p>
-				    David A. Case, Hasan Metin Aktulga, Kellon Belfon, David S. Cerutti, G. Andrés Cisneros, Vinícius Wilian D. Cruzeiro, Negin Forouzesh, Timothy J. Giese, Andreas W. Götz, Holger Gohlke, Saeed Izadi, Koushik Kasavajhala, Mehmet C. Kaymak, Edward King, Tom Kurtzman, Tai-Sung Lee, Pengfei Li, Jian Liu<sup>*</sup>, Tyler Luchko, Ray Luo, Madushanka Manathunga, Matias R. Machado, Hai Minh Nguyen, Kurt A. O’Hearn, Alexey V. Onufriev, Feng Pan, Sergio Pantano, Ruxi Qi, Ali Rahnamoun, Ali Risheh, Stephan Schott-Verdugo, Akhil Shajan, Jason Swails, Junmei Wang, Haixin Wei, Xiongwu Wu, Yongxian Wu, Shi Zhang, Shiji Zhao, Qiang Zhu, Thomas E. Cheatham III, Daniel R. Roe, Adrian Roitberg, Carlos Simmerling, Darrin M. York, Maria C. Nagan, Kenneth M. Merz Jr. , "AmberTools", Journal of Chemical Information and Modeling, 63(20), 6183-6191 (2023)
-                            [<a href="https://pubs.acs.org/doi/10.1021/acs.jcim.3c01153">https://pubs.acs.org/doi/10.1021/acs.jcim.3c01153</a>]
-			    [<a href="paper/paper/JCIM2023AmberTools.pdf" download="">pdf version</a>]<p></li>
-			    <li><p>Zhaoxi Sun, Payam Kalhor, Yang Xu, Jian Liu<sup>*</sup>,"Extensive Numerical Tests of the Leapfrog Integrator in the Middle Thermostat Scheme in Molecular Simulations", Chinese Journal of Chemical Physics, 34, 6, 932-948 (2021) [Invited contribution to the John Zhang Festschrift] <a href="https://doi.org/10.1063/1674-0068/cjcp2111242">https://doi.org/10.1063/1674-0068/cjcp2111242</a>  </p></li> 	
-                            <li>
-                                <p>Zhijun Zhang, Xinzijian Liu, Kangyu Yan, Mark Tuckerman, Jian Liu<sup>*</sup>, "A unified efficient thermostat scheme for the canonical ensemble with holonomic or isokinetic constraints via molecular dynamics", Journal of Physical Chemistry A, 123, 28, 6056-6079 (2019). (Invited contribution to "Young Scientist Virtual Special Issue") [<a href="https://doi.org/10.1021/acs.jpca.9b02771">https://doi.org/10.1021/acs.jpca.9b02771</a>]<a href="paper/paper/constraint.pdf" download>[pdf version]</a>  (Highlighted in <a href="https://pubs.acs.org/doi/10.1021/acs.jpca.0c04262">JPC Virtual Issue on New Tools and Methods</a> ) </p>
-                            </li>
-<li><p>Xinzijian Liu, Jian Liu<sup>*</sup>, "Path integral molecular dynamics for exact quantum statistics of multi-electronic-state systems", Journal of Chemical Physics, 148, 102319 (2018) [<a href="https://doi.org/10.1063/1.5005059" target="_blank">https://doi.org/10.1063/1.5005059</a> Invited article for the JCP special topic issue on "Nuclear Quantum Effects"] <a href="https://arxiv.org/ftp/arxiv/papers/1710/1710.04126.pdf" target="_blank">[arXiv preprint]</a> <a href="paper/paper/9.pdf">[pdf version] </a>  </p></li>
-			    <li>
-                                    <p>Zhijun Zhang, Kangyu Yan, Xinzijian Liu, Jian Liu<sup>*</sup>, "A leap-frog algorithm-based efficient unified thermostat scheme <i>via</i> molecular dynamics", Chinese Science Bulletin，63(33), 3467-3483(2018) [Invited Contribution] [<a href="http://engine.scichina.com/doi/10.1360/N972018-00908">http://engine.scichina.com/doi/10.1360/N972018-00908</a> ] <a href="paper/paper/5.pdf">[pdf version] </a></p>
-                            </li>
-                            <li>
-                                <p>Dezhang Li, Zifei Chen, Zhijun Zhang, Jian Liu<sup>*</sup>, "Understanding molecular dynamics with stochastic processes <i>via</i> real or virtual dynamics", Chinese Journal of Chemical Physics, 30, 735 (2017)  [<a href="http://dx.doi.org/10.1063/1674-0068/30/cjcp1711223" target="_blank">http://dx.doi.org/10.1063/1674-0068/30/cjcp1711223</a> Invited article for the CJCP special topic issue on "Chemical Dynamics"]  <a href="http://cjcp.ustc.edu.cn/hxwlxb_en/ch/reader/create_pdf.aspx?file_no=cjcp1711223&amp;year_id=2017&amp;quarter_id=6&amp;falg=1" target="_blank">pdf version from the CJCP website</a>  <a href="https://arxiv.org/ftp/arxiv/papers/1711/1711.09497.pdf" target="_blank">[arXiv preprint]</a> <a href="paper/paper/8.pdf">[pdf version] </a>  </p>
-                            </li>
-                            <li>
-                                <p>Zhijun Zhang, Xinzijian Liu, Zifei Chen, Haifeng Zheng, Kangyu Yan, Jian Liu<sup>*</sup>, "A unified thermostat scheme for efficient configurational sampling for classical/quantum canonical ensembles <i>via</i> molecular dynamics", Journal of Chemical Physics, 147, 034109 (2017) [<a href="http://dx.doi.org/10.1063/1.4991621" target="_blank">http://dx.doi.org/10.1063/1.4991621</a>] <a href="ftp://ftp.aip.org/epaps/journ_chem_phys/E-JCPSA6-147-027726" target="_blank">Supplementary material</a>  <a href="https://arxiv.org/ftp/arxiv/papers/1705/1705.02236.pdf" target="_blank">[arXiv preprint]</a> <a href="paper/paper/11.pdf">[pdf version] </a>
-                                </p>
-                            </li>  
-<li>
-    <p>Jian Liu<sup>*</sup>, Dezhang Li, Xinzijian Liu, "A simple and accurate algorithm for path integral molecular dynamics", Journal of Chemical Physics, 145, 024103 (2016)   [<a href=" http://dx.doi.org/10.1063/1.4954990" target="_blank">http://dx.doi.org/10.1063/1.4954990</a>]  <a href="ftp://ftp.aip.org/epaps/journ_chem_phys/E-JCPSA6-145-007626" target="_blank">Supplementary material</a> <a href="https://arxiv.org/ftp/arxiv/papers/1611/1611.06331.pdf" target="_blank">[arXiv preprint (Paper + Supplemental materical)]</a><a href="paper/paper/14.pdf">[pdf version] </a> </p>
-</li>
-<li>
-    <p>Jian Liu<sup>*</sup>, Zhijun Zhang, "Path integral Liouville dynamics: Applications to infrared spectra of OH, water, ammonia, and methane", Journal of Chemical Physics, 144, 034307 (2016)  [<a href="http://dx.doi.org/10.1063/1.4939953" target="_blank">http://dx.doi.org/10.1063/1.4939953</a>] <a href="paper/paper/15.pdf">[pdf version] </a> </p>
-</li>
-                        </ul>
-                </div>
+            <div class="pull-right">
+                <img class="img-responsive" src="images/logo/group-logo-sword-pild.jpg" />
             </div>
-        </div>
-    </div>      
-
-          </div>
-    </div>
-
-
-    
-</div>
-
-
-<!-- footer -->
-<footer class="footer bg-lightgray">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="support-footer">
-                    <ul class="list-inline">
-                        <li><p>Support:</p></li>
-                        <li>
-                        <a href="http://www.chem.pku.edu.cn/" target="_blank">
-                            <img src="images/logo/ccme-logo.jpg">
-                        </a>
-                        </li>
-                        <li>
-                        <a href="http://bnlms.iccas.ac.cn/" target="_blank">
-                            <img src="images/logo/BNLMS.jpg">
-                        </a>
-                        </li>
-                        <li>
-                        <a href="http://www.nsfc.gov.cn/" target="_blank">
-                            <img src="images/logo/nsfc_logo.jpg">
-                        </a>
-                        </li>
-                        <li>
-                        <a href="http://www.most.gov.cn/" target="_blank">
-                            <img src="images/logo/most_logo.jpg">
-                        </a>
-                        </li>
-                        <li>
-                        <a href="http://www.moe.gov.cn/" target="_blank">
-                            <img src="images/logo/moe_logo.jpg">
-                        </a>
-                        </li>
+            <nav>
+                <!--<div id="navbar" class="collapse navbar-collapse">--><!-- for mobile menu -->
+                <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav nav-justified navbar-custom">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="members.html">Members</a></li>
+                        <li><a href="research.html">Research</a></li>
+                        <li><a href="publications.html">Publications</a></li>
+                        <li><a href="teaching.html">Teaching</a></li>
+                        <li><a href="tutorials.html">Tutorials</a></li>
+                        <li class="active"><a href="#">Software</a></li>
+                        <li><a href="links.html">Links</a></li>
                     </ul>
                 </div>
-            </div>            
+                <!--</div>-->
+            </nav>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
         </div>
-        <div class="row">
-            <p class="text-muted text-center">Copyright &copy; 2015, Liu Group. All rights reserved.</p>
+
+    </header>
+
+    <div class="container mg-top-20 mg-bottom-20">
+        <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+            <li class="active"><a href="#overview" data-toggle="tab">Overview</a></li>
+            <li><a href="#msat" data-toggle="tab">MiddleScheme</a></li>
+            <li><a href="#hnaf" data-toggle="tab">hNaF</a></li>
+            <li><a href="#psinad" data-toggle="tab">PSiNAD</a></li>
+            <li><a href="#psiqmd" data-toggle="tab">PSiQMD</a></li>
+        </ul>
+        <div id="overview-tab-content" class="tab-content">
+            <div class="tab-pane active" id="overview">
+                <h1 class="page-header">Overview</h1>
+                <p>High-throughput computation of important properties of chemical systems with the latest theoretical
+                    chemistry methods is a fundamental quest from the realm of computational chemistry. We have been
+                    working on implementing our theory on existing or new quantum molecular dynamics computer programs
+                    to fulfill the requirement. We hope these programs can build a bridge between theorists and
+                    experimentalists, making convenient use of our novel path integral molecular dynamics and
+                    nonadiabatic dynamics methods.</p>
+                <p>
+                    Currently we have been developing the following programs:
+                </p>
+                <ul>
+                    <li>
+                        hNaF: Nonadiabatic Field for Heterogeneous Hardware
+                    </li>
+
+                    <li>
+                        PSiNAD: Phase Space Integrated Nonadiabatic Dynamics
+                    </li>
+                    <li>
+                        PSiQMD: Phase Space Integrated Quantum Molecular Dynamics
+                    </li>
+                </ul>
+                <p>
+                    Currently we have been working on adding the following features to the corresponding existing
+                    programs:
+                </p>
+                <ul>
+                    <li>
+                        The "middle" scheme thermostat and barostat to Amber, AmberTools, GROMACS and DL-POLY
+                    </li>
+                </ul>
+
+            </div>
+
+            <div class="tab-pane" id="psinad">
+                <h1 class="page-header">PSiNAD: Phase Space Integrated Nonadiabatic Dynamics</h1>
+                <div class="tutorial">
+                    <div class="row">
+                        <h2 class="tutorial-heading">Introduction</h2>
+                        <div class="tutorial-text">
+                            <p>PSiNad (Phase Space Integrated Nonadiabatic Dynamics) is an open-source framework
+                                specifically designed for simulating chemical and physical dynamics at atomic and
+                                molecular scales in condensed matter. It excels in classical and quantum dynamics
+                                simulations, accommodating small systems, few-body systems, reduced systems, and large
+                                many-particle systems such as molecules and condensed matter. PSiNad offers a robust,
+                                versatile platform with multiple interfaces for developing advanced algorithms, ensuring
+                                ease of use and accessibility with third-party language wrappers, such as Python.</p>
+                            <p>PSiNad features a comprehensive array of models and solvers, including harmonic models,
+                                forcefield models, and ab initio interfaces, meeting diverse simulation needs. It
+                                supports a wide range of computational approaches, from classical dynamics based on
+                                Newtonian and Hamiltonian mechanics to sophisticated quantum dynamics incorporating
+                                quantum phase space approximations, quantum trajectories, path integral techniques,
+                                influence functional methods, and semi-classical wavepackets.</p>
+                            <p>Continual development efforts focus on expanding the library of models and solvers, with
+                                community contributions highly encouraged. To further extend its accessibility, PSiNad
+                                is now available as a Python package (PyPSiNad).</p>
+                            <p>Related papers:</p>
+                            <ul>
+                                <li>
+                                    <p>Xin He, Haocheng Lu, Jian Liu<sup>*</sup>, "PSiNAD: An Extensible Solution for
+                                        Nonadiabatic Dynamics Based on Phase Space Formulations", (Invited contribution)
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="psiqmd">
+                <h1 class="page-header">PSiQMD: Phase Space Integrated Quantum Molecular Dynamics</h1>
+                <div class="tutorial">
+                    <div class="row">
+                        <h2 class="tutorial-heading">Introduction</h2>
+                        <div class="tutorial-text">
+                            <p>PSiQMD includes molecular dynamics, path integral molecular dynamics, path integral
+                                Liouville dynamics, nonadiabatic molecular dynamics, and so on. It not only collects
+                                progress of our coding in</p>
+                            <ul>
+                                <li><a href="#hnaf" data-toggle="tab">hNaF</a></li>
+                                <li><a href="#psinad" data-toggle="tab">PSiNAD</a></li>
+                            </ul>
+                            <p>and for</p>
+                            <ul>
+                                <li><a href="#msat" data-toggle="tab">novel integrators of the "middle"
+                                        thermostat-barostat scheme in AMBER, AmberTools, GROMACS</a></li>
+                            </ul>
+                            <p>but also includes phase space quantum dynamics approaches and other trajectory-based
+                                dynamics/thermodynamics methods for real molecular systems.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="hnaf">
+                <h1 class="page-header">hNaF: Nonadiabatic Field for Heterogeneous Hardware</h1>
+                <div class="tutorial"><!-- The layout is similar to tutorials -->
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="tutorial-img">
+                                <img src="images/research/hNAD-logo.png" alt="image: "
+                                    class="img-responsive center-block">
+                            </div>
+                            <div class="tutorial-img">
+                                <img src="images/research/hNAD-structure.png" alt="image: "
+                                    class="img-responsive center-block">
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <h2 class="tutorial-heading">
+                                Introduction
+                            </h2>
+                            <div class="tutorial-text">
+                                <p>hNaF is a nonadiabatic dynamics program designed for ultra-high throughput model
+                                    tests and method developments on heterogeneous computation platforms. Homemade
+                                    computational platforms are usually equipped with specially designed heterogeneous
+                                    hardwares, parallel interfaces and limited supports to the programming languages. By
+                                    modularizing the computation tasks and separating out the parallel layers, hNaF
+                                    enables us to test our new nonadiabatic dynamics methods rapidly, making full use of
+                                    the homemade hardwares, for example, the new Sunway supercomputer.</p>
+                                <p>Related papers:</p>
+                                <ul>
+                                    <li>
+                                        <p>Baihua Wu, Bingqi Li, Xin He, Xiangsong Cheng, Jiajun Ren, Jian
+                                            Liu<sup>*</sup>, "Nonadiabatic Field: A Conceptually Novel Approach for
+                                            Nonadiabatic Quantum Molecular Dynamics", Journal of Chemical Theory and
+                                            Computation, 21(8), 3775-3813 (2025) (Invited contribution to the Special
+                                            Issue "Developments of Theoretical and Computational Chemistry Methods in
+                                            Asia") [<a
+                                                href="https://pubs.acs.org/doi/10.1021/acs.jctc.5c00181">https://doi.org/10.1021/acs.jctc.5c00181</a>]
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="msat">
+                <h1 class="page-header">The "middle" thermostat and barostat scheme in molecular dynamics programs</h1>
+
+
+                <div class="tutorial"><!-- The layout is similar to tutorials -->
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="tutorial-img">
+                                <a href="http://ambermd.org/GetAmber.php#ambertools">
+                                    <img src="images/research/pimd-water-middle.png" alt="image: "
+                                        class="img-responsive center-block">
+                                </a>
+                            </div>
+                            <div class="tutorial-img">
+                                <a href="http://ambermd.org/GetAmber.php#ambertools">
+                                    <img src="images/research/Amber19_cover.png" alt="image: "
+                                        class="img-responsive center-block">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <h2 class="tutorial-heading">
+                                The "middle" thermostat and barostat scheme in Amber, AmberTools, GROMACS and DL-POLY
+                            </h2>
+                            <div class="tutorial-text">
+                                <p> <!-- description for how to download it -->
+                                    [NEW!] We have implemented a recommended "middle" scheme for the isobaric-isothermal
+                                    ensemble in molecular dynamics packages, e.g., AMBER, GROMACS, and DL-POLY. An
+                                    detailed description is on the way.</p>
+                                <p>
+                                    We have implemented the efficient "middle" thermostat scheme into the lastest
+                                    version of AmberTools since 2019. It can be obtained by following the instructions
+                                    on <a href="http://ambermd.org/GetAmber.php#ambertools">the official website</a>.
+                                    For the users who can only use AmberTools18, the updated files for the "middle"
+                                    scheme for AmberTools18 can be downloaded from <a
+                                        href="https://github.com/jianliugroup/AMBER-addition">the GitHub webpage</a>.
+                                </p>
+                                <p><!-- description for how to use it -->
+                                    The tutorial for the "middle" scheme is available on the <a
+                                        href="tutorial-testcase/tutorial-testcase.html">webpage</a>.
+                                    One is also encouraged to read the <a
+                                        href="http://ambermd.org/doc12/Amber19.pdf">AMBER manual</a> for more details.
+                                    The "middle" thermostat scheme has been implemented for MD for classical statistics
+                                    as well as primitive PIMD for quantum statistics. It can be used together with QM/MM
+                                    and enhanced sampling techniques (such as replica exchange) in AMBER. One can do
+                                    <i>ab initio</i> PIMD or MD for the canonical ensemble by using AMBER combined with
+                                    other quantum chemistry packages.
+                                </p>
+                                <p>Related papers:</p>
+                                <ul>
+                                    <li>
+                                        <p>Weihao Liang, Sihan Wang, Cong Wang, Weizhou Wang, Xinchen She, Chongbin
+                                            Wang, Jiushu Shao, Jian Liu<sup>*</sup>, "An Efficient Integrator Scheme for
+                                            Sampling the (Quantum) Isobaric-Isothermal Ensemble in (Path Integral)
+                                            Molecular Dynamics Simulations", Journal of Chemical Theory and Computation.
+                                            (Accepted. Invited Contribution) [<a
+                                                href="https://arxiv.org/abs/2504.08342">https://arxiv.org/abs/2504.08342</a>]
+                                        </p>
+                                    <li>
+                                        <p>
+                                            David A. Case, Hasan Metin Aktulga, Kellon Belfon, David S. Cerutti, G.
+                                            Andrés Cisneros, Vinícius Wilian D. Cruzeiro, Negin Forouzesh, Timothy J.
+                                            Giese, Andreas W. Götz, Holger Gohlke, Saeed Izadi, Koushik Kasavajhala,
+                                            Mehmet C. Kaymak, Edward King, Tom Kurtzman, Tai-Sung Lee, Pengfei Li, Jian
+                                            Liu<sup>*</sup>, Tyler Luchko, Ray Luo, Madushanka Manathunga, Matias R.
+                                            Machado, Hai Minh Nguyen, Kurt A. O’Hearn, Alexey V. Onufriev, Feng Pan,
+                                            Sergio Pantano, Ruxi Qi, Ali Rahnamoun, Ali Risheh, Stephan Schott-Verdugo,
+                                            Akhil Shajan, Jason Swails, Junmei Wang, Haixin Wei, Xiongwu Wu, Yongxian
+                                            Wu, Shi Zhang, Shiji Zhao, Qiang Zhu, Thomas E. Cheatham III, Daniel R. Roe,
+                                            Adrian Roitberg, Carlos Simmerling, Darrin M. York, Maria C. Nagan, Kenneth
+                                            M. Merz Jr. , "AmberTools", Journal of Chemical Information and Modeling,
+                                            63(20), 6183-6191 (2023)
+                                            [<a
+                                                href="https://pubs.acs.org/doi/10.1021/acs.jcim.3c01153">https://pubs.acs.org/doi/10.1021/acs.jcim.3c01153</a>]
+                                            [<a href="paper/paper/JCIM2023AmberTools.pdf" download="">pdf version</a>]
+                                        <p>
+                                    </li>
+                                    <li>
+                                        <p>Zhaoxi Sun, Payam Kalhor, Yang Xu, Jian Liu<sup>*</sup>,"Extensive Numerical
+                                            Tests of the Leapfrog Integrator in the Middle Thermostat Scheme in
+                                            Molecular Simulations", Chinese Journal of Chemical Physics, 34, 6, 932-948
+                                            (2021) [Invited contribution to the John Zhang Festschrift] <a
+                                                href="https://doi.org/10.1063/1674-0068/cjcp2111242">https://doi.org/10.1063/1674-0068/cjcp2111242</a>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>Zhijun Zhang, Xinzijian Liu, Kangyu Yan, Mark Tuckerman, Jian
+                                            Liu<sup>*</sup>, "A unified efficient thermostat scheme for the canonical
+                                            ensemble with holonomic or isokinetic constraints via molecular dynamics",
+                                            The Journal of Physical Chemistry A, 123, 28, 6056-6079 (2019). (Invited
+                                            contribution to "Young Scientist Virtual Special Issue") [<a
+                                                href="https://doi.org/10.1021/acs.jpca.9b02771">https://doi.org/10.1021/acs.jpca.9b02771</a>]<a
+                                                href="paper/paper/constraint.pdf" download>[pdf version]</a>
+                                            (Highlighted in <a
+                                                href="https://pubs.acs.org/doi/10.1021/acs.jpca.0c04262">JPC Virtual
+                                                Issue on New Tools and Methods</a> ) </p>
+                                    </li>
+                                    <li>
+                                        <p>Xinzijian Liu, Jian Liu<sup>*</sup>, "Path integral molecular dynamics for
+                                            exact quantum statistics of multi-electronic-state systems", The Journal of
+                                            Chemical Physics, 148, 102319 (2018) [<a
+                                                href="https://doi.org/10.1063/1.5005059"
+                                                target="_blank">https://doi.org/10.1063/1.5005059</a> Invited article
+                                            for the JCP special topic issue on "Nuclear Quantum Effects"] <a
+                                                href="https://arxiv.org/ftp/arxiv/papers/1710/1710.04126.pdf"
+                                                target="_blank">[arXiv preprint]</a> <a href="paper/paper/9.pdf">[pdf
+                                                version] </a> </p>
+                                    </li>
+                                    <li>
+                                        <p>Zhijun Zhang, Kangyu Yan, Xinzijian Liu, Jian Liu<sup>*</sup>, "A leap-frog
+                                            algorithm-based efficient unified thermostat scheme <i>via</i> molecular
+                                            dynamics", Chinese Science Bulletin，63(33), 3467-3483(2018) [Invited
+                                            Contribution] [<a
+                                                href="http://engine.scichina.com/doi/10.1360/N972018-00908">http://engine.scichina.com/doi/10.1360/N972018-00908</a>
+                                            ] <a href="paper/paper/5.pdf">[pdf version] </a></p>
+                                    </li>
+                                    <li>
+                                        <p>Dezhang Li, Zifei Chen, Zhijun Zhang, Jian Liu<sup>*</sup>, "Understanding
+                                            molecular dynamics with stochastic processes <i>via</i> real or virtual
+                                            dynamics", Chinese Journal of Chemical Physics, 30, 735 (2017) [<a
+                                                href="http://dx.doi.org/10.1063/1674-0068/30/cjcp1711223"
+                                                target="_blank">http://dx.doi.org/10.1063/1674-0068/30/cjcp1711223</a>
+                                            Invited article for the CJCP special topic issue on "Chemical Dynamics"] <a
+                                                href="http://cjcp.ustc.edu.cn/hxwlxb_en/ch/reader/create_pdf.aspx?file_no=cjcp1711223&amp;year_id=2017&amp;quarter_id=6&amp;falg=1"
+                                                target="_blank">pdf version from the CJCP website</a> <a
+                                                href="https://arxiv.org/ftp/arxiv/papers/1711/1711.09497.pdf"
+                                                target="_blank">[arXiv preprint]</a> <a href="paper/paper/8.pdf">[pdf
+                                                version] </a> </p>
+                                    </li>
+                                    <li>
+                                        <p>Zhijun Zhang, Xinzijian Liu, Zifei Chen, Haifeng Zheng, Kangyu Yan, Jian
+                                            Liu<sup>*</sup>, "A unified thermostat scheme for efficient configurational
+                                            sampling for classical/quantum canonical ensembles <i>via</i> molecular
+                                            dynamics", The Journal of Chemical Physics, 147, 034109 (2017) [<a
+                                                href="http://dx.doi.org/10.1063/1.4991621"
+                                                target="_blank">http://dx.doi.org/10.1063/1.4991621</a>] <a
+                                                href="ftp://ftp.aip.org/epaps/journ_chem_phys/E-JCPSA6-147-027726"
+                                                target="_blank">Supplementary material</a> <a
+                                                href="https://arxiv.org/ftp/arxiv/papers/1705/1705.02236.pdf"
+                                                target="_blank">[arXiv preprint]</a> <a href="paper/paper/11.pdf">[pdf
+                                                version] </a>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>Jian Liu<sup>*</sup>, Dezhang Li, Xinzijian Liu, "A simple and accurate
+                                            algorithm for path integral molecular dynamics", The Journal of Chemical
+                                            Physics, 145, 024103 (2016) [<a href=" http://dx.doi.org/10.1063/1.4954990"
+                                                target="_blank">http://dx.doi.org/10.1063/1.4954990</a>] <a
+                                                href="ftp://ftp.aip.org/epaps/journ_chem_phys/E-JCPSA6-145-007626"
+                                                target="_blank">Supplementary material</a> <a
+                                                href="https://arxiv.org/ftp/arxiv/papers/1611/1611.06331.pdf"
+                                                target="_blank">[arXiv preprint (Paper + Supplemental materical)]</a><a
+                                                href="paper/paper/14.pdf">[pdf version] </a> </p>
+                                    </li>
+                                    <li>
+                                        <p>Jian Liu<sup>*</sup>, Zhijun Zhang, "Path integral Liouville dynamics:
+                                            Applications to infrared spectra of OH, water, ammonia, and methane",
+                                            The Journal of Chemical Physics, 144, 034307 (2016) [<a
+                                                href="http://dx.doi.org/10.1063/1.4939953"
+                                                target="_blank">http://dx.doi.org/10.1063/1.4939953</a>] <a
+                                                href="paper/paper/15.pdf">[pdf version] </a> </p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
+
+
+
     </div>
-</footer>
-<!-- ====== Bootstrap core JavaScript ====== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="js/ie10-viewport-bug-workaround.js"></script>
+
+
+    <!-- footer -->
+    <footer class="footer bg-lightgray">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="support-footer">
+                        <ul class="list-inline">
+                            <li>
+                                <p>Support:</p>
+                            </li>
+                            <li>
+                                <a href="http://www.chem.pku.edu.cn/" target="_blank">
+                                    <img src="images/logo/ccme-logo.jpg">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://bnlms.iccas.ac.cn/" target="_blank">
+                                    <img src="images/logo/BNLMS.jpg">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://www.nsfc.gov.cn/" target="_blank">
+                                    <img src="images/logo/nsfc_logo.jpg">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://www.most.gov.cn/" target="_blank">
+                                    <img src="images/logo/most_logo.jpg">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://www.moe.gov.cn/" target="_blank">
+                                    <img src="images/logo/moe_logo.jpg">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <p class="text-muted text-center">Copyright &copy; 2015, Liu Group. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- ====== Bootstrap core JavaScript ====== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
 </body>
+
 </html>
