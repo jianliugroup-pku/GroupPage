@@ -2,9 +2,9 @@
 
 [TOC]
 
-In this tutorial we provide a general suite for benchmarking nonadiabatic dynamics described in ref [^1]  together with [data](files/data.zip) (this link is the collection) of all figures.
+In this tutorial we provide a general suite for benchmarking nonadiabatic dynamics described in ref [^1]  together with [data](files/data.zip) (this link is the collection) of all figures. Among all the dynamics tested, the robustness of nonadiabatic field (NaF)[^a][^b] is highlighted.
 
-For a full publication list of the generalized constraint coordinate-momentum phase space (CPS) and nonadiabatic field please see [this page](publication_list.html).
+For a full publication list of the generalized constraint coordinate-momentum phase space (CPS) and NaF please see [this page](publication_list.html).
 
 For an illustration of the nonadiabatic force on the surface hopping dynamics please see [this page](fsnaf.html) (reported in ref[^a]).
 
@@ -396,4 +396,6 @@ We guide readers to Section S5-S6 of Supporting Information of ref[^1] for detai
 [^30]:  X. He, Z. Gong, B. Wu and J. Liu, "Negative zero-point-energy parameter in the Meyer–Miller mapping model for nonadiabatic dynamics", J. Phys. Chem. Lett. 12, 2496–2501 (2021).
 [^31]: M. N. Yang and G. R. Fleming, "Influence of phonons on exciton transfer dynamics: Comparison of the Redfield, Forster and modified Redfield equations", Chem. Phys. 275, 355-372 (2002).
 [^a]:B. Wu, X. He and J. Liu, "Nonadiabatic Field on Quantum Phase Space: A Century after Ehrenfest", J. Phys. Chem. Lett., 15(2), 644-658 (2024).
+
+[^b]: X. He, X. Cheng, B. Wu and J. Liu, "Nonadiabatic Field with Triangle Window Functions on Quantum Phase Space", J. Phys. Chem. Lett., 15(20), 5452-5466 (2024).
 
